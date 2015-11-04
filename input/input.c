@@ -17,7 +17,7 @@ int main() {
     input_file_ptr = fopen("./input.dat", "wb");
 
     if (!input_file_ptr) {
-        printf("Unable to open file!");
+        printf("Unable to open file!\n");
         return 1;
     }
 
@@ -25,10 +25,10 @@ int main() {
     random_num = malloc(sizeof(float));
 
     int i;
-    for (i = 0; i < NumPart; i++) {
+    for (i = 0; i < numPart; i++) {
         int j;
         for (j = 0; j < 7; j++) {
-            random_float_num_ptr(50, random_num);
+            random_float_num_ptr(boxSize, random_num);
             fwrite(random_num, 1, sizeof(float), input_file_ptr);
         }
     }

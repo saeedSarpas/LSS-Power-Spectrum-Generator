@@ -4,39 +4,37 @@ struct particle_data {
     float Mass;
 } *P;
 
-int allocate_memory(void) {
-    printf("allocating memory...");
+int allocateMemory(void) {
+    fprintf(stdout, "Allocating memory for %d particls... ", numPart);
 
-    if(P = malloc(NumPart * sizeof(struct particle_data)) ) {
-        fprintf(stderr, "memory has allocated for %d particle_data\n", NumPart);
+    if(P = malloc(numPart * sizeof(struct particle_data)) ) {
+        fprintf(stdout, "[done]\n");
     } else {
         fprintf(stderr, "failed to allocate memory.\n");
         exit(0);
     }
-
-    printf("[done]\n");
 }
 
-int load_input_from_file(void) {
-    char inputPath[] = "input/input.dat";
+int loadInputFromFile(void) {
+    char inputPath[] = "./input/input.dat";
 
     FILE * inputFile;
     char buf[200];
 
     sprintf(buf, "%s", inputPath);
 
+    allocateMemory();
+
     if(inputFile = fopen(buf, "r")) {
-        fprintf(stdout, "reading %s ... ", buf);
+        fprintf(stdout, "Reading %s... ", buf);
         fflush(stdout);
     } else {
-        fprintf(stderr, "can't open file `%s`\n", buf);
+        fprintf(stderr, "Cannot open file `%s`\n", buf);
         exit(0);
     }
 
-    allocate_memory();
-
     int n, i;
-    for (n = 0; n < NumPart; n++) {
+    for (n = 0; n < numPart; n++) {
         for (i = 0; i < 3; i++) {
             fread(&P[n].Pos[i], sizeof(float), 1, inputFile);
         }
@@ -49,5 +47,5 @@ int load_input_from_file(void) {
     }
 
     fclose(inputFile);
-    printf("[done].\n");
+    printf("[done]\n");
 }
