@@ -1,4 +1,22 @@
 int threeToOne(int i, int j, int k) {
+    if (i > numGrid - 1) {
+        i = i - numGrid;
+    } else if (i < 0) {
+        i = i + numGrid;
+    }
+
+    if (j > numGrid - 1) {
+        j = j - numGrid;
+    } else if (j < 0) {
+        j = j + numGrid;
+    }
+
+    if (k > numGrid - 1) {
+        k = k - numGrid;
+    } else if (k < 0) {
+        k = k + numGrid;
+    }
+
     return(k * numGrid * numGrid + j * numGrid + i);
 }
 
@@ -19,20 +37,8 @@ void cicWeight (int index, int * delta, float overlap, float * weight) {
 
     if (overlap > grid_half_size) {
         *weight = 1 - (overlap / gridSize) + 0.5;
-
-        if (index != (numGrid - 1)) {
-            *delta = 1;
-        } else {
-            *delta = 1 - numGrid;
-        }
     } else {
         *weight = (overlap / gridSize) + 0.5;
-
-        if (index != 0) {
-            *delta = -1;
-        } else {
-            *delta = numGrid - 1;
-        }
     }
 }
 
@@ -59,7 +65,7 @@ void CIC (struct particle_data P, float * mass_grid) {
     index_temp = threeToOne(i, j, k);
     mass_grid[index_temp] += i_weight * j_weight * k_weight * P.Mass;
 
-    index_temp = threeToOne(i+di, j, k+dk);
+    index_temp = threeToOne(i+di, j, k);
     mass_grid[index_temp] += (1 - i_weight) * j_weight * k_weight * P.Mass;
 
     index_temp = threeToOne(i, j+dj, k);
@@ -68,11 +74,11 @@ void CIC (struct particle_data P, float * mass_grid) {
     index_temp = threeToOne(i, j, k+dk);
     mass_grid[index_temp] += i_weight * j_weight * (1 - k_weight) * P.Mass;
 
-    index_temp = threeToOne(i, j+dj, k+dk);
-    mass_grid[index_temp] += i_weight * (1 - j_weight) * (1 - k_weight) * P.Mass;
-
     index_temp = threeToOne(i+di, j+dj, k);
     mass_grid[index_temp] += (1 - i_weight) * (1 - j_weight) * k_weight * P.Mass;
+
+    index_temp = threeToOne(i, j+dj, k+dk);
+    mass_grid[index_temp] += i_weight * (1 - j_weight) * (1 - k_weight) * P.Mass;
 
     index_temp = threeToOne(i+di, j, k+dk);
     mass_grid[index_temp] += (1 - i_weight) * j_weight * (1 - k_weight) * P.Mass;
