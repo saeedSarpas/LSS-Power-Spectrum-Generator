@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "./../headers/constants.h"
+#include "./../include/constants.h"
 
 struct particle_data {
 	float Pos[3];

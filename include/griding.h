@@ -1,22 +1,4 @@
-int gridBoundryChecker (int pos) {
-	if (pos > numGrid - 1) {
-		return pos - numGrid;
-	} else if (pos < 0) {
-		return pos + numGrid;
-	} else {
-		return pos;
-	}
-}
-
-int threeToOne(int i, int j, int k) {
-	i = gridBoundryChecker(i);
-	j = gridBoundryChecker(j);
-	k = gridBoundryChecker(k);
-
-	return k * numGrid * numGrid + j * numGrid + i;
-}
-
-void NGP (struct particle_data P, float * grid_mass) {
+void NGP (struct particle_data P, double * grid_mass) {
 	int i, j, k;
 
 	i = P.Pos[0] / gridSize;
@@ -28,22 +10,24 @@ void NGP (struct particle_data P, float * grid_mass) {
 	grid_mass[index] += P.Mass;
 }
 
-void cicWeight (int index, int * delta, float overlap, float * weight) {
-	float grid_half_size = gridSize / 2.0;
+void cicWeight (int index, int * d_index, double overlap, double * weight) {
+	double grid_half_size = gridSize / 2.0;
 
 	if (overlap > grid_half_size) {
 		*weight = 1 - (overlap / gridSize) + 0.5;
+		*d_index = +1;
 	} else {
 		*weight = (overlap / gridSize) + 0.5;
+		*d_index = -1;
 	}
 }
 
-void CIC (struct particle_data P, float * grid_mass) {
+void CIC (struct particle_data P, double * grid_mass) {
 	int i, j, k;
 	int di, dj, dk;
 
-	float i_weight, j_weight, k_weight;
-	float overlap;
+	double i_weight, j_weight, k_weight;
+	double overlap;
 
 	i = P.Pos[0] / gridSize;
 	overlap = fmodf(P.Pos[0], gridSize);
@@ -83,22 +67,17 @@ void CIC (struct particle_data P, float * grid_mass) {
 	grid_mass[index] += (1 - i_weight) * (1 - j_weight) * (1 - k_weight) * P.Mass;
 }
 
-int moveAlongGridAxis(int init_pos, int step) {
-	int new_pos = init_pos + step;
-	return gridBoundryChecker(new_pos);
-}
-
-void TSC (struct particle_data P, float * grid_mass) {
+void TSC (struct particle_data P, double * grid_mass) {
 	int pos[3];
-	float overlap;
-	float weight[3][3];
+	double overlap;
+	double weight[3][3];
 
 	int i;
 	for (i = 0; i < 3; i++) {
 		pos[i] = P.Pos[i] / gridSize;
 		overlap = fmodf(P.Pos[i], gridSize);
 
-		float overlap_ratio = overlap/gridSize;
+		double overlap_ratio = overlap/gridSize;
 		weight[i][0] = 0.5  * pow((1 - overlap_ratio), 2);
 		weight[i][1] = 0.75 - pow((overlap_ratio - 0.5), 2);
 		weight[i][2] = 0.5  * pow(overlap_ratio, 2);
