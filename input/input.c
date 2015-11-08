@@ -3,13 +3,13 @@
 #include "./../include/constants.h"
 
 struct particle_data {
-	float Pos[3];
-	float Vel[3];
-	float Mass;
+	double Pos[3];
+	double Vel[3];
+	double Mass;
 } *P;
 
-void random_float_num_ptr(int max, float * random_num) {
-	*random_num = ((float)rand() / (float)(RAND_MAX)) * max;
+void random_double_num_ptr(int max, double * random_num) {
+	*random_num = ((double)rand() / (double)(RAND_MAX)) * max;
 }
 
 int main() {
@@ -21,15 +21,15 @@ int main() {
 		return 1;
 	}
 
-	float * random_num;
-	random_num = malloc(sizeof(float));
+	double * random_num;
+	random_num = malloc(sizeof(double));
 
 	int i;
 	for (i = 0; i < numPart; i++) {
 		int j;
 		for (j = 0; j < 7; j++) {
-			random_float_num_ptr(boxSize, random_num);
-			fwrite(random_num, 1, sizeof(float), input_file_ptr);
+			random_double_num_ptr(boxSize, random_num);
+			fwrite(random_num, 1, sizeof(double), input_file_ptr);
 		}
 	}
 
