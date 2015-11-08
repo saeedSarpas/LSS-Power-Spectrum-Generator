@@ -2,8 +2,8 @@ double rho_tilda(int * pos, fftw_complex * grid_fourier_ptr) {
 	int i, index;
 	index = threeToOne(pos[0], pos[1], pos[2]);
 
-	if(index > fourierGridLength) {
-		index = pow(gridLength, 3) - index;
+	if(index > NUM_FOURIER_GRID_BLOCKS) {
+		index = pow(NUM_GRID_BLOCKS, 3) - index;
 	}
 
 	return sqrt(pow(creal(grid_fourier_ptr[index]),2) + pow(cimag(grid_fourier_ptr[index]),2));
@@ -42,9 +42,9 @@ double onePointOnOneModePS (int * pos, double mode_k, double dk, fftw_complex * 
 double oneModePS (double mode_k, double dk, fftw_complex * grid_fourier_ptr) {
 	int pos[3], counter = 0;
 	double P_k = 0.0;
-	for (pos[0] = 0; pos[0] < gridLength; pos[0]++){
-		for (pos[1] = 0; pos[1] < gridLength; pos[1]++){
-			for (pos[2] = 0; pos[2] < gridLength; pos[2]++){
+	for (pos[0] = 0; pos[0] < NUM_GRID_BLOCKS; pos[0]++){
+		for (pos[1] = 0; pos[1] < NUM_GRID_BLOCKS; pos[1]++){
+			for (pos[2] = 0; pos[2] < NUM_GRID_BLOCKS; pos[2]++){
 				P_k += onePointOnOneModePS(pos, mode_k, dk, grid_fourier_ptr);
 				counter++;
 			}

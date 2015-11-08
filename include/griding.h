@@ -1,9 +1,9 @@
 void NGP (struct particle_data P, double * grid_mass) {
 	int i, j, k;
 
-	i = P.Pos[0] / gridSize;
-	j = P.Pos[1] / gridSize;
-	k = P.Pos[2] / gridSize;
+	i = P.Pos[0] / GRID_SIZE;
+	j = P.Pos[1] / GRID_SIZE;
+	k = P.Pos[2] / GRID_SIZE;
 
 	int index = threeToOne(i, j, k);
 
@@ -11,13 +11,13 @@ void NGP (struct particle_data P, double * grid_mass) {
 }
 
 void cicWeight (int index, int * d_index, double overlap, double * weight) {
-	double grid_half_size = gridSize / 2.0;
+	double grid_half_size = GRID_SIZE / 2.0;
 
 	if (overlap > grid_half_size) {
-		*weight = 1 - (overlap / gridSize) + 0.5;
+		*weight = 1 - (overlap / GRID_SIZE) + 0.5;
 		*d_index = +1;
 	} else {
-		*weight = (overlap / gridSize) + 0.5;
+		*weight = (overlap / GRID_SIZE) + 0.5;
 		*d_index = -1;
 	}
 }
@@ -29,16 +29,16 @@ void CIC (struct particle_data P, double * grid_mass) {
 	double i_weight, j_weight, k_weight;
 	double overlap;
 
-	i = P.Pos[0] / gridSize;
-	overlap = fmodf(P.Pos[0], gridSize);
+	i = P.Pos[0] / GRID_SIZE;
+	overlap = fmodf(P.Pos[0], GRID_SIZE);
 	cicWeight(i, &di, overlap, &i_weight);
 
-	j = P.Pos[1] / gridSize;
-	overlap = fmodf(P.Pos[1], gridSize);
+	j = P.Pos[1] / GRID_SIZE;
+	overlap = fmodf(P.Pos[1], GRID_SIZE);
 	cicWeight(j, &dj, overlap, &j_weight);
 
-	k = P.Pos[2] / gridSize;
-	overlap = fmodf(P.Pos[2], gridSize);
+	k = P.Pos[2] / GRID_SIZE;
+	overlap = fmodf(P.Pos[2], GRID_SIZE);
 	cicWeight(k, &dk, overlap, &k_weight);
 
 	int index;
@@ -74,10 +74,10 @@ void TSC (struct particle_data P, double * grid_mass) {
 
 	int i;
 	for (i = 0; i < 3; i++) {
-		pos[i] = P.Pos[i] / gridSize;
-		overlap = fmodf(P.Pos[i], gridSize);
+		pos[i] = P.Pos[i] / GRID_SIZE;
+		overlap = fmodf(P.Pos[i], GRID_SIZE);
 
-		double overlap_ratio = overlap/gridSize;
+		double overlap_ratio = overlap/GRID_SIZE;
 		weight[i][0] = 0.5  * pow((1 - overlap_ratio), 2);
 		weight[i][1] = 0.75 - pow((overlap_ratio - 0.5), 2);
 		weight[i][2] = 0.5  * pow(overlap_ratio, 2);

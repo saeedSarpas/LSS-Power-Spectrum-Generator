@@ -1,8 +1,8 @@
 int gridBoundryChecker (int pos) {
-	if (pos > gridLength - 1) {
-		return pos - gridLength;
+	if (pos > NUM_GRID_BLOCKS - 1) {
+		return pos - NUM_GRID_BLOCKS;
 	} else if (pos < 0) {
-		return pos + gridLength;
+		return pos + NUM_GRID_BLOCKS;
 	} else {
 		return pos;
 	}
@@ -13,7 +13,7 @@ int threeToOne(int i, int j, int k) {
 	j = gridBoundryChecker(j);
 	k = gridBoundryChecker(k);
 
-	return k * gridLength * gridLength + j * gridLength + i;
+	return k * NUM_GRID_BLOCKS * NUM_GRID_BLOCKS + j * NUM_GRID_BLOCKS + i;
 }
 
 int moveAlongGridAxis(int init_pos, int step) {

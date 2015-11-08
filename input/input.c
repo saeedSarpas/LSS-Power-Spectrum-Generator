@@ -25,10 +25,10 @@ int main() {
 	random_num = malloc(sizeof(double));
 
 	int i;
-	for (i = 0; i < numPart; i++) {
+	for (i = 0; i < NUM_OF_PART; i++) {
 		int j;
 		for (j = 0; j < 7; j++) {
-			random_double_num_ptr(boxSize, random_num);
+			random_double_num_ptr(BOX_SIZE, random_num);
 			fwrite(random_num, 1, sizeof(double), input_file_ptr);
 		}
 	}
