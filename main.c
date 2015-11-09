@@ -17,10 +17,6 @@ int main(int argc, char *argv[]) {
 	loadInputFromFile();
 	fprintf(stdout, "[done]\n");
 
-	char algorithm;
-	fprintf(stdout, "Choose griding algorithm, [n for NGP (defualt), c for CIC, t for TSC]: ");
-	fscanf(stdin, "%c", &algorithm);
-
 	fprintf(stdout, "Creating FFTW plan... ");
 	double * grid_mass_ptr;
 	grid_mass_ptr = calloc(pow(NUM_GRID_BLOCKS, 3), sizeof(double));
@@ -31,6 +27,9 @@ int main(int argc, char *argv[]) {
 	p = fftw_plan_dft_r2c(3, rank, grid_mass_ptr, grid_fourier_ptr, FFTW_MEASURE);
 	fprintf(stdout, "[done]\n");
 
+	char algorithm;
+	fprintf(stdout, "Choose griding algorithm, [n for NGP (defualt), c for CIC, t for TSC]: ");
+	fscanf(stdin, "%c", &algorithm);
 	int n;
 	if (algorithm == 'c') {
 		fprintf(stdout, "Griding using cloud in cell (CIC) algorithm... ");
@@ -46,13 +45,33 @@ int main(int argc, char *argv[]) {
 		fprintf(stdout, "[done]\n");
 	}
 
+	fprintf(stdout, "Dividing grid mass by the volume of the grid blocks... ");
 	int total_num_grid_blocks = pow(NUM_GRID_BLOCKS, 3);
 	double grid_block_volume = pow(GRID_SIZE, 3);
-	fprintf(stdout, "Dividing grid mass by the volume of the grid blocks... ");
 	for (n = 0; n < total_num_grid_blocks; n++) {
 		grid_mass_ptr[n] /= grid_block_volume;
 	}
 	fprintf(stdout, "[done]\n");
+
+	fprintf(stdout, "Do you want to save the grid? [y,n]: ");
+	char snapshot;
+	fscanf(stdin, "%c", &snapshot);
+	if (snapshot == 'y') {
+		FILE * snapshot;
+		snapshot = fopen("./grid.dat", "w");
+		int index;
+		double density_holder;
+		for (i = 0; i < NUM_GRID_BLOCKS; i++){
+			for (j = 0; j < NUM_GRID_BLOCKS; j++){
+				for (k = 0; k < NUM_GRID_BLOCKS; k++){
+					index = threeToOne(i,j,k);
+					density_holder = grid_mass_ptr[index];
+					fprintf(snapshot,"%d\t%d\t%d\t%f\n", i, j, k, density_holder);
+				}
+			}
+		}
+		fclose(snapshot);
+	}
 
 	fprintf(stdout, "Fourier transform... ");
 	fftw_execute(p);
@@ -70,10 +89,6 @@ int main(int argc, char *argv[]) {
 	}
 	fclose(output_file_ptr);
 	fprintf(stdout, "[done]\n");
-
-	/*for (counter = 0; counter < NUM_GRID_BLOCKS * NUM_GRID_BLOCKS * (NUM_GRID_BLOCKS / 2 + 1); counter++) {*/
-		/*printf("%f + i%f\n", creal(grid_fourier_ptr[counter]), cimag(grid_fourier_ptr[counter]));*/
-	/*}*/
 
 	fftw_free(grid_fourier_ptr);
 	free(grid_mass_ptr);
