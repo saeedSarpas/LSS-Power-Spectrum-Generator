@@ -1,30 +1,28 @@
-double rho_tilda(int * pos, fftw_complex * grid_fourier_ptr) {
-	int i, index;
-	index = threeToOne(pos[0], pos[1], pos[2]);
+double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
+	bool negative_mode = false;
+ 	if (i < 0){ negative_mode = true; }
+ 	if (j < 0){ negative_mode = true; }
+ 	if (k < 0){ negative_mode = true; }
 
-	if(index > NUM_FOURIER_GRID_BLOCKS) {
-		index = pow(NUM_GRID_BLOCKS, 3) - index;
+	int index = threeToOne(abs(i), abs(j), abs(k));
+
+	if (negative_mode){
+		return conj(grid_fourier[index]);
+	} else {
+		return grid_fourier[index];
 	}
-
-	return sqrt(pow(creal(grid_fourier_ptr[index]),2) + pow(cimag(grid_fourier_ptr[index]),2));
 }
 
-double onePointOnOneModePS (int * pos, double mode_k, double dk, fftw_complex * grid_fourier_ptr){
-	int i, j, k;
-	int new_pos[3];
-	int counter = 0;
-	double P_k = 0.0;
-	double range = ceil(mode_k) + ceil(dk);
-	for (i = pos[0] - range; i <= pos[0] + range; i++){
-		for (j = pos[1] - range; j <= pos[1] + range; j++){
-			for (k = pos[2] - range; k <= pos[2] + range; k++){
-				double d;
-				d = sqrt(pow(pos[0] - i,2) + pow(pos[1] - j,2) + pow(pos[2] - k,2));
-				if (d > mode_k - dk && d < mode_k + dk) {
-					new_pos[0] = gridBoundryChecker(i);
-					new_pos[1] = gridBoundryChecker(j);
-					new_pos[2] = gridBoundryChecker(k);
-					P_k += rho_tilda(pos, grid_fourier_ptr) * rho_tilda(new_pos, grid_fourier_ptr);
+double complex oneModePS (double mode_log, double mode_interval_log, fftw_complex * gird_fourier){
+	int i, j, k, counter = 0;
+	double complex P_k = 0.0 + 0.0 * I, rho;
+	double d_log;
+	for (i = - (NUM_GRID_BLOCKS / 2); i <= NUM_GRID_BLOCKS / 2; i++){
+		for (j = - (NUM_GRID_BLOCKS / 2); j <= NUM_GRID_BLOCKS / 2; j++){
+			for (k = - (NUM_GRID_BLOCKS / 2); k <= NUM_GRID_BLOCKS / 2; k++){
+				d_log = log10(sqrt(pow(i, 2) + pow(j, 2) + pow(k, 2)));
+				if (d_log >= mode_log - mode_interval_log && d_log <= mode_log + mode_interval_log) {
+					P_k += rho_tilda(i, j, k, gird_fourier);
 					counter++;
 				}
 			}
@@ -34,22 +32,7 @@ double onePointOnOneModePS (int * pos, double mode_k, double dk, fftw_complex * 
 	if (counter != 0) {
 		return P_k / counter;
 	} else {
-		fprintf(stderr, "\nFind no point in this shell, you may want to change the size of \\Delata k.\n");
+		printf("\nFind no point in this shell, log10(mode)= %f and log10(mode_interval)= %f\n", mode_log, mode_interval_log);
 		exit(0);
 	}
-}
-
-double oneModePS (double mode_k, double dk, fftw_complex * grid_fourier_ptr) {
-	int pos[3], counter = 0;
-	double P_k = 0.0;
-	for (pos[0] = 0; pos[0] < NUM_GRID_BLOCKS; pos[0]++){
-		for (pos[1] = 0; pos[1] < NUM_GRID_BLOCKS; pos[1]++){
-			for (pos[2] = 0; pos[2] < NUM_GRID_BLOCKS; pos[2]++){
-				P_k += onePointOnOneModePS(pos, mode_k, dk, grid_fourier_ptr);
-				counter++;
-			}
-		}
-	}
-
-	return P_k / counter;
 }

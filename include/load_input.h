@@ -4,13 +4,6 @@ struct particle_data {
 	double Mass;
 } *P;
 
-int allocateMemory(void) {
-	if( !(P = malloc(NUM_OF_PART * sizeof(struct particle_data))) ) {
-		fprintf(stderr, "[Failed to allocate memory.]\n");
-		exit(0);
-	}
-}
-
 int loadInputFromFile() {
 	char inputPath[] = "./input/input.dat";
 
@@ -19,9 +12,12 @@ int loadInputFromFile() {
 
 	sprintf(buf, "%s", inputPath);
 
-	allocateMemory();
+	if( !(P = malloc(NUM_OF_PART * sizeof(struct particle_data))) ) {
+		fprintf(stderr, "[Failed to allocate memory.]\n");
+		exit(0);
+	}
 
-	if(!(inputFile = fopen(buf, "r"))) {
+	if(!(inputFile = fopen(buf, "rb"))) {
 		fprintf(stderr, "[Cannot open file `%s`]\n", buf);
 		exit(0);
 	}

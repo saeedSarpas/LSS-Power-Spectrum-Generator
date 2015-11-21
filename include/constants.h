@@ -5,32 +5,32 @@
 //-----------------------------------------------------------------------------
 // NUMBER OF PARTICLES IN THE FIELD
 //-----------------------------------------------------------------------------
-int NUM_OF_PART = 1000000;
+int NUM_OF_PART = 10000000;
 
 //-----------------------------------------------------------------------------
-// ORIGINAL LENGTH OF THE FILED (Same unit as GRID_SIZE and DELTA_K)
+// ORIGINAL LENGTH OF THE FILED (Same unit as GRID_SIZE)
 //-----------------------------------------------------------------------------
 int BOX_SIZE = 128;
 
 //-----------------------------------------------------------------------------
-// NUMBER OF GRID BLOCKS IN THE FIELD
+// NUMBER OF GRID BLOCKS ALONG EACH AXIS
 //-----------------------------------------------------------------------------
-int NUM_GRID_BLOCKS = 64;
+int NUM_GRID_BLOCKS = 256;
 
 //-----------------------------------------------------------------------------
 // SIZE OF EACH GRID BLOCKS (GRID_LENGTH * GRID_SIZE = BOX_LENGTH, Same unit
-// as BOX_LENGTH and DELTA_K)
+// as BOX_LENGTH)
 //-----------------------------------------------------------------------------
-int GRID_SIZE = 2;
+double GRID_SIZE = 0.5f;
 
 //-----------------------------------------------------------------------------
-// NUMBER OF BLOCKS AFTER FOURIER TRANSFORM (Since I used real to complex
+// NUMBER OF BLOCKS AFTER FOURIER TRANSFORM (Since we used real to complex
 // transformation, the number of blocks after Fourier transformation is
 // BOX_LENGTH * BOX_LENGTH * (BOX_LENGTH / 2 + 1))
 //-----------------------------------------------------------------------------
-int NUM_FOURIER_GRID_BLOCKS = 64 * 64 * (64 / 2 + 1);
+int NUM_FOURIER_GRID_BLOCKS = 256 * 265 * (265 / 2 + 1);
 
 //-----------------------------------------------------------------------------
-// DELTA_K IN (Same unit as BOX_LENGTH and GRID_SIZE)
+// NUMBER OF BINS IN FOURIER SPACE FOR POWER SPECTRUM
 //-----------------------------------------------------------------------------
-double DELTA_K = 0.5;
+int NUM_OF_BINS = 30;

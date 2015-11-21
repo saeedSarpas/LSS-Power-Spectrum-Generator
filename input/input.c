@@ -21,21 +21,23 @@ int main() {
 		return 1;
 	}
 
-	char input_type;
-	fprintf(stdout, "Input type: [r for random filed, u for uniform field (default)]: ");
-	fscanf(stdin, "%c", &input_type);
+	int input_type;
+	printf("Input type: [0 for random filed, 1 for uniform field (default)]: ");
+	fscanf(stdin, "%d", &input_type);
 
-	if (input_type == 'r') {
+	double cnst_mass = 10.0f;
+	if (input_type == 0) {
 		double * random_num;
 		random_num = malloc(sizeof(double));
 
 		int i;
 		for (i = 0; i < NUM_OF_PART; i++) {
 			int j;
-			for (j = 0; j < 7; j++) {
+			for (j = 0; j < 6; j++) {
 				random_double_num_ptr(BOX_SIZE, random_num);
 				fwrite(random_num, 1, sizeof(double), input_file_ptr);
 			}
+			fwrite(&cnst_mass, 1, sizeof(double), input_file_ptr);
 		}
 	} else {
 		double i, j, k, mass=100.0;

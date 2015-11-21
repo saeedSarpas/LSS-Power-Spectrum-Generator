@@ -4,6 +4,8 @@
 #include <time.h>
 #include <complex.h>
 #include <fftw3.h>
+#include <stdbool.h>
+#include <string.h>
 #include "include/constants.h"
 #include "include/global_functions.h"
 #include "include/load_input.h"
@@ -11,86 +13,98 @@
 #include "include/power_spectrum.h"
 
 int main(int argc, char *argv[]) {
-	int counter, i, j, k;
+	int counter, i, j, k, n;
 
-	fprintf(stdout, "Reading input file...");
+	printf("Reading input file...");
 	loadInputFromFile();
-	fprintf(stdout, "[done]\n");
+	printf("[done]\n");
 
-	fprintf(stdout, "Creating FFTW plan... ");
-	double * grid_mass_ptr;
-	grid_mass_ptr = calloc(pow(NUM_GRID_BLOCKS, 3), sizeof(double));
-	fftw_complex * grid_fourier_ptr;
-	grid_fourier_ptr = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NUM_FOURIER_GRID_BLOCKS);
+	printf("Creating FFTW plan... ");
+	double * gird_mass;
+	gird_mass = calloc(pow(NUM_GRID_BLOCKS, 3), sizeof(double));
+	fftw_complex * gird_fourier;
+	gird_fourier = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * NUM_FOURIER_GRID_BLOCKS);
 	fftw_plan p;
 	int rank[3] = {NUM_GRID_BLOCKS, NUM_GRID_BLOCKS, NUM_GRID_BLOCKS};
-	p = fftw_plan_dft_r2c(3, rank, grid_mass_ptr, grid_fourier_ptr, FFTW_MEASURE);
-	fprintf(stdout, "[done]\n");
+	p = fftw_plan_dft_r2c(3, rank, gird_mass, gird_fourier, FFTW_MEASURE);
+	printf("[done]\n");
 
-	char algorithm;
-	fprintf(stdout, "Choose griding algorithm, [n for NGP (defualt), c for CIC, t for TSC]: ");
-	fscanf(stdin, "%c", &algorithm);
-	int n;
-	if (algorithm == 'c') {
-		fprintf(stdout, "Griding using cloud in cell (CIC) algorithm... ");
-		for (n = 0; n < NUM_OF_PART; n++) { CIC(P[n], grid_mass_ptr); }
-		fprintf(stdout, "[done]\n");
-	} else if (algorithm == 't') {
-		fprintf(stdout, "Griding using triangular shaped cloud (TSC) algorithm... ");
-		for (n = 0; n < NUM_OF_PART; n++) { TSC(P[n], grid_mass_ptr); }
-		fprintf(stdout, "[done]\n");
+	printf("Choose griding algorithm, [1 for NGP, 2 for CIC, 3 for TSC]: ");
+	char algorithm_name[10];
+	int algorithm;
+	scanf("%d", &algorithm);
+	if (algorithm == 2) {
+		printf("Griding using cloud in cell (CIC) algorithm... ");
+		for (n = 0; n < NUM_OF_PART; n++) { CIC(P[n], gird_mass); }
+		strcpy(algorithm_name, "-cic.dat");
+		printf("[done]\n");
+	} else if (algorithm == 3) {
+		printf("Griding using triangular shaped cloud (TSC) algorithm... ");
+		for (n = 0; n < NUM_OF_PART; n++) { TSC(P[n], gird_mass); }
+		strcpy(algorithm_name, "-tsc.dat");
+		printf("[done]\n");
 	} else {
-		fprintf(stdout, "Griding using nearest grid points (NGP) algorithm... ");
-		for (n = 0; n < NUM_OF_PART; n++) { NGP(P[n], grid_mass_ptr); }
-		fprintf(stdout, "[done]\n");
+		printf("Griding using nearest grid points (NGP) algorithm... ");
+		for (n = 0; n < NUM_OF_PART; n++) { NGP(P[n], gird_mass); }
+		strcpy(algorithm_name, "-ngp.dat");
+		printf("[done]\n");
 	}
 
-	fprintf(stdout, "Dividing grid mass by the volume of the grid blocks... ");
+	printf("Dividing grid mass by the volume of the grid blocks... ");
 	int total_num_grid_blocks = pow(NUM_GRID_BLOCKS, 3);
 	double grid_block_volume = pow(GRID_SIZE, 3);
 	for (n = 0; n < total_num_grid_blocks; n++) {
-		grid_mass_ptr[n] /= grid_block_volume;
+		gird_mass[n] /= grid_block_volume;
 	}
-	fprintf(stdout, "[done]\n");
+	printf("[done]\n");
 
-	fprintf(stdout, "Do you want to save the grid? [y,n]: ");
-	char snapshot;
-	fscanf(stdin, "%c", &snapshot);
-	if (snapshot == 'y') {
-		FILE * snapshot;
-		snapshot = fopen("./grid.dat", "w");
+	int save_griding;
+	printf("Do you want to save the griding output? [0 for no, 1 for yes] : ");
+	scanf("%d", &save_griding);
+	if (save_griding == 1) {
+		FILE * griding;
+		char griding_output[50] = "./output/raw_data/griding";
+		strcat(griding_output, algorithm_name);
+		griding = fopen(griding_output, "w");
 		int index;
 		double density_holder;
 		for (i = 0; i < NUM_GRID_BLOCKS; i++){
 			for (j = 0; j < NUM_GRID_BLOCKS; j++){
-				for (k = 0; k < NUM_GRID_BLOCKS; k++){
+				for (k = 10; k < 11; k++){
 					index = threeToOne(i,j,k);
-					density_holder = grid_mass_ptr[index];
-					fprintf(snapshot,"%d\t%d\t%d\t%f\n", i, j, k, density_holder);
+					density_holder = gird_mass[index];
+					fprintf(griding,"%d\t%d\t%f\n", i, j, density_holder);
 				}
 			}
 		}
-		fclose(snapshot);
+		fclose(griding);
 	}
 
-	fprintf(stdout, "Fourier transform... ");
+	printf("Fourier transform... ");
 	fftw_execute(p);
-	fprintf(stdout, "[done]\n");
+	printf("[done]\n");
 	fftw_destroy_plan(p);
 
-	double mode_k, one_mode_ps;
-	FILE *output_file_ptr;
-	output_file_ptr = fopen("./output.dat", "wb");
-	fprintf(stdout, "Calculating power spectrum... ");
-	for(mode_k = 1.0; mode_k < NUM_GRID_BLOCKS/2; mode_k += 1.0){
-		one_mode_ps = oneModePS(mode_k, DELTA_K, grid_fourier_ptr);
-		fwrite(&mode_k, 1, sizeof(double), output_file_ptr);
-		fwrite(&one_mode_ps, 1, sizeof(double), output_file_ptr);
-	}
-	fclose(output_file_ptr);
-	fprintf(stdout, "[done]\n");
+	printf("Generating power spectrum... ");
+	double complex one_mode_ps;
+	double one_mode_ps_real, one_mode_ps_imag, mode_log;
+	double delta_k = 10 * GRID_SIZE, max_mode = (sqrt(3) * NUM_GRID_BLOCKS / 2);
+	FILE * result_file;
+	char power_spectrum[50] = "./output/raw_data/power-spectrum";
+	strcat(power_spectrum, algorithm_name);
+	result_file = fopen(power_spectrum, "wb");
+	int offset = 20;
 
-	fftw_free(grid_fourier_ptr);
-	free(grid_mass_ptr);
+	double mode_interval_log = log10(sqrt(3) * NUM_GRID_BLOCKS / 2) / NUM_OF_BINS;
+
+	for(mode_log = mode_interval_log; mode_log < mode_interval_log * NUM_OF_BINS; mode_log += 2 * mode_interval_log){
+		one_mode_ps = oneModePS(mode_log, mode_interval_log, gird_fourier);
+		fprintf(result_file, "%f\t%f\t%f\n", mode_log, mode_interval_log, pow(cabs(one_mode_ps), 2));
+	}
+	fclose(result_file);
+	printf("[done]\n");
+
+	fftw_free(gird_fourier);
+	free(gird_mass);
 	return 0;
 }
