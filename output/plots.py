@@ -35,8 +35,9 @@ class Plot:
         """Reading power spectrum files"""
         k = kwargs.get
         skiprows = k('skiprows') if 'skiprows' in kwargs else 0
-        self.__x, self.__dx, self.__y = np.loadtxt(filename, unpack='true',
-                                                   skiprows=skiprows)
+        self.__x, self.__dx, self.__y, self.__dy = np.loadtxt(filename,
+                                                              unpack='true',
+                                                              skiprows=skiprows)
 
     def draw_density(self, **kwargs):
         """Ploting density"""
@@ -77,8 +78,14 @@ class Plot:
             ymax = k('ymax') if 'ymax' in kwargs else np.amax(self.__y)
             plt.ylim(ymin, ymax)
 
-        plt.plot(self.__x, self.__y, color=color, linestyle=linestyle,
-                 label=label)
+        if 'xerr' not in kwargs or 'xerr' in kwargs and k('xerr') != 'true':
+            self.__dx = None
+
+        if 'yerr' not in kwargs or 'yerr' in kwargs and k('yerr') != 'true':
+            self.__dy = None
+
+        plt.errorbar(self.__x, self.__y, xerr=self.__dx, yerr=self.__dy,
+                     color=color, linestyle=linestyle, label=label)
 
     def save(self, name, **kwargs):
         """Save plots"""

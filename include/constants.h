@@ -28,7 +28,7 @@ double GRID_SIZE = 0.5f;
 // transformation, the number of blocks after Fourier transformation is
 // BOX_LENGTH * BOX_LENGTH * (BOX_LENGTH / 2 + 1))
 //-----------------------------------------------------------------------------
-int NUM_FOURIER_GRID_BLOCKS = 256 * 265 * (265 / 2 + 1);
+int NUM_FOURIER_GRID_BLOCKS = 256 * 265 * ((265 / 2) + 1);
 
 //-----------------------------------------------------------------------------
 // NUMBER OF BINS IN FOURIER SPACE FOR POWER SPECTRUM
