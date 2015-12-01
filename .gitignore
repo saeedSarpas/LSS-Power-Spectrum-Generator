@@ -2,3 +2,6 @@
 *.dat
 *.pyc
 output/plots/*
+*.txt
+*.conf
+*.png

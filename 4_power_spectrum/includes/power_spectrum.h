@@ -3,11 +3,9 @@ double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
 	// Change the order of modes by considering the location of DC mode on the
 	// r2c FFTW output array
 
-	if (i < 0) { i = NUM_GRID_BLOCKS + i; }
-	if (j < 0) { j = NUM_GRID_BLOCKS + j; }
-	if (k < 0) { k = NUM_GRID_BLOCKS + k; }
-
-	int index;
+	if (i < 0) { i = NUM_GRID_IN_EACH_AXIS  + i; }
+	if (j < 0) { j = NUM_GRID_IN_EACH_AXIS  + j; }
+	if (k < 0) { k = NUM_GRID_IN_EACH_AXIS  + k; }
 
 	// Following is the output of a two-dimensional r2c FFTW transform of a 8
 	// elements real array:
@@ -31,13 +29,19 @@ double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
 	// from the first half of the array and use following formula to reproduce
 	// the value of the element:
 	//
-	// X_{k_1, k_2, ..., k_d} = X^*_{k_{N_1 - k_1}, k_{N_2 - k_2}, ..., k_{N_d - k_d}}
+	// X_{k_1, k_2, ..., k_d} = X^*_{N_1 - k_1, N_2 - k_2, ..., N_d - k_d}
 
-	if (k > NUM_GRID_BLOCKS / 2 + 1){
-		index = threeToOne(NUM_GRID_BLOCKS - i, NUM_GRID_BLOCKS - j, NUM_GRID_BLOCKS - k);
+	int index;
+
+	if (k > (NUM_GRID_IN_EACH_AXIS / 2)){
+		index = threeToOne(NUM_GRID_IN_EACH_AXIS  - i,
+				NUM_GRID_IN_EACH_AXIS - j,
+				NUM_GRID_IN_EACH_AXIS  - k);
+
 		return conj(grid_fourier[index]);
 	} else {
 		index = threeToOne(i, j, k);
+
 		return grid_fourier[index];
 	}
 }
@@ -50,19 +54,23 @@ void variance(double * power_array, int length, double * callback_results) {
 	// +-----------------------------+
 
 	int i;
+
 	callback_results[0] = 0.0f;
+
 	for (i = 1; i < length; i++) {
 		callback_results[0] += power_array[i];
 	}
+
 	callback_results[0] /= length;
 
 	callback_results[1] = 0.0f;
+
 	for (i = 0; i < length; i++) {
 		callback_results[1] += pow(power_array[i] - callback_results[0], 2);
 	}
 }
 
-void oneModePS (double mode_log, double mode_interval_log, fftw_complex * gird_fourier, double * callback_results) {
+void one_mode_ps (double mode_log, double mode_interval_log, fftw_complex * gird_fourier, double * callback_results) {
 
 	// callback results:
 	// +--------------------------+
@@ -71,15 +79,15 @@ void oneModePS (double mode_log, double mode_interval_log, fftw_complex * gird_f
 
 	int i, j, k, length = 0;
 	double rho, d_log, *power_array;
-	power_array = calloc(pow(NUM_GRID_BLOCKS, 3), sizeof(double));
+	power_array = calloc(pow(NUM_GRID_IN_EACH_AXIS , 3), sizeof(double));
 
 	// Following we iterate through all negative and positive Fourier mode and
 	// it is the job of rho_tilda function to return the right element of
 	// the output of r2c FFTW transform
 
-	for (i = - (NUM_GRID_BLOCKS / 2); i < (NUM_GRID_BLOCKS / 2); i++){
-		for (j = - (NUM_GRID_BLOCKS / 2); j < NUM_GRID_BLOCKS; j++){
-			for (k = - (NUM_GRID_BLOCKS / 2); k < NUM_GRID_BLOCKS / 2; k++){
+	for (i = - (NUM_GRID_IN_EACH_AXIS / 2); i < (NUM_GRID_IN_EACH_AXIS / 2); i++){
+		for (j = - (NUM_GRID_IN_EACH_AXIS / 2); j < NUM_GRID_IN_EACH_AXIS; j++){
+			for (k = - (NUM_GRID_IN_EACH_AXIS / 2); k < NUM_GRID_IN_EACH_AXIS / 2; k++){
 				d_log = log10(sqrt(pow(i, 2) + pow(j, 2) + pow(k, 2)));
 				if (d_log >= mode_log - mode_interval_log && d_log <= mode_log + mode_interval_log) {
 					rho = rho_tilda(i, j, k, gird_fourier);
