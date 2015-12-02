@@ -1,12 +1,20 @@
 """Drawing power spectrum plots"""
 import plots as p
+import os
 
 #------------------------------------------------------------------------------
 #   POWER SPECTRUM
 #------------------------------------------------------------------------------
-PS_RANDOM_CIC = p.Plot()
-PS_RANDOM_CIC.read_power_spectrum("./power_spectrum-cic-256-HaloTab-35289.dat")
-PS_RANDOM_CIC.draw_power_spectrum(color="#885511", linestyle="solid",
-                                  label="cic", ymin=0, ymax=3e10,
-                                  yerr='true', xmin=-0.1, xmax=2.5)
-PS_RANDOM_CIC.save("ps-cic", xlabel="$k$", ylabel="$P$")
+
+PS = [f for f in os.listdir("./") if f.startswith("power-spectrum-")]
+
+PS_PLOTS = {}
+
+for dat in PS:
+    PS_PLOTS[dat] = p.Plot()
+    PS_PLOTS[dat].read_power_spectrum(dat)
+    PS_PLOTS[dat].draw_power_spectrum(color="#5b7c7d", ecolor="#fe5e31",
+                                      linestyle="solid",
+                                      xmin=0, xmax=2, yerr='true')
+    PS_PLOTS[dat].save(os.path.splitext(dat)[0],
+                       xlabel="$\\log k$", ylabel="$P$")
