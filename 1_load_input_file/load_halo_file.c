@@ -11,6 +11,20 @@
 int main() {
 	int i, n;
 
+	int mass_mode;
+	printf("Mass mode [0 for constant mass, 1 for real mass]: ");
+	scanf("%d", &mass_mode);
+
+	char nickname[256];
+	if (mass_mode == 0) {
+		strcpy(nickname, IN_NICKS[1]);
+	} else if (mass_mode == 1) {
+		strcpy(nickname, IN_NICKS[2]);
+	} else {
+		printf("[Wrong mass mode]\n");
+		exit(0);
+	}
+
 	char read_halo_msg[256] = "Reading HaloTab_Run1 file... ";
 	clock_t begin = start(read_halo_msg);
 
@@ -41,7 +55,7 @@ int main() {
 	int num_halo;
 	int cntr = 0;
 
-	if(!(P = malloc(num_line * sizeof(struct particle_data)))) {
+	if (!(P = malloc(num_line * sizeof(struct particle_data)))) {
 		printf("[Failed to allocate memory.]\n");
 		exit(0);
 	}
@@ -49,7 +63,9 @@ int main() {
 	while ((read = getline(&line, &len, in_file)) != -1) {
 		sscanf(line, "%lf\t%lf\t%lf\t%lf\t%d\n",
 				&P[cntr].Mass, &P[cntr].Pos[0], &P[cntr].Pos[1], &P[cntr].Pos[2], &num_halo);
-		P[cntr].Mass = mass_const;
+
+		if (mass_mode == 0) { P[cntr].Mass = mass_const; }
+
 		cntr++;
 	}
 
@@ -63,7 +79,7 @@ int main() {
 	FILE * out_file;
 
 	char out_path[256] = "./outputs/";
-	append_input_filename(IN_NICKS[1], out_path);
+	append_input_filename(nickname, out_path);
 
 	if (!(out_file = fopen(out_path, "wb"))) {
 		printf("[Cannot open file %s]\n", out_path);
@@ -90,7 +106,7 @@ int main() {
 	C->NumPart = num_line;
 	C->BoxLength = 1200;
 
-	set_config(*C, IN_NICKS[1]);
+	set_config(*C, nickname);
 
 	done(begin);
 

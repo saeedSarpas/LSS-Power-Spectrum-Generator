@@ -1,21 +1,28 @@
 //-----------------------------------------------------------------------------
 // NUMBER OF GRID BLOCKS ALONG EACH AXIS
 //-----------------------------------------------------------------------------
-int NUM_GRID_IN_EACH_AXIS = 256;
+int NUM_GRID_IN_EACH_AXIS = 64;
 
 //-----------------------------------------------------------------------------
 // NUMBER OF BINS IN FOURIER SPACE FOR POWER SPECTRUM
 //-----------------------------------------------------------------------------
-int NUM_OF_BINS = 30;
+int NUM_OF_BINS = 12;
 
 //-----------------------------------------------------------------------------
 // STRUCTURED INPUT DATA OF THE FIELD BASED ON THE DATA STRUCTURE (OUTPUT OF
 // THE 1ST STEP)
 //-----------------------------------------------------------------------------
-int STR_LEN = 256;
-char IN_FILENAME[2][256] = {"", "HaloTab_Run1.0.1_FOF.txt"};
-char IN_NICKS[2][256] = {"random", "HaloTab"};
-int IN_ARR_LEN = 2;
+char IN_FILENAME[3][256] = {
+	"",
+	"HaloTab_Run1.0.1_FOF.txt",
+	"HaloTab_Run1.0.1_FOF.txt"};
+
+char IN_NICKS[3][256] = {
+	"random",
+	"HaloTab-CnstMass",
+	"HaloTab"};
+
+int IN_ARR_LEN = 3;
 
 //-----------------------------------------------------------------------------
 // CONFIG FILE EXTENSION. THIS FILE CONTAINS NUMBER OF PARTICLES AND THE LENGTH

@@ -3,9 +3,9 @@ double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
 	// Change the order of modes by considering the location of DC mode on the
 	// r2c FFTW output array
 
-	if (i < 0) { i = NUM_GRID_IN_EACH_AXIS  + i; }
-	if (j < 0) { j = NUM_GRID_IN_EACH_AXIS  + j; }
-	if (k < 0) { k = NUM_GRID_IN_EACH_AXIS  + k; }
+	if (i < 0) { i = NUM_GRID_IN_EACH_AXIS  - abs(i); }
+	if (j < 0) { j = NUM_GRID_IN_EACH_AXIS  - abs(j); }
+	if (k < 0) { k = NUM_GRID_IN_EACH_AXIS  - abs(k); }
 
 	// Following is the output of a two-dimensional r2c FFTW transform of a 8
 	// elements real array:

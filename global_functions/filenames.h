@@ -49,7 +49,7 @@ void append_power_spectrum_filename(char in_file[256], char alg_name[256],
 	char num_part[16];
 	sprintf(num_part, "%d", C.NumPart);
 
-	char * strings[] = {"power_spectrum-", alg_name, "-",
+	char * strings[] = {"power-spectrum-", alg_name, "-",
 		num_grid_in_each_axis, "-", in_file, "-", num_part, ".dat"};
 
 	str_concat(strings, 9, return_path);
