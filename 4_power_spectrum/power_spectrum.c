@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
 	double * results;
 	results = malloc(2 * sizeof(double));
 
-	for(mode_log = mode_interval_log; mode_log < mode_interval_log *
+	for(mode_log = mode_interval_log; mode_log < mode_interval_log * 2 *
 			NUM_OF_BINS; mode_log += 2 * mode_interval_log){
 
 		/*// callback results of:*/
