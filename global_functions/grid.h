@@ -13,7 +13,7 @@ int threeToOne(int i, int j, int k) {
 	j = gridBoundryChecker(j);
 	k = gridBoundryChecker(k);
 
-	return k * NUM_GRID_IN_EACH_AXIS * NUM_GRID_IN_EACH_AXIS + j * NUM_GRID_IN_EACH_AXIS + i;
+	return k * pow(NUM_GRID_IN_EACH_AXIS, 2) + j * NUM_GRID_IN_EACH_AXIS + i;
 }
 
 int moveAlongGridAxis(int init_pos, int step) {

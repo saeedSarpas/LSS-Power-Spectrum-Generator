@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	double mode_interval_log = log10(sqrt(3) * NUM_GRID_IN_EACH_AXIS / 2)
-								/ NUM_OF_BINS;
+								/ (2 * NUM_OF_BINS);
 
 	double * results;
 	results = malloc(2 * sizeof(double));

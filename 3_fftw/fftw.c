@@ -14,6 +14,7 @@
 #include "./includes/load_density_contrast_grid.h"
 
 int main(int argc, char *argv[]) {
+	int i;
 
 	char in_filename[256];
 	choosing_input(in_filename);
@@ -63,6 +64,17 @@ int main(int argc, char *argv[]) {
 
 	fftw_execute(p);
 	fftw_destroy_plan(p);
+
+	done(begin);
+
+	char normalization_msg[256] = "Normalizing FFTW results... ";
+	begin = start(normalization_msg);
+
+	double norm_factor = sqrt(pow(NUM_GRID_IN_EACH_AXIS, 3));
+
+	for (i = 0; i < grid_fourier_size; i++) {
+		grid_fourier[i] /= norm_factor;
+	}
 
 	done(begin);
 

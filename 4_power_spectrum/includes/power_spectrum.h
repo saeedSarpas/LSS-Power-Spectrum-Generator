@@ -27,7 +27,7 @@ double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
 	// elements we should check if the element belongs to second half of the last
 	// dimension of the output array. If yes, we should find the linked element
 	// from the first half of the array and use following formula to reproduce
-	// the value of the element:
+	// the value of the element (the output values satisfy Hermitian redundancy):
 	//
 	// X_{k_1, k_2, ..., k_d} = X^*_{N_1 - k_1, N_2 - k_2, ..., N_d - k_d}
 
@@ -66,11 +66,12 @@ void variance(double * power_array, int length, double * callback_results) {
 	callback_results[1] = 0.0f;
 
 	for (i = 0; i < length; i++) {
-		callback_results[1] += pow(power_array[i] - callback_results[0], 2);
+		callback_results[1] += pow((power_array[i] - callback_results[0]), 2);
 	}
 }
 
-void one_mode_ps (double mode_log, double mode_interval_log, fftw_complex * gird_fourier, double * callback_results) {
+void one_mode_ps (double mode_log, double mode_interval_log,
+		fftw_complex * gird_fourier, double * callback_results) {
 
 	// callback results:
 	// +--------------------------+
@@ -85,11 +86,16 @@ void one_mode_ps (double mode_log, double mode_interval_log, fftw_complex * gird
 	// it is the job of rho_tilda function to return the right element of
 	// the output of r2c FFTW transform
 
-	for (i = - (NUM_GRID_IN_EACH_AXIS / 2); i < (NUM_GRID_IN_EACH_AXIS / 2); i++){
-		for (j = - (NUM_GRID_IN_EACH_AXIS / 2); j < NUM_GRID_IN_EACH_AXIS; j++){
-			for (k = - (NUM_GRID_IN_EACH_AXIS / 2); k < NUM_GRID_IN_EACH_AXIS / 2; k++){
+	int mid_grid = NUM_GRID_IN_EACH_AXIS / 2;
+	for (i = - mid_grid; i < mid_grid; i++){
+		for (j = - mid_grid; j < mid_grid; j++){
+			for (k = - mid_grid; k < mid_grid; k++){
 				d_log = log10(sqrt(pow(i, 2) + pow(j, 2) + pow(k, 2)));
-				if (d_log >= mode_log - mode_interval_log && d_log <= mode_log + mode_interval_log) {
+
+				double min = mode_log - mode_interval_log;
+				double max = mode_log + mode_interval_log;
+
+				if (d_log >= min && d_log < max) {
 					rho = rho_tilda(i, j, k, gird_fourier);
 					power_array[length] += pow(creal(rho), 2) + pow(cimag(rho), 2);
 					length++;

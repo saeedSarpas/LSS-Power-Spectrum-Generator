@@ -1,12 +1,12 @@
 //-----------------------------------------------------------------------------
-// NUMBER OF GRID BLOCKS ALONG EACH AXIS
+// NUMBER OF GRID BLOCKS ALONG EACH AXIS (SHOULD BE EVEN)
 //-----------------------------------------------------------------------------
 int NUM_GRID_IN_EACH_AXIS = 64;
 
 //-----------------------------------------------------------------------------
 // NUMBER OF BINS IN FOURIER SPACE FOR POWER SPECTRUM
 //-----------------------------------------------------------------------------
-int NUM_OF_BINS = 12;
+int NUM_OF_BINS = 16;
 
 //-----------------------------------------------------------------------------
 // STRUCTURED INPUT DATA OF THE FIELD BASED ON THE DATA STRUCTURE (OUTPUT OF

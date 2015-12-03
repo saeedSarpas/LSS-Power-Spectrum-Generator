@@ -5,4 +5,4 @@ output/plots/*
 *.txt
 *.conf
 *.png
-Thesis/*
+report
