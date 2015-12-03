@@ -132,6 +132,13 @@ class Plot:
                      color=color, ecolor=ecolor, linestyle=linestyle,
                      label=label)
 
+        if 'shaded' in kwargs and k('shaded') == 'true':
+            if 'yerr' in kwargs:
+                __fc = k('facecolor') if 'facecolor' in kwargs else "#fef4ea"
+                plt.fill_between(self.__x, self.__y - self.__dy, self.__y +
+                                self.__dy, facecolor=__fc, edgecolor=__fc,
+                                 interpolate='true')
+
     def save(self, name, **kwargs):
         """Save plots"""
         k = kwargs.get
