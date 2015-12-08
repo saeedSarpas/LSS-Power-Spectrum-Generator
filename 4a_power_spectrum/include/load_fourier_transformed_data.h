@@ -1,4 +1,4 @@
-void load_input(char filename[256],
+void load_fourier_transformed_data(char filename[256],
 		fftw_complex * grid_fourier_delta) {
 
 	char input_path[256] = "./../3_fftw/outputs/";

@@ -13,8 +13,9 @@
 #include "./../global_functions/filenames.h"
 #include "./../global_functions/grid.h"
 
-#include "./includes/load_input.h"
-#include "./includes/power_spectrum.h"
+#include "./include/load_fourier_transformed_data.h"
+#include "./include/rho_tilda.h"
+#include "./include/one_mode_ps.h"
 
 int main(int argc, char *argv[]) {
 
@@ -25,7 +26,7 @@ int main(int argc, char *argv[]) {
 	choosing_algorithm(alg_name);
 
 	if (!(C = malloc(sizeof(struct config))) ) {
-		printf("[Failed to allocate memory.]\n");
+		printf("[Failed to allocate memory]\n");
 		exit(0);
 	}
 	get_config(C, in_filename);
@@ -42,7 +43,7 @@ int main(int argc, char *argv[]) {
 
 	char input_file[256] = "";
 	append_fourier_transformed_filename(in_filename, alg_name, *C, input_file);
-	load_input(input_file, grid_fourier);
+	load_fourier_transformed_data(input_file, grid_fourier);
 
 	done(begin);
 

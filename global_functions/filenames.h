@@ -54,3 +54,13 @@ void append_power_spectrum_filename(char in_file[256], char alg_name[256],
 
 	str_concat(strings, 9, return_path);
 }
+
+void append_indexed_modes_filename(char * return_path) {
+
+	char num_grid_in_each_axis[3];
+	sprintf(num_grid_in_each_axis, "%d", NUM_GRID_IN_EACH_AXIS);
+
+  char * strings[] = {"indexed-modes-", num_grid_in_each_axis, ".dat"};
+
+  str_concat(strings, 3, return_path);
+}

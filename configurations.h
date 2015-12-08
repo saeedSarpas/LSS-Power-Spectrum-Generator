@@ -54,3 +54,14 @@ struct particle_data {
 	double Pos[3];
 	double Mass;
 } *P;
+
+//-----------------------------------------------------------------------------
+// K MODES STRUCT
+//-----------------------------------------------------------------------------
+struct modes {
+  int index;
+  int kx;
+  int ky;
+  int kz;
+  double length;
+} *M;

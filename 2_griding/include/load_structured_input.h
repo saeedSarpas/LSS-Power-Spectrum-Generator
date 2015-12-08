@@ -1,4 +1,4 @@
-int load_input(struct particle_data P[], char in_filename[256],
+int load_sturctured_input(struct particle_data P[], char in_filename[256],
 		struct config C) {
 
 	int i, n;

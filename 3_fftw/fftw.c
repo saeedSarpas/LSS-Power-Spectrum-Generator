@@ -11,7 +11,8 @@
 #include "./../global_functions/choosing.h"
 #include "./../global_functions/config_file.h"
 #include "./../global_functions/filenames.h"
-#include "./includes/load_density_contrast_grid.h"
+
+#include "./include/load_density_contrast_grid.h"
 
 int main(int argc, char *argv[]) {
 	int i;

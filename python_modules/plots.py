@@ -54,9 +54,10 @@ class Plot:
         """Reading power spectrum files"""
         k = kwargs.get
         skiprows = k('skiprows') if 'skiprows' in kwargs else 0
-        self.__x, self.__dx, self.__y, self.__dy = np.loadtxt(filename,
+        __x, self.__dx, self.__y, self.__dy = np.loadtxt(filename,
                                                               unpack='true',
                                                               skiprows=skiprows)
+        self.__x = np.power(10, __x)
 
     def draw_density(self, **kwargs):
         """Ploting density"""
@@ -87,37 +88,20 @@ class Plot:
         linestyle = k("linestyle") if 'linestyle' in kwargs else 'solid'
         label = k("label") if 'label' in kwargs else ''
 
+        xoffset = 0.05 * abs(self.__x[-1] - self.__x[0])
+        yoffset = 0.05 * abs(self.__y[-1] - self.__y[0])
+
         if 'xmin' in kwargs:
-            xmin = k('xmin')
-        elif 'xerr' in kwargs:
-            xmin = min(self.__x) - 1.4 * self.__dx[np.where(min(self.__x))]
-        else:
-            xmin = min(self.__x)
+            plt.gca().set_xlim(left=k('xmin'))
 
         if 'xmax' in kwargs:
-            xmax = k('xmax')
-        elif 'xerr' in kwargs:
-            xmax = max(self.__x) + 1.4 * self.__dx[np.where(max(self.__x))]
-        else:
-            xmax = max(self.__x)
-
-        plt.xlim(xmin, xmax)
+            plt.gca().set_xlim(right=k('xmax'))
 
         if 'ymin' in kwargs:
-            ymin = k('ymin')
-        elif 'yerr' in kwargs:
-            ymin = min(self.__y) - 1.4 * self.__dy[np.where(min(self.__y))]
-        else:
-            ymin = min(self.__y)
+            plt.gca().set_ylim(left=k('ymin'))
 
         if 'ymax' in kwargs:
-            ymax = k('ymax')
-        elif 'yerr' in kwargs:
-            ymax = max(self.__y) + 1.4 * self.__dy[np.where(max(self.__y))]
-        else:
-            ymax = max(self.__y)
-
-        plt.ylim(ymin, ymax)
+            plt.gca().set_ylim(right=k('ymax'))
 
         if 'xerr' not in kwargs or 'xerr' in kwargs and k('xerr') != 'true':
             self.__dx = None
@@ -125,7 +109,11 @@ class Plot:
         if 'yerr' not in kwargs or 'yerr' in kwargs and k('yerr') != 'true':
             self.__dy = None
 
-        plt.xlim(xmin, xmax)
+        if 'xaxislog' in kwargs:
+            plt.xscale(k('xaxislog'))
+
+        if 'yaxislog' in kwargs:
+            plt.yscale(k('yaxislog'))
 
         ecolor = k('ecolor') if 'ecolor' in kwargs else "#febb00"
         plt.errorbar(self.__x, self.__y, xerr=self.__dx, yerr=self.__dy,
@@ -153,16 +141,3 @@ class Plot:
         plt.savefig(path)
 
         plt.close()
-
-def make_colormap(seq):
-    """Return a LinearSegmentedColormap"""
-    seq = [(None,) * 3, 0.0] + list(seq) + [1.0, (None,) * 3]
-    cdict = {'red': [], 'green': [], 'blue': []}
-    for i, item in enumerate(seq):
-        if isinstance(item, float):
-            r1, g1, b1 = seq[i - 1]
-            r2, g2, b2 = seq[i + 1]
-            cdict['red'].append([item, r1, r2])
-            cdict['green'].append([item, g1, g2])
-            cdict['blue'].append([item, b1, b2])
-            return mcolors.LinearSegmentedColormap('CustomMap', cdict)

@@ -10,9 +10,12 @@
 #include "./../global_functions/config_file.h"
 #include "./../global_functions/grid.h"
 #include "./../global_functions/filenames.h"
-#include "./includes/load_input.h"
-#include "./includes/griding.h"
-#include "./includes/density_contrast.h"
+
+#include "./include/load_structured_input.h"
+#include "./include/ngp.h"
+#include "./include/cic.h"
+#include "./include/tsc.h"
+#include "./include/density_contrast.h"
 
 int main() {
 	char in_filename[256];
@@ -36,7 +39,7 @@ int main() {
 		exit(0);
 	}
 
-	load_input(P, in_filename, *C);
+	load_sturctured_input(P, in_filename, *C);
 
 	done(begin);
 
@@ -120,7 +123,7 @@ int main() {
 			for (k = (NUM_GRID_IN_EACH_AXIS / 2);
 					k < (NUM_GRID_IN_EACH_AXIS / 2) + 1; k++) {
 
-				index = threeToOne(i, j, k);
+				index = three_to_one(i, j, k);
 				fprintf(ascii_out_file, "%d\t%d\t%f\n", i, j, grid_delta[index]);
 			}
 		}
