@@ -5,19 +5,11 @@ void load_density_contrast_grid(char filename[256], double * grid_delta) {
 	strcat(input_path, filename);
 
 	FILE * input_file;
+	open_file(&input_file, input_path, "r");
 
-	if(!(input_file = fopen(input_path, "r"))) {
-		printf("[Cannot open file `%s`]\n", input_path);
-		exit(0);
-	}
+	size_t tot_num_grid = pow(NUM_GRID_IN_EACH_AXIS, 3);
 
-	int total_num_grid = pow(NUM_GRID_IN_EACH_AXIS, 3);
-
-	if(fread(grid_delta, sizeof(double), total_num_grid, input_file) !=
-			total_num_grid) {
-		printf("[Cannot read from file %s]", input_path);
-		exit(0);
-	}
+	read_double_from_file(input_file, input_path, &grid_delta, tot_num_grid);
 
 	fclose(input_file);
 }
