@@ -39,9 +39,8 @@ int main() {
 	done(begin);
 
 	double * grid_mass;
-	if (!(grid_mass = calloc(pow(NUM_GRID_IN_EACH_AXIS, 3), sizeof(double)))) {
-		printf("[Failed to allocate memory.]");
-	}
+  size_t tot_num_grid = pow(NUM_GRID_IN_EACH_AXIS, 3);
+  allocate_double_array(&grid_mass, tot_num_grid);
 
 	if (strcmp(alg_name, CIC_POSTFIX) == 0) {
 		char alg[256] = "Griding using cloud in cell (CIC) algorithm... ";
@@ -70,9 +69,7 @@ int main() {
 	begin = start(calc_dens_msg);
 
 	double * grid_delta;
-	if (!(grid_delta = calloc(pow(NUM_GRID_IN_EACH_AXIS, 3), sizeof(double)))) {
-		printf("[Failed to allocate memory.]");
-	};
+  allocate_double_array(&grid_delta, tot_num_grid);
 
 	density_contrast(grid_mass, *C, grid_delta);
 
@@ -91,12 +88,8 @@ int main() {
 		exit(0);
 	}
 
-	int total_num_grid = pow(NUM_GRID_IN_EACH_AXIS, 3);
-	if (fwrite(grid_delta, sizeof(double), total_num_grid, out_file) !=
-			total_num_grid) {
-		printf("[Cannot write on stream %s]", output_path);
-		exit(0);
-	}
+  write_double_to_file(grid_delta, tot_num_grid, out_file, output_path);
+
 	fclose(out_file);
 
 	done(begin);
@@ -110,10 +103,7 @@ int main() {
 
 	FILE * ascii_out_file;
 
-	if (!(ascii_out_file = fopen(ascii_output_path, "w"))) {
-		printf("[Cannot open file %s]\n", ascii_output_path);
-		exit(0);
-	}
+  open_file(&ascii_out_file, ascii_output_path, "w");
 
 	int i, j, k, index;
 	for (i = 0; i < NUM_GRID_IN_EACH_AXIS; i++) {

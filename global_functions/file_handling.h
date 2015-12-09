@@ -12,3 +12,11 @@ void write_struct_triangle_to_file(struct triangles * t,
     exit(0);
   }
 }
+
+void write_double_to_file(double * d, size_t nmemb, FILE * file,
+                          char * file_path) {
+  if (fwrite(d, sizeof(double), nmemb, file) != nmemb) {
+    printf("[Cannot write to file %s]\n", file_path);
+    exit(0);
+  }
+}
