@@ -68,17 +68,6 @@ int main(int argc, char *argv[]) {
 
 	done(begin);
 
-	char normalization_msg[256] = "Normalizing FFTW results... ";
-	begin = start(normalization_msg);
-
-	double norm_factor = sqrt(pow(NUM_GRID_IN_EACH_AXIS, 3));
-
-	for (i = 0; i < grid_fourier_size; i++) {
-		grid_fourier[i] /= norm_factor;
-	}
-
-	done(begin);
-
 	char save_out[256] = "Saving data... ";
 	begin = start(save_out);
 
