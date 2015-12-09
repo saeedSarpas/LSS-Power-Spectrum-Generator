@@ -61,7 +61,7 @@ void one_mode_ps (double mode_log, double mode_interval_log,
 		variance(power_array, length, callback_results);
 		callback_results[1] = sqrt(callback_results[1]) / length;
 	} else {
-		printf("\nFind no point in this shell, log10(mode)= %f and log10(mode_interval)= %f\n", mode_log, mode_interval_log);
+		printf("\n[Find no point in this shell, mode= %f and mode_interval = %f]\n", pow(10, mode_log), pow(10, mode_interval_log));
 		exit(0);
 	}
 }

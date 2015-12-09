@@ -33,7 +33,7 @@ double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
 
 	int index;
 
-	if (k > (NUM_GRID_IN_EACH_AXIS / 2)){
+	if (k >= (NUM_GRID_IN_EACH_AXIS / 2)){
 		index = three_to_one(NUM_GRID_IN_EACH_AXIS  - i,
 				NUM_GRID_IN_EACH_AXIS - j,
 				NUM_GRID_IN_EACH_AXIS  - k);

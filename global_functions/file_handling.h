@@ -29,10 +29,18 @@ void write_double_to_file(double * d, size_t nmemb, FILE * file,
 	}
 }
 
-void read_double_from_file(FILE * file, char * file_path, double ** d,
+void read_double_from_file(FILE * file, char * file_path, double * d,
 						   size_t size) {
-	if (fread(*d, sizeof(double), size, file) != size) {
+	if (fread(d, sizeof(double), size, file) != size) {
 		printf("[Cannot read from file %s]", file_path);
+		exit(0);
+	}
+}
+
+void read_fftw_comlex_from(FILE * file, char * file_path, fftw_complex * f,
+						   size_t size) {
+	if (fread(f, sizeof(fftw_complex), size, file) != size) {
+		printf("[Cannot read from file %s]\n", file_path);
 		exit(0);
 	}
 }

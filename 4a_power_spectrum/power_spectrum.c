@@ -12,6 +12,8 @@
 #include "./../global_functions/config_file.h"
 #include "./../global_functions/filenames.h"
 #include "./../global_functions/grid.h"
+#include "./../global_functions/memory_allocation.h"
+#include "./../global_functions/file_handling.h"
 
 #include "./include/load_fourier_transformed_data.h"
 #include "./include/rho_tilda.h"
@@ -22,17 +24,14 @@ int main(int argc, char *argv[]) {
 	char in_filename[256];
 	choosing_input(in_filename);
 
+	allocate_struct_config(&C);
+	get_config(C, in_filename);
+
 	char alg_name[256];
 	choosing_algorithm(alg_name);
 
-	if (!(C = malloc(sizeof(struct config))) ) {
-		printf("[Failed to allocate memory]\n");
-		exit(0);
-	}
-	get_config(C, in_filename);
-
 	char load_input_msg[256] = "Load Fourier transformed data... ";
-	clock_t begin = start(load_input_msg);
+	clock_t start_load_input = start(load_input_msg);
 
 	size_t grid_fourier_size = pow(NUM_GRID_IN_EACH_AXIS, 2) *
 		((NUM_GRID_IN_EACH_AXIS / 2) + 1);
@@ -45,10 +44,10 @@ int main(int argc, char *argv[]) {
 	append_fourier_transformed_filename(in_filename, alg_name, *C, input_file);
 	load_fourier_transformed_data(input_file, grid_fourier);
 
-	done(begin);
+	done(start_load_input);
 
 	char gen_ps_msg[256] = "Generating power spectrum... ";
-	begin = start(gen_ps_msg);
+	clock_t start_gen_ps = start(gen_ps_msg);
 
 	double mode_log;
 
@@ -56,25 +55,22 @@ int main(int argc, char *argv[]) {
 	append_power_spectrum_filename(in_filename, alg_name, *C, out_path);
 
 	FILE * out_file;
-	if(!(out_file = fopen(out_path, "wb"))) {
-		printf("[Cannot open file `%s`]\n", out_path);
-		exit(0);
-	}
+	open_file(&out_file, out_path, "wb");
 
 	double mode_interval_log = log10(sqrt(3) * NUM_GRID_IN_EACH_AXIS / 2)
 								/ (2 * NUM_OF_BINS);
 
 	double * results;
-	results = malloc(2 * sizeof(double));
+	allocate_double_array(&results, 2);
 
 	for(mode_log = mode_interval_log; mode_log < mode_interval_log * 2 *
 			NUM_OF_BINS; mode_log += 2 * mode_interval_log){
 
-		/*// callback results of:*/
+		// callback results of:
 		one_mode_ps(mode_log, mode_interval_log, grid_fourier, results);
-		/*// +--------------------------+*/
-		/*// | 0: mode power | 1: error |*/
-		/*// +--------------------------+*/
+		// +--------------------------+
+		// | 0: mode power | 1: error |
+		// +--------------------------+
 
 		fprintf(out_file, "%f\t%f\t%f\t%f\n", mode_log, mode_interval_log,
 				results[0], results[1]);
@@ -82,7 +78,7 @@ int main(int argc, char *argv[]) {
 
 	fclose(out_file);
 
-	done(begin);
+	done(start_gen_ps);
 
 	free(results);
 	fftw_free(grid_fourier);
