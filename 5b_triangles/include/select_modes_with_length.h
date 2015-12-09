@@ -12,6 +12,11 @@ void get_mode_length (struct modes * M[], int * index, double * m_length) {
 
 void select_modes_with_length (struct modes * M[], double length, int * indices) {
 
+  // indices:
+  // +---+---------+---------------------+--------------+
+  // | N | index 1 | index 2 ... index N | unset memory |
+  // +---+---------+---------------------+--------------+
+
   double m_length;
   int total_num_grid = pow(NUM_GRID_IN_EACH_AXIS, 3);
   int temp_index = total_num_grid / 2;

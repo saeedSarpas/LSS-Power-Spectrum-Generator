@@ -64,3 +64,33 @@ void append_indexed_modes_filename(char * return_path) {
 
   str_concat(strings, 3, return_path);
 }
+
+void append_equilateral_triangles_filename(char * return_path) {
+
+	char num_grid_in_each_axis[3];
+	sprintf(num_grid_in_each_axis, "%d", NUM_GRID_IN_EACH_AXIS);
+
+  char * strings[] = {"equilateral-triangles-", num_grid_in_each_axis, ".dat"};
+
+  str_concat(strings, 3, return_path);
+}
+
+void append_isosceles_triangles_filename(char * return_path) {
+
+	char num_grid_in_each_axis[3];
+	sprintf(num_grid_in_each_axis, "%d", NUM_GRID_IN_EACH_AXIS);
+
+  char * strings[] = {"isosceles-triangles-", num_grid_in_each_axis, ".dat"};
+
+  str_concat(strings, 3, return_path);
+}
+
+void append_scalene_triangles_filename(char * return_path) {
+
+	char num_grid_in_each_axis[3];
+	sprintf(num_grid_in_each_axis, "%d", NUM_GRID_IN_EACH_AXIS);
+
+  char * strings[] = {"scalene-triangles-", num_grid_in_each_axis, ".dat"};
+
+  str_concat(strings, 3, return_path);
+}
