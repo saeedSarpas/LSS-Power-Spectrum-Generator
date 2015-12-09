@@ -9,10 +9,7 @@ int load_sturctured_input(struct particle_data P[], char in_filename[256],
 
 	FILE * input_file;
 
-	if (!(input_file = fopen(input_path , "rb"))) {
-		printf("[Cannot open file `%s`]\n", input_path);
-		exit(0);
-	}
+  open_file(&input_file, input_path, "rb");
 
 	for (n = 0; n < C.NumPart; n++) {
 		for (i = 0; i < 3; i++) {

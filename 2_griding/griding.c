@@ -10,6 +10,8 @@
 #include "./../global_functions/config_file.h"
 #include "./../global_functions/grid.h"
 #include "./../global_functions/filenames.h"
+#include "./../global_functions/memory_allocation.h"
+#include "./../global_functions/file_handling.h"
 
 #include "./include/load_structured_input.h"
 #include "./include/ngp.h"
@@ -24,20 +26,13 @@ int main() {
 	char alg_name[256];
 	choosing_algorithm(alg_name);
 
-	if (!(C = malloc(sizeof(struct config))) ) {
-		printf("[Failed to allocate memory.]\n");
-		exit(0);
-	}
-
+  allocate_struct_config(&C);
 	get_config(C, in_filename);
 
 	char load_msg[256] = "Reading griding input... ";
 	clock_t begin = start(load_msg);
 
-	if (!(P = malloc(C->NumPart * sizeof(struct particle_data))) ) {
-		printf("[Failed to allocate memory.]\n");
-		exit(0);
-	}
+  allocate_struct_particle_data_array(&P, C->NumPart);
 
 	load_sturctured_input(P, in_filename, *C);
 
