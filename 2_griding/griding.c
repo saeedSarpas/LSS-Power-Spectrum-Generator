@@ -48,25 +48,28 @@ int main() {
 		printf("[Failed to allocate memory.]");
 	}
 
-	if (alg_name == CIC_POSTFIX) {
+	if (strcmp(alg_name, CIC_POSTFIX) == 0) {
 		char alg[256] = "Griding using cloud in cell (CIC) algorithm... ";
 		clock_t begin = start(alg);
 		int n;
 		for (n = 0; n < C->NumPart; n++) { cic(P[n], grid_mass, *C); }
 		done(begin);
-	} else if (alg_name == TSC_POSTFIX) {
+	} else if (strcmp(alg_name, TSC_POSTFIX) == 0) {
 		char alg[256] = "Griding using triangular shaped cloud (TSC) algorithm... ";
 		clock_t begin = start(alg);
 		int n;
 		for (n = 0; n < C->NumPart; n++) { tsc(P[n], grid_mass, *C); }
 		done(begin);
-	} else {
+	} else if (strcmp(alg_name, NGP_POSTFIX) == 0) {
 		char alg[256] = "Griding using nearest grid points (NGP) algorithm... ";
 		clock_t begin = start(alg);
 		int n;
 		for (n = 0; n < C->NumPart; n++) { ngp(P[n], grid_mass, *C); }
 		done(begin);
-	}
+	} else {
+    printf("[Wrong algorithm]\n");
+    exit(0);
+  }
 
 	char calc_dens_msg[256] = "Calculating density contrast... ";
 	begin = start(calc_dens_msg);
