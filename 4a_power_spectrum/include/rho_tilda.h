@@ -1,11 +1,12 @@
-double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
+void rho_tilda(int i, int j, int k, fftw_complex * grid_fourier,
+						 fftw_complex * result) {
 
 	// Change the order of modes by considering the location of DC mode on the
 	// r2c FFTW output array
 
-	if (i < 0) { i = NUM_GRID_IN_EACH_AXIS  - abs(i); }
-	if (j < 0) { j = NUM_GRID_IN_EACH_AXIS  - abs(j); }
-	if (k < 0) { k = NUM_GRID_IN_EACH_AXIS  - abs(k); }
+	if (i < 0) { i = NUM_GRID_IN_EACH_AXIS  + i; }
+	if (j < 0) { j = NUM_GRID_IN_EACH_AXIS  + j; }
+	if (k < 0) { k = NUM_GRID_IN_EACH_AXIS  + k; }
 
 	// Following is the output of a two-dimensional r2c FFTW transform of a 8
 	// elements real array:
@@ -33,15 +34,23 @@ double complex rho_tilda(int i, int j, int k, fftw_complex * grid_fourier) {
 
 	int index;
 
-	if (k >= (NUM_GRID_IN_EACH_AXIS / 2)){
-		index = three_to_one(NUM_GRID_IN_EACH_AXIS  - i,
-				NUM_GRID_IN_EACH_AXIS - j,
-				NUM_GRID_IN_EACH_AXIS  - k);
+	if (i > (NUM_GRID_IN_EACH_AXIS / 2)){
 
-		return conj(grid_fourier[index]);
+		int index, ii, jj, kk;
+		ii = NUM_GRID_IN_EACH_AXIS - i;
+		jj = NUM_GRID_IN_EACH_AXIS - j;
+		kk = NUM_GRID_IN_EACH_AXIS - k;
+
+		index = three_to_one(ii, jj, kk);
+
+		/* result[0] = creal(conj(grid_fourier[index])); */
+		/* result[1] = cimag(conj(grid_fourier[index])); */
+		*result = conj(grid_fourier[index]);
 	} else {
 		index = three_to_one(i, j, k);
 
-		return grid_fourier[index];
+		/* result[0] = creal(grid_fourier[index]); */
+		/* result[1] = cimag(grid_fourier[index]); */
+		*result = grid_fourier[index];
 	}
 }

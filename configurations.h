@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // NUMBER OF GRID BLOCKS ALONG EACH AXIS (SHOULD BE EVEN)
 //-----------------------------------------------------------------------------
-int NUM_GRID_IN_EACH_AXIS = 64;
+int NUM_GRID_IN_EACH_AXIS = 256;
 
 //-----------------------------------------------------------------------------
 // NUMBER OF BINS IN FOURIER SPACE FOR POWER SPECTRUM

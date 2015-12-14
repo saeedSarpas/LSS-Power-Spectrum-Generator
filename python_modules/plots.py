@@ -18,22 +18,22 @@ class Plot:
         self.__dz = []
 
         cdict = {'red':   [(0.0, 0.0, 0.3568627450980392),
-                           (0.25, 0.4470588235294118, 0.4470588235294118),
-                           (0.50, 0.996078431372549, 0.996078431372549),
-                           (0.75, 0.996078431372549, 0.996078431372549),
-                           (1, 0.996078431372549, 0.996078431372549)],
+                        (0.25, 0.4470588235294118, 0.4470588235294118),
+                        (0.50, 0.996078431372549, 0.996078431372549),
+                        (0.75, 0.996078431372549, 0.996078431372549),
+                        (1, 0.996078431372549, 0.996078431372549)],
 
-                 'green': [(0.0, 0.0, 0.48627450980392156),
-                           (0.25, 0.7215686274509804, 0.7215686274509804),
-                           (0.50, 0.8274509803921568, 0.8274509803921568),
-                           (0.75, 0.5647058823529412, 0.5647058823529412),
-                           (1, 0.3686274509803922, 0.3686274509803922)],
+        'green': [(0.0, 0.0, 0.48627450980392156),
+                (0.25, 0.7215686274509804, 0.7215686274509804),
+                (0.50, 0.8274509803921568, 0.8274509803921568),
+                (0.75, 0.5647058823529412, 0.5647058823529412),
+                (1, 0.3686274509803922, 0.3686274509803922)],
 
-                 'blue':  [(0.0, 0.0, 0.4901960784313725),
-                           (0.25, 0.788235294117647, 0.788235294117647),
-                           (0.50, 0.6470588235294118, 0.6470588235294118),
-                           (0.75, 0.0039215686274510, 0.0039215686274510),
-                           (1, 0.1921568627450980, 0.1921568627450980)]}
+        'blue':  [(0.0, 0.0, 0.4901960784313725),
+                (0.25, 0.788235294117647, 0.788235294117647),
+                (0.50, 0.6470588235294118, 0.6470588235294118),
+                (0.75, 0.0039215686274510, 0.0039215686274510),
+                (1, 0.1921568627450980, 0.1921568627450980)]}
 
         self.__cm = mcolors.LinearSegmentedColormap('CustomMap', cdict)
 
@@ -44,8 +44,8 @@ class Plot:
         skip_footer = k('skip_footer') if 'skip_footer' in kwargs else 0
 
         self.__x, self.__y, self.__z = np.genfromtxt(filename, unpack='true',
-                                                     skip_header=skip_header,
-                                                     skip_footer=skip_footer)
+                                                        skip_header=skip_header,
+                                                        skip_footer=skip_footer)
 
         __n = int(len(self.__z)**.5)
         self.__z = self.__z.reshape(__n, __n)
@@ -54,9 +54,9 @@ class Plot:
         """Reading power spectrum files"""
         k = kwargs.get
         skiprows = k('skiprows') if 'skiprows' in kwargs else 0
-        __x, self.__dx, self.__y, self.__dy = np.loadtxt(filename,
-                                                              unpack='true',
-                                                              skiprows=skiprows)
+        __x, self.__dx, self.__y, self.__dy, dumb = np.loadtxt(filename,
+                                                        unpack='true',
+                                                        skiprows=skiprows)
         self.__x = np.power(10, __x)
 
     def draw_density(self, **kwargs):
@@ -75,7 +75,7 @@ class Plot:
         y_max = k('ymax') if 'ymax' in kwargs else np.amax(self.__y)
 
         plt.imshow(self.__z, cmap=self.__cm, vmin=cmap_min, vmax=cmap_max,
-                   extent=[x_min, x_max, y_min, y_max])
+                extent=[x_min, x_max, y_min, y_max])
 
         if 'cMap' in kwargs and k('cMap') == True:
             plt.colorbar()
@@ -117,15 +117,15 @@ class Plot:
 
         ecolor = k('ecolor') if 'ecolor' in kwargs else "#febb00"
         plt.errorbar(self.__x, self.__y, xerr=self.__dx, yerr=self.__dy,
-                     color=color, ecolor=ecolor, linestyle=linestyle,
-                     label=label)
+                    color=color, ecolor=ecolor, linestyle=linestyle,
+                    label=label)
 
         if 'shaded' in kwargs and k('shaded') == 'true':
             if 'yerr' in kwargs:
                 __fc = k('facecolor') if 'facecolor' in kwargs else "#fef4ea"
                 plt.fill_between(self.__x, self.__y - self.__dy, self.__y +
                                 self.__dy, facecolor=__fc, edgecolor=__fc,
-                                 interpolate='true')
+                                interpolate='true')
 
     def save(self, name, **kwargs):
         """Save plots"""

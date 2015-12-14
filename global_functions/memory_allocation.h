@@ -32,6 +32,13 @@ void allocate_struct_triangles_array (struct triangles ** t, size_t size) {
   }
 }
 
+void allocate_fftw_complex_array(fftw_complex ** f, size_t size) {
+  if ( !(*f = malloc(size * sizeof(fftw_complex)))) {
+    failed_message("fftw_complex", size);
+    exit(0);
+  }
+}
+
 void allocate_double_array (double ** d, size_t size) {
   if ( !(*d = malloc(size * sizeof(double)))) {
     failed_message("double", size);

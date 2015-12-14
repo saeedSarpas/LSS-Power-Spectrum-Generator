@@ -61,20 +61,24 @@ int main(int argc, char *argv[]) {
 								/ (2 * NUM_OF_BINS);
 
 	double * results;
-	allocate_double_array(&results, 2);
+	allocate_double_array(&results, 3);
 
+	int tot = 0;
 	for(mode_log = mode_interval_log; mode_log < mode_interval_log * 2 *
 			NUM_OF_BINS; mode_log += 2 * mode_interval_log){
 
 		// callback results of:
 		one_mode_ps(mode_log, mode_interval_log, grid_fourier, results);
-		// +--------------------------+
-		// | 0: mode power | 1: error |
-		// +--------------------------+
+		// +--------------------------+-----------------------------+
+		// | 0: mode power | 1: error | 2: number of found elements |
+		// +--------------------------+-----------------------------+
 
-		fprintf(out_file, "%f\t%f\t%f\t%f\n", mode_log, mode_interval_log,
-				results[0], results[1]);
+		fprintf(out_file, "%f\t%f\t%f\t%f\t%d\n", mode_log, mode_interval_log,
+				results[0], results[1], (int)results[2]);
+		printf("%d\n", (int)results[2]);
+		tot += (int)results[2];
 	}
+	printf("%d, %d\n", tot, (int)pow(NUM_GRID_IN_EACH_AXIS, 3));
 
 	fclose(out_file);
 

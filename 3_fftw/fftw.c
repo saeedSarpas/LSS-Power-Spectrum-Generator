@@ -39,6 +39,7 @@ int main(int argc, char *argv[]) {
 		((NUM_GRID_IN_EACH_AXIS / 2) + 1);
 
 	fftw_complex * grid_fourier;
+	allocate_fftw_complex_array(&grid_fourier, grid_fourier_size);
 	grid_fourier = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) *
 											   grid_fourier_size);
 
@@ -53,10 +54,10 @@ int main(int argc, char *argv[]) {
 	char load_input_msg[256] = "Loading density contrast... ";
 	clock_t start_load_input = start(load_input_msg);
 
-	char input_file[256] = "";
-	append_density_contrast_filename(in_filename, alg_name, *C, input_file);
+	char input_path[256] = "./../2_griding/outputs/";
+	append_density_contrast_filename(in_filename, alg_name, *C, input_path);
 
-	load_density_contrast_grid(input_file, grid_delta);
+	load_density_contrast_grid(input_path, grid_delta);
 
 	done(start_load_input);
 

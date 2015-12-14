@@ -1,8 +1,4 @@
-void load_density_contrast_grid(char filename[256], double * grid_delta) {
-
-	char input_path[256] = "./../2_griding/outputs/";
-
-	strcat(input_path, filename);
+void load_density_contrast_grid(char input_path[256], double * grid_delta) {
 
 	FILE * input_file;
 	open_file(&input_file, input_path, "r");

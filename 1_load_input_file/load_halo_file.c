@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <complex.h>
+#include <fftw.h>
 #include <time.h>
 
 #include "./../configurations.h"
 #include "./../global_functions/config_file.h"
 #include "./../global_functions/clock.h"
 #include "./../global_functions/filenames.h"
+#include "./../global_functions/file_handling.h"
+#include "./../global_functions/memory_allocation.h"
 
 int main() {
 	int i, n;
@@ -26,7 +30,7 @@ int main() {
 	}
 
 	char read_halo_msg[256] = "Reading HaloTab_Run1 file... ";
-	clock_t begin = start(read_halo_msg);
+	clock_t start_reading_halo = start(read_halo_msg);
 
 	double mass_const = 1.0f;
 
@@ -35,12 +39,9 @@ int main() {
 	char in_path[256] = "./../0_input/";
 	strcat(in_path, IN_FILENAME[1]);
 
-	if (!(in_file = fopen(in_path, "r"))) {
-		printf("[Cannot open stream %s]\n", in_path);
-		exit(0);
-	}
+	open_file(&in_file, in_path, "r");
 
-	int num_line = 0;
+	size_t num_line = 0;
 	while(!feof(in_file)) {
 		char c = fgetc(in_file);
 		if(c == '\n') {
@@ -55,10 +56,7 @@ int main() {
 	int num_halo;
 	int cntr = 0;
 
-	if (!(P = malloc(num_line * sizeof(struct particle_data)))) {
-		printf("[Failed to allocate memory.]\n");
-		exit(0);
-	}
+	allocate_struct_particle_data_array(&P, num_line);
 
 	while ((read = getline(&line, &len, in_file)) != -1) {
 		sscanf(line, "%lf\t%lf\t%lf\t%lf\t%d\n",
@@ -71,46 +69,36 @@ int main() {
 
 	fclose(in_file);
 
-	done(begin);
+	done(start_reading_halo);
 
 	char save_msg[256] = "Saving output file...";
-	begin = start(save_msg);
+	clock_t start_saving = start(save_msg);
 
 	FILE * out_file;
 
 	char out_path[256] = "./outputs/";
 	append_input_filename(nickname, out_path);
 
-	if (!(out_file = fopen(out_path, "wb"))) {
-		printf("[Cannot open file %s]\n", out_path);
-		exit(0);
-	}
+	open_file(&out_file, out_path, "wb");
 
-	for (n = 0; n < num_line; n++) {
-		for (i = 0; i < 3; i++) {
-			fwrite(&P[n].Pos[i], 1, sizeof(double), out_file);
-		}
-		fwrite(&P[n].Mass, 1, sizeof(double), out_file);
-	}
+	write_struct_particle_data_to(out_file, P, num_line, out_path);
 
-	done(begin);
+	done(start_saving);
 
 	char save_conf[256] = "Creating configuration file... ";
-	begin = start(save_conf);
+	clock_t start_saving_conf = start(save_conf);
 
-	if (!(C = malloc(sizeof(struct config))) ) {
-		fprintf(stderr, "[Failed to allocate memory.]\n");
-		exit(0);
-	}
+	allocate_struct_config(&C);
 
 	C->NumPart = num_line;
 	C->BoxLength = 1200;
 
 	set_config(*C, nickname);
 
-	done(begin);
+	done(start_saving_conf);
 
 	free(C);
 	free(P);
+
 	return 0;
 }
