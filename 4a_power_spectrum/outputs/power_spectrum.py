@@ -12,7 +12,7 @@ PS_PLOTS = {}
 
 for dat in PS:
     PS_PLOTS[dat] = p.Plot()
-    PS_PLOTS[dat].read_power_spectrum(dat)
+    PS_PLOTS[dat].read_power_spectrum(dat, skiprows=1)
     PS_PLOTS[dat].draw_power_spectrum(color="#5b7c7d", ecolor="#fe5e31",
                                       linestyle="solid", shaded='true',
                                       yerr='true',

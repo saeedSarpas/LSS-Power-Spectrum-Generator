@@ -13,7 +13,8 @@ class Plot:
         self.__x = []
         self.__y = []
         self.__z = []
-        self.__dx = []
+        self.__ldx = []
+        self.__rdx = []
         self.__dy = []
         self.__dz = []
 
@@ -54,10 +55,8 @@ class Plot:
         """Reading power spectrum files"""
         k = kwargs.get
         skiprows = k('skiprows') if 'skiprows' in kwargs else 0
-        __x, self.__dx, self.__y, self.__dy, dumb = np.loadtxt(filename,
-                                                        unpack='true',
-                                                        skiprows=skiprows)
-        self.__x = np.power(10, __x)
+        self.__x, self.__ldx, self.__rdx, self.__y, self.__dy, dumb = np.loadtxt(
+            filename, unpack='true', skiprows=skiprows)
 
     def draw_density(self, **kwargs):
         """Ploting density"""
@@ -116,9 +115,10 @@ class Plot:
             plt.yscale(k('yaxislog'))
 
         ecolor = k('ecolor') if 'ecolor' in kwargs else "#febb00"
-        plt.errorbar(self.__x, self.__y, xerr=self.__dx, yerr=self.__dy,
-                    color=color, ecolor=ecolor, linestyle=linestyle,
-                    label=label)
+        plt.errorbar(self.__x, self.__y,
+                     xerr=[self.__ldx, self.__rdx], yerr=self.__dy,
+                     color=color, ecolor=ecolor, linestyle=linestyle,
+                     label=label)
 
         if 'shaded' in kwargs and k('shaded') == 'true':
             if 'yerr' in kwargs:
