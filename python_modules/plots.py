@@ -55,7 +55,7 @@ class Plot:
         """Reading power spectrum files"""
         k = kwargs.get
         skiprows = k('skiprows') if 'skiprows' in kwargs else 0
-        self.__x, self.__ldx, self.__rdx, self.__y, self.__dy, dumb = np.loadtxt(
+        self.__x, self.__ldx, self.__rdx, self.__y, self.__dy, __N = np.loadtxt(
             filename, unpack='true', skiprows=skiprows)
 
     def draw_density(self, **kwargs):
@@ -97,13 +97,15 @@ class Plot:
             plt.gca().set_xlim(right=k('xmax'))
 
         if 'ymin' in kwargs:
-            plt.gca().set_ylim(left=k('ymin'))
+            plt.gca().set_ylim(bottom=k('ymin'))
 
         if 'ymax' in kwargs:
-            plt.gca().set_ylim(right=k('ymax'))
+            plt.gca().set_ylim(top=k('ymax'))
 
         if 'xerr' not in kwargs or 'xerr' in kwargs and k('xerr') != 'true':
-            self.__dx = None
+            __dx = None
+        else:
+            __dx = [self.__ldx, self.__rdx]
 
         if 'yerr' not in kwargs or 'yerr' in kwargs and k('yerr') != 'true':
             self.__dy = None
@@ -115,8 +117,7 @@ class Plot:
             plt.yscale(k('yaxislog'))
 
         ecolor = k('ecolor') if 'ecolor' in kwargs else "#febb00"
-        plt.errorbar(self.__x, self.__y,
-                     xerr=[self.__ldx, self.__rdx], yerr=self.__dy,
+        plt.errorbar(self.__x, self.__y, xerr=__dx, yerr=self.__dy,
                      color=color, ecolor=ecolor, linestyle=linestyle,
                      label=label)
 
