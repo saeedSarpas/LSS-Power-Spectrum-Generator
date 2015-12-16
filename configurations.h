@@ -1,5 +1,6 @@
 //-----------------------------------------------------------------------------
-// NUMBER OF GRID BLOCKS ALONG EACH AXIS (SHOULD BE EVEN)
+// NUMBER OF GRID BLOCKS ALONG EACH AXIS (SHOULD BE EVEN BECAUSE OF REORDERING
+// FOURIER INPUT)
 //-----------------------------------------------------------------------------
 int NUM_GRID_IN_EACH_AXIS = 64;
 

@@ -25,13 +25,6 @@ void one_to_three (int x, int * pos) {
   pos[0] = x / pow(NUM_GRID_IN_EACH_AXIS, 2);
   pos[1] = ret / NUM_GRID_IN_EACH_AXIS;
   pos[2] = ret % NUM_GRID_IN_EACH_AXIS;
-
-  int i;
-  for (i = 0; i < 3; i++) {
-    if (pos[i] >= (NUM_GRID_IN_EACH_AXIS / 2)) {
-      pos[i] -= NUM_GRID_IN_EACH_AXIS;
-    }
-  }
 }
 
 int move_along_grid_axis (int init_pos, int step) {
