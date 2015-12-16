@@ -15,7 +15,7 @@ void variance(double * power_array, int length, double * callback_results) {
 
 	callback_results[0] /= length;
 
-	callback_results[1] = 0.0f;
+	callback_results[1] = 0.0;
 
 	for (i = 0; i < length; i++) {
 		callback_results[1] += pow((power_array[i] - callback_results[0]), 2);

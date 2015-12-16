@@ -13,7 +13,6 @@
 #include "./../global_functions/memory_allocation.h"
 
 int main() {
-	int i, n;
 
 	int mass_mode;
 	printf("Mass mode [0 for constant mass, 1 for real mass]: ");
@@ -29,8 +28,7 @@ int main() {
 		exit(0);
 	}
 
-	char read_halo_msg[256] = "Reading HaloTab_Run1 file... ";
-	clock_t start_reading_halo = start(read_halo_msg);
+	clock_t _r_h_f_ = start("Reading HaloTab_Run1 file... ");
 
 	double mass_const = 1.0f;
 
@@ -69,10 +67,9 @@ int main() {
 
 	fclose(in_file);
 
-	done(start_reading_halo);
+	done(_r_h_f_);
 
-	char save_msg[256] = "Saving output file...";
-	clock_t start_saving = start(save_msg);
+	clock_t _s_o_f_ = start("Saving output file...");
 
 	FILE * out_file;
 
@@ -83,10 +80,9 @@ int main() {
 
 	write_struct_particle_data_to(out_file, P, num_line, out_path);
 
-	done(start_saving);
+	done(_s_o_f_);
 
-	char save_conf[256] = "Creating configuration file... ";
-	clock_t start_saving_conf = start(save_conf);
+	clock_t _s_c_f_ = start("Saving configuration file... ");
 
 	allocate_struct_config(&C);
 
@@ -95,7 +91,7 @@ int main() {
 
 	set_config(*C, nickname);
 
-	done(start_saving_conf);
+	done(_s_c_f_);
 
 	free(C);
 	free(P);

@@ -30,8 +30,7 @@ int main() {
 	char alg_name[256];
 	choosing_algorithm(alg_name);
 
-	char load_input_msg[256] = "Load Fourier transformed data... ";
-	clock_t start_load_input = start(load_input_msg);
+	clock_t _l_f_t_d_ = start("Load Fourier transformed data... ");
 
 	size_t tot_num_grid = pow(NUM_GRID_IN_EACH_AXIS, 3);
 
@@ -42,10 +41,9 @@ int main() {
 	append_fourier_transformed_filename(input_mode, alg_name, *C, input_path);
 	load_fourier_transformed_data(input_path, grid_fourier);
 
-	done(start_load_input);
+	done(_l_f_t_d_);
 
-	char gen_ps_msg[256] = "Generating power spectrum... ";
-	clock_t start_gen_ps = start(gen_ps_msg);
+	clock_t _g_p_s_ = start("Generating power spectrum... ");
 
 	double log_of_the_mode;
 
@@ -80,8 +78,8 @@ int main() {
 		double k  = mode * cnvtr;
 		double le = (mode - pow(10, log_of_the_mode -log_of_k_bins_half_width)) * cnvtr;
 		double re = (pow(10, log_of_the_mode + log_of_k_bins_half_width) - mode) * cnvtr;
-		double p  = results[0];
-		double pe = results[1];
+		double p  = results[0] / norm_factor;
+		double pe = results[1] / norm_factor;
 
 		fprintf(out_file, "%f\t%f\t%f\t%f\t%f\t%d\n", k, le, re, p, pe,
 				(int)results[2]);
@@ -89,7 +87,7 @@ int main() {
 
 	fclose(out_file);
 
-	done(start_gen_ps);
+	done(_g_p_s_);
 
 	free(results);
 	fftw_free(grid_fourier);

@@ -19,20 +19,18 @@
 #include "./include/fill_fftw_complex_grid_delta.h"
 #include "./include/reordering_fourier_input.h"
 
-int main(int argc, char *argv[]) {
-	int i;
+int main() {
 
-	char in_filename[256];
-	choosing_input(in_filename);
+	char input_mode[256];
+	choosing_input(input_mode);
 
 	char alg_name[256];
 	choosing_algorithm(alg_name);
 
 	allocate_struct_config(&C);
-	get_config(C, in_filename);
+	get_config(C, input_mode);
 
-	char fftw_plan_msg[256] = "Creating a c2c FFTW plan... ";
-	clock_t start_fftw_plan = start(fftw_plan_msg);
+	clock_t _c_a_c_f_f_ = start("Creating a c2c FFTW plan... ");
 
 	fftw_complex * grid_delta;
 	size_t tot_num_grid = pow(NUM_GRID_IN_EACH_AXIS, 3);
@@ -47,13 +45,12 @@ int main(int argc, char *argv[]) {
 	fftw_plan p;
 	p = fftw_plan_dft(3, rank, grid_delta, grid_fourier, FFTW_FORWARD, FFTW_MEASURE);
 
-	done(start_fftw_plan);
+	done(_c_a_c_f_f_);
 
-	char load_input_msg[256] = "Loading density contrast... ";
-	clock_t start_load_input = start(load_input_msg);
+	clock_t _l_d_c_ = start("Loading density contrast... ");
 
 	char input_path[256] = "./../2_griding/outputs/";
-	append_density_contrast_filename(in_filename, alg_name, *C, input_path);
+	append_density_contrast_filename(input_mode, alg_name, *C, input_path);
 
 	double * temp;
 	allocate_double_array(&temp, tot_num_grid);
@@ -63,21 +60,19 @@ int main(int argc, char *argv[]) {
 
 	reordering_fourier_input(grid_delta);
 
-	done(start_load_input);
+	done(_l_d_c_);
 
-	char fourier_trans_msg[256] = "Fourier transform... ";
-	clock_t start_fourier_trans = start(fourier_trans_msg);
+	clock_t _f_t_ = start("Fourier transform... ");
 
 	fftw_execute(p);
 	fftw_destroy_plan(p);
 
-	done(start_fourier_trans);
+	done(_f_t_);
 
-	char save_out[256] = "Saving data... ";
-	clock_t start_saving = start(save_out);
+	clock_t _s_d_ = start("Saving data... ");
 
 	char output_path[256] = "./outputs/";
-	append_fourier_transformed_filename(in_filename, alg_name, *C, output_path);
+	append_fourier_transformed_filename(input_mode, alg_name, *C, output_path);
 
 	FILE * out_file;
 
@@ -86,7 +81,7 @@ int main(int argc, char *argv[]) {
 	write_fftw_complex_to_file(out_file, output_path, grid_fourier,
 							   tot_num_grid);
 
-	done(start_saving);
+	done(_s_d_);
 
 	fftw_free(grid_fourier);
 	free(grid_delta); free(C);
