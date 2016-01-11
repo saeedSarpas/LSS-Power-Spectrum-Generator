@@ -24,8 +24,6 @@ _G_DEPS = clock/start.o \
           open_file.o \
           memory/allocation_failing_message.o \
           memory/allocate_particle_data_struct.o \
-          memory/allocate_config_struct.o \
-          memory/allocate_input_file_infos_struct.o \
           filenames/str_concat.o \
           filenames/append_input_name.o \
           filenames/append_input_infos_name.o \

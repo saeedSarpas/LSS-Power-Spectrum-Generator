@@ -6,14 +6,13 @@
 #include "./../../global_functions/clock/done.h"
 #include "./../../global_functions/open_file.h"
 #include "./../../global_functions/memory/allocate_particle_data_struct.h"
-#include "./../../global_functions/memory/allocate_config_struct.h"
-#include "./../../global_functions/memory/allocate_input_file_infos_struct.h"
 #include "./../../global_functions/filenames/append_input_name.h"
 #include "./../../global_functions/filenames/append_input_infos_name.h"
 #include "./../../global_functions/io/write_particle_data_struct_to.h"
 #include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/info_file/write_input_file_infos_to.h"
 
+#include "./../../global_structs/particle_data_struct.h"
 #include "./../../global_structs/config_struct.h"
 #include "./../../global_structs/input_file_infos.h"
 
