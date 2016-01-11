@@ -51,7 +51,7 @@ int main() {
 	config conf;
 	get_config(&conf);
 
-	char *output_path = strdup("./../output/");
+	char *output_path = strdup("./../../0_structured_input/");
 	append_input_name(conf.inputs[mass_mode][1], &output_path);
 
 	open_file(&out_file, output_path, "wb");
@@ -69,7 +69,7 @@ int main() {
 	infos.num_of_parts = num_of_lines;
 	infos.box_length = 1200.0;
 
-	char *info_path = strdup("./../output/");
+	char *info_path = strdup("./../../0_structured_input/");
 	append_input_infos_name(conf.inputs[mass_mode][1], &info_path);
 
 	FILE *info_file;
