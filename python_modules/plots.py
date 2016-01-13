@@ -10,6 +10,7 @@ import numpy as np
 #------------------------------------------------------------------------------
 class Plot:
     def __init__(self):
+
         self.__x = []
         self.__y = []
         self.__z = []
@@ -18,25 +19,33 @@ class Plot:
         self.__dy = []
         self.__dz = []
 
-        cdict = {'red':   [(0.0, 0.0, 0.3568627450980392),
-                        (0.25, 0.4470588235294118, 0.4470588235294118),
-                        (0.50, 0.996078431372549, 0.996078431372549),
-                        (0.75, 0.996078431372549, 0.996078431372549),
-                        (1, 0.996078431372549, 0.996078431372549)],
-
-        'green': [(0.0, 0.0, 0.48627450980392156),
+        cdict = {
+            'red': [
+                (0.0, 0.0, 0.3568627450980392),
+                (0.25, 0.4470588235294118, 0.4470588235294118),
+                (0.50, 0.996078431372549, 0.996078431372549),
+                (0.75, 0.996078431372549, 0.996078431372549),
+                (1, 0.996078431372549, 0.996078431372549)
+            ],
+            'green': [
+                (0.0, 0.0, 0.48627450980392156),
                 (0.25, 0.7215686274509804, 0.7215686274509804),
                 (0.50, 0.8274509803921568, 0.8274509803921568),
                 (0.75, 0.5647058823529412, 0.5647058823529412),
-                (1, 0.3686274509803922, 0.3686274509803922)],
-
-        'blue':  [(0.0, 0.0, 0.4901960784313725),
+                (1, 0.3686274509803922, 0.3686274509803922)
+            ],
+            'blue': [
+                (0.0, 0.0, 0.4901960784313725),
                 (0.25, 0.788235294117647, 0.788235294117647),
                 (0.50, 0.6470588235294118, 0.6470588235294118),
                 (0.75, 0.0039215686274510, 0.0039215686274510),
-                (1, 0.1921568627450980, 0.1921568627450980)]}
+                (1, 0.1921568627450980, 0.1921568627450980)
+            ]
+        }
 
         self.__cm = mcolors.LinearSegmentedColormap('CustomMap', cdict)
+
+
 
     def read_density(self, filename, **kwargs):
         """Reading density files"""
@@ -45,11 +54,13 @@ class Plot:
         skip_footer = k('skip_footer') if 'skip_footer' in kwargs else 0
 
         self.__x, self.__y, self.__z = np.genfromtxt(filename, unpack='true',
-                                                        skip_header=skip_header,
-                                                        skip_footer=skip_footer)
+                                                     skip_header=skip_header,
+                                                     skip_footer=skip_footer)
 
         __n = int(len(self.__z)**.5)
         self.__z = self.__z.reshape(__n, __n)
+
+
 
     def read_power_spectrum(self, filename, **kwargs):
         """Reading power spectrum files"""
@@ -57,6 +68,8 @@ class Plot:
         skiprows = k('skiprows') if 'skiprows' in kwargs else 0
         self.__x, self.__ldx, self.__rdx, self.__y, self.__dy, __N = np.loadtxt(
             filename, unpack='true', skiprows=skiprows)
+
+
 
     def draw_density(self, **kwargs):
         """Ploting density"""
@@ -79,6 +92,8 @@ class Plot:
         if 'cMap' in kwargs and k('cMap') == True:
             plt.colorbar()
 
+
+
     def draw_power_spectrum(self, **kwargs):
         """Ploting power spectrum"""
         k = kwargs.get
@@ -86,9 +101,6 @@ class Plot:
         color = k("color") if 'color' in kwargs else '#000000'
         linestyle = k("linestyle") if 'linestyle' in kwargs else 'solid'
         label = k("label") if 'label' in kwargs else ''
-
-        xoffset = 0.05 * abs(self.__x[-1] - self.__x[0])
-        yoffset = 0.05 * abs(self.__y[-1] - self.__y[0])
 
         if 'xmin' in kwargs:
             plt.gca().set_xlim(left=k('xmin'))
@@ -128,6 +140,8 @@ class Plot:
                                 self.__dy, facecolor=__fc, edgecolor=__fc,
                                 interpolate='true')
 
+
+
     def save(self, name, **kwargs):
         """Save plots"""
         k = kwargs.get
@@ -138,7 +152,7 @@ class Plot:
         if 'ylabel' in kwargs:
             plt.ylabel(k('ylabel'), fontsize=16)
 
-        path = "./plots/" + name + ".png"
+        path = name + ".png"
         plt.savefig(path)
 
         plt.close()

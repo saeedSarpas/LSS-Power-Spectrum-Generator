@@ -47,6 +47,28 @@ const char* libconfig_setting_lookup_string (config_setting_t *setting,
 	}
 }
 
+int libconfig_setting_lookup_int (config_setting_t *setting,
+											 const char *field) {
+	int value;
+	if (config_setting_lookup_int(setting, field, &value)) {
+		return value;
+	} else {
+		printf("[Unable to find field: %s]\n", field);
+		exit(0);
+	}
+}
+
+double libconfig_setting_lookup_double (config_setting_t *setting,
+								  const char *field) {
+	double value;
+	if (config_setting_lookup_float(setting, field, &value)) {
+		return value;
+	} else {
+		printf("[Unable to find field: %s]\n", field);
+		exit(0);
+	}
+}
+
 int libconfig_setting_length (config_setting_t *setting) {
 	int len = config_setting_length(setting);
 	if (len) {
