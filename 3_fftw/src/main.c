@@ -10,7 +10,6 @@
 #include "./../../global_structs/input_file_infos.h"
 
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/io/get_algorithm_alias.h"
 #include "./../../global_functions/io/get_input_filename_alias.h"
 #include "./../../global_functions/filenames/append_input_infos_name.h"
