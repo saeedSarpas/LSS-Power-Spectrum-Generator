@@ -64,7 +64,7 @@ int main () {
 	clock_t _s_i_m_ = start("Saving indexed modes... ");
 
 	char *output_path = strdup("./../output/");
-	append_indexed_modes_filename(&output_path, &conf);
+	append_indexed_modes_filename(&conf, &output_path);
 
 	FILE * output_file;
 	open_file(&output_file, output_path, "wb");

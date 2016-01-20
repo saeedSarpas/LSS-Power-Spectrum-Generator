@@ -4,7 +4,7 @@
 
 #include "./str_concat.h"
 
-void append_indexed_modes_filename(char **return_path, config *conf) {
+void append_indexed_modes_filename(config *conf, char **return_path) {
 
 	char num_of_grids_in_each_axis[3];
 	sprintf(num_of_grids_in_each_axis, "%d", conf->num_of_grids_in_each_axis);
