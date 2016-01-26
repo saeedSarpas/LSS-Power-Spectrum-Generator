@@ -45,11 +45,12 @@ int main() {
 
 	clock_t _c_a_c_f_f_ = start("Creating a c2c FFTW plan... ");
 
-	fftw_complex * delta_complex;
 	size_t tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+
+	fftw_complex *delta_complex;
 	allocate_fftw_complex(&delta_complex, tot_num_of_grids);
 
-	fftw_complex * delta_fourier;
+	fftw_complex *delta_fourier;
 	allocate_fftw_complex(&delta_fourier, tot_num_of_grids);
 
 	int rank[3] = {
@@ -92,7 +93,7 @@ int main() {
 
 	clock_t _s_d_ = start("Saving data... ");
 
-	char *output_path = strdup("./../outputs/");
+	char *output_path = strdup("./../output/");
 	append_fourier_transformed_filename(input_filename_alias, algorithm_alias,
 											&info, &conf, &output_path);
 
