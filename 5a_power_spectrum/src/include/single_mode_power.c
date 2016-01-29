@@ -70,7 +70,7 @@ single_mode_power_result single_mode_power (double k, double k_min, double k_max
 	while (modes_vector.log_length > 0) {
 		vector_pop(&modes_vector, &mode);
 
-		index = three_to_one(mode.kx, mode.ky, mode.kz, conf);
+		index = three_to_one(mode.i, mode.j, mode.k, conf);
 		power = pow(creal(delta_fourier[index]), 2) +
 			pow(cimag(delta_fourier[index]), 2);
 

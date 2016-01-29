@@ -34,9 +34,9 @@ Ensure(load_modes_into, accumulate_all_modes) {
 			for (k = 0; k < ng; k++) {
 				index = three_to_one(i, j, k, &conf);
 				assert_that(modes_array[index].index, is_equal_to(index));
-				assert_that(modes_array[index].kx, is_equal_to(i - hgbs));
-				assert_that(modes_array[index].ky, is_equal_to(j - hgbs));
-				assert_that(modes_array[index].kz, is_equal_to(k - hgbs));
+				assert_that(modes_array[index].i, is_equal_to(i));
+				assert_that(modes_array[index].j, is_equal_to(j));
+				assert_that(modes_array[index].k, is_equal_to(k));
 				len = sqrt(pow(i - hgbs, 2) + pow(j - hgbs, 2) + pow(k - hgbs, 2));
 				assert_that(modes_array[index].length, is_equal_to(len));
 			}

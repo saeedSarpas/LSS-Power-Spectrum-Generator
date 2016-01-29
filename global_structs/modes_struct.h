@@ -3,9 +3,9 @@
 
 typedef struct {
   int index;
-  int kx;
-  int ky;
-  int kz;
+  int i;
+  int j;
+  int k;
   double length;
 } modes;
 
