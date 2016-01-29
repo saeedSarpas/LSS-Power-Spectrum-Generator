@@ -14,6 +14,8 @@ void read_input_file_infos(input_file_infos *info, char *info_file_path) {
 
 	infos_setting = libconfig_lookup(&cfg, "infos");
 
-	info->num_of_parts = libconfig_setting_lookup_int(infos_setting, "number_of_particles");
-	info->box_length = libconfig_setting_lookup_double(infos_setting, "box_length");
+	info->num_of_parts = libconfig_setting_lookup_int(infos_setting,
+			"number_of_particles");
+	info->box_length = libconfig_setting_lookup_double(infos_setting,
+			"box_length");
 }

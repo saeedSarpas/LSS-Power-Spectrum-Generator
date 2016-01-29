@@ -16,6 +16,8 @@ for dat in PS:
     PS_PLOTS[dat].draw_power_spectrum(color="#5b7c7d", ecolor="#fe5e31",
                                       linestyle="solid", shaded='true',
                                       xerr='true', yerr='true',
+                                      xmin=1e-3, xmax=10,
+                                      ymin=1e5, ymax=1e11,
                                       xaxislog='log', yaxislog='log')
     PS_PLOTS[dat].save(os.path.splitext(dat)[0],
                        xlabel="$\\log k$", ylabel="$P$")

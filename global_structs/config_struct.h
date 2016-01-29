@@ -8,7 +8,7 @@ typedef struct {
 	char *cic_alias;
 	char *tsc_alias;
 	int num_of_grids_in_each_axis;
-	double log_of_k_bins_width;
+	int min_num_of_modes_in_bins;
 } config;
 
 #endif
