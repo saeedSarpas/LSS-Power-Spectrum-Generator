@@ -1,9 +1,12 @@
 #include <cgreen/cgreen.h>
 
-#include "./../../../tests/tests_factories.h"
 #include "./../../../global_functions/open_file.h"
 
 #include "./../../src/include/get_number_of_lines.h"
+
+#define TEST_FILE_ADDR "./test.file"
+#define TEST_FILE_NUM_OF_LINES 5
+#define DOUBLE_NUM 1.234567
 
 Describe(get_number_of_lines);
 

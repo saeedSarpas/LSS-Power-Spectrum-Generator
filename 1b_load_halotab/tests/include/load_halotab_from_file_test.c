@@ -1,11 +1,14 @@
 #include <cgreen/cgreen.h>
 
-#include "./../../../tests/tests_factories.h"
 #include "./../../../global_functions/open_file.h"
 #include "./../../../global_functions/memory/allocate_particle_data_struct.h"
 #include "./../../../global_structs/particle_data_struct.h"
 
 #include "./../../src/include/load_halotab_from_file.h"
+
+#define TEST_FILE_ADDR "./test.file"
+#define TEST_FILE_NUM_OF_LINES 5
+#define DOUBLE_NUM 1.234567
 
 Describe(load_halotab_from_file);
 
