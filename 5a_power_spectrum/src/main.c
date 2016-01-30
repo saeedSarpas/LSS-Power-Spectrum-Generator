@@ -109,7 +109,7 @@ int main() {
 	while (bins_vector.log_length > 0) {
 		vector_pop(&bins_vector, &bin);
 		result = single_mode_power(bin.k, bin.k_min, bin.k_max, delta_fourier,
-				&conf);
+				indexed_mode_modulus, &conf);
 
 		fprintf(output_file, "%f\t%f\t%f\t%f\t%f\t%d\n", bin.k, bin.k_min,
 				bin.k_max, result.mode_power, result.error, result.num_of_found_modes);

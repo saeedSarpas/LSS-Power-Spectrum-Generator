@@ -4,6 +4,10 @@
 #include <math.h>
 #include <time.h>
 
+#include "./../../global_structs/config_struct.h"
+#include "./../../global_structs/particle_data_struct.h"
+#include "./../../global_structs/input_file_infos.h"
+
 #include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/io/get_algorithm_alias.h"
 #include "./../../global_functions/io/get_input_filename_alias.h"
@@ -18,10 +22,6 @@
 #include "./../../global_functions/info_file/read_input_file_infos.h"
 #include "./../../global_functions/grid/three_to_one.h"
 #include "./../../global_functions/open_file.h"
-
-#include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_infos.h"
 
 #include "./include/load_input.h"
 #include "./include/cic.h"
@@ -57,7 +57,7 @@ int main() {
 	done(_r_g_i_);
 
 
-	double * grid_mass;
+	double *grid_mass;
 	size_t tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
 	allocate_double_array(&grid_mass, tot_num_of_grids);
 
@@ -129,7 +129,6 @@ int main() {
 	done(_s_g_a_);
 
 	free(P);
-	free(grid_mass);
 	free(grid_delta);
 	free(input_filename_alias);
 	free(algorithm_alias);

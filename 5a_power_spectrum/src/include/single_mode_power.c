@@ -16,7 +16,7 @@
 
 #include "./../struct/single_mode_power_result.h"
 
-#include "./rho_tilda.h"
+#include "./../include/generate_logarithmic_bins.h"
 
 typedef struct {
 	double mode_power;
@@ -50,7 +50,7 @@ static variance_result variance(vector *power_double_vector) {
 }
 
 single_mode_power_result single_mode_power (double k, double k_min, double k_max,
-		fftw_complex *delta_fourier, modes *indexed_modes, config *conf) {
+		fftw_complex *delta_fourier, modes *indexed_mode_modulus, config *conf) {
 
 	single_mode_power_result result;
 
@@ -59,7 +59,7 @@ single_mode_power_result single_mode_power (double k, double k_min, double k_max
 	vector modes_vector;
 	vector_new(&modes_vector, sizeof(modes), tot_num_of_grids);
 
-	get_modes_in_range(k_min, k_max, indexed_modes, conf, &modes_vector);
+	get_modes_in_range(k_min, k_max, indexed_mode_modulus, conf, &modes_vector);
 
 	vector power_double_vector;
 	vector_new(&power_double_vector, sizeof(double), modes_vector.log_length);

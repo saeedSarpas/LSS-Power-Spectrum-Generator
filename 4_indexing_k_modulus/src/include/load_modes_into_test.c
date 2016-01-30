@@ -10,12 +10,8 @@
 #include "./../../src/include/load_modes_into.h"
 
 Describe(load_modes_into);
-
-BeforeEach(load_modes_into) {
-}
-
-AfterEach(load_modes_into) {
-}
+BeforeEach(load_modes_into) {}
+AfterEach(load_modes_into) {}
 
 Ensure(load_modes_into, accumulate_all_modes) {
 	config conf;
