@@ -28,9 +28,9 @@ Ensure(generate_logarithmic_bins, sets_bins_boundries_correct) {
 
 	int i;
 	for (i = 0; i < pow(NUM_OF_GRIDS, 3); i++)
-		indexed_mode_modulus[i].length = i;
+		indexed_mode_modulus[i].modulus = i;
 
-	double first_bin_max = indexed_mode_modulus[conf.min_num_of_modes_in_bins].length;
+	double first_bin_max = indexed_mode_modulus[conf.min_num_of_modes_in_bins].modulus;
 	double jump = sqrt(first_bin_max);
 
 	vector bins_vector;

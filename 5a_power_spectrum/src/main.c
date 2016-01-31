@@ -101,14 +101,14 @@ int main() {
 	FILE * output_file;
 	open_file(&output_file, output_path, "wb");
 
-	fprintf(output_file, "Mode     \tLeft err \tRight err\tPower   \tPower err\tN\n");
+	fprintf(output_file, "Mode     \tShell min\tShell max\tPower   \tPower err\tFound modes\n");
 
 	bins bin;
 	single_mode_power_result result;
 
 	while (bins_vector.log_length > 0) {
 		vector_pop(&bins_vector, &bin);
-		result = single_mode_power(bin.k, bin.k_min, bin.k_max, delta_fourier,
+		result = single_mode_power(bin.k_min, bin.k, bin.k_max, delta_fourier,
 				indexed_mode_modulus, &conf);
 
 		fprintf(output_file, "%f\t%f\t%f\t%f\t%f\t%d\n", bin.k, bin.k_min,

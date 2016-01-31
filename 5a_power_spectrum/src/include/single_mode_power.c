@@ -38,18 +38,20 @@ static variance_result variance(vector *power_double_vector) {
 
 	result.mode_power /= power_double_vector->log_length;
 
+	int tot_num_of_powers = power_double_vector->log_length;
+
 	double error = 0.0;
 	while (power_double_vector->log_length > 0) {
 		vector_pop(power_double_vector, &power);
 		error += pow(power - result.mode_power, 2);
 	}
 
-	result.error = sqrt(error) / power_double_vector->log_length;
+	result.error = sqrt(error) / tot_num_of_powers;
 
 	return result;
 }
 
-single_mode_power_result single_mode_power (double k, double k_min, double k_max,
+single_mode_power_result single_mode_power (double k_min, double k, double k_max,
 		fftw_complex *delta_fourier, modes *indexed_mode_modulus, config *conf) {
 
 	single_mode_power_result result;
@@ -60,19 +62,18 @@ single_mode_power_result single_mode_power (double k, double k_min, double k_max
 	vector_new(&modes_vector, sizeof(modes), tot_num_of_grids);
 
 	get_modes_in_range(k_min, k_max, indexed_mode_modulus, conf, &modes_vector);
+	result.num_of_found_modes = modes_vector.log_length;
 
 	vector power_double_vector;
 	vector_new(&power_double_vector, sizeof(double), modes_vector.log_length);
 
-	int index;
 	modes mode;
 	double power;
 	while (modes_vector.log_length > 0) {
 		vector_pop(&modes_vector, &mode);
 
-		index = three_to_one(mode.i, mode.j, mode.k, conf);
-		power = pow(creal(delta_fourier[index]), 2) +
-			pow(cimag(delta_fourier[index]), 2);
+		power = pow(creal(delta_fourier[mode.index]), 2) +
+			pow(cimag(delta_fourier[mode.index]), 2);
 
 		vector_push(&power_double_vector, &power);
 	}
@@ -84,7 +85,6 @@ single_mode_power_result single_mode_power (double k, double k_min, double k_max
 		exit(0);
 	} else {
 		variance_result power = variance(&power_double_vector);
-		result.num_of_found_modes = power_double_vector.log_length;
 		result.mode_power = power.mode_power;
 		result.error = power.error;
 	}

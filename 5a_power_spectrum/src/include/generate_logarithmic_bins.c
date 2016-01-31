@@ -13,11 +13,11 @@
 void generate_logarithmic_bins(vector *bins_vector, modes *indexed_mode_modulus,
 		config *conf) {
 
-	double first_bin_max = indexed_mode_modulus[conf->min_num_of_modes_in_bins].length;
+	double first_bin_max = indexed_mode_modulus[conf->min_num_of_modes_in_bins].modulus;
 	double jump = sqrt(first_bin_max);
 
 	int tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
-	double largest_mode = indexed_mode_modulus[tot_num_of_grids - 1].length;
+	double largest_mode = indexed_mode_modulus[tot_num_of_grids - 1].modulus;
 
 	bins bin;
 	int i = 0;
