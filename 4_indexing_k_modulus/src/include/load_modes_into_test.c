@@ -9,32 +9,34 @@
 
 #include "./../../src/include/load_modes_into.h"
 
+#define NUM_OF_GRIDS 4
+
 Describe(load_modes_into);
 BeforeEach(load_modes_into) {}
 AfterEach(load_modes_into) {}
 
 Ensure(load_modes_into, accumulate_all_modes) {
 	config conf;
-	int ng = conf.num_of_grids_in_each_axis = 4;
+	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
 
 	modes *modes_array;
-	allocate_modes_struct(&modes_array, pow(ng, 3));
+	allocate_modes_struct(&modes_array, pow(NUM_OF_GRIDS, 3));
 
 	load_modes_into(modes_array, &conf);
 
 	int hgbs = conf.num_of_grids_in_each_axis / 2;
 	int i, j, k, index;
 	double len;
-	for (i = 0; i < ng; i++) {
-		for (j = 0; j < ng; j++) {
-			for (k = 0; k < ng; k++) {
+	for (i = 0; i < NUM_OF_GRIDS; i++) {
+		for (j = 0; j < NUM_OF_GRIDS; j++) {
+			for (k = 0; k < NUM_OF_GRIDS; k++) {
 				index = three_to_one(i, j, k, &conf);
 				assert_that(modes_array[index].index, is_equal_to(index));
-				assert_that(modes_array[index].i, is_equal_to(i));
-				assert_that(modes_array[index].j, is_equal_to(j));
-				assert_that(modes_array[index].k, is_equal_to(k));
+				assert_that(modes_array[index].kx, is_equal_to(i - hgbs));
+				assert_that(modes_array[index].ky, is_equal_to(j - hgbs));
+				assert_that(modes_array[index].kz, is_equal_to(k - hgbs));
 				len = sqrt(pow(i - hgbs, 2) + pow(j - hgbs, 2) + pow(k - hgbs, 2));
-				assert_that(modes_array[index].length, is_equal_to(len));
+				assert_that(modes_array[index].modulus, is_equal_to(len));
 			}
 		}
 	}

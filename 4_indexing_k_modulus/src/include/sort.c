@@ -21,9 +21,9 @@ int compare(const void *p1, const void *p2)
 	const modes *elem1 = p1;
 	const modes *elem2 = p2;
 
-	if ( elem1->length < elem2->length)
+	if ( elem1->modulus < elem2->modulus)
 		return -1;
-	else if (elem1->length > elem2->length)
+	else if (elem1->modulus > elem2->modulus)
 		return 1;
 	else
 		return 0;

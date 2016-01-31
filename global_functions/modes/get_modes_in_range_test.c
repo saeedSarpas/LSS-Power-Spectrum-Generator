@@ -27,19 +27,34 @@ Ensure(get_mode_in_range, returns_right_results_for_a_trivial_input) {
 
 	int i;
 	for (i = 0; i < tot_num_of_grids; i++)
-		indexed_mode_modulus[i].length = i;
+		indexed_mode_modulus[i].modulus = i;
 
 	vector modes_vector;
 	vector_new(&modes_vector, sizeof(modes), 1000);
 
 	get_modes_in_range(100, 1000, indexed_mode_modulus, &conf, &modes_vector);
-
 	modes mode;
 	assert_that(modes_vector.log_length, is_equal_to(900));
 	vector_get_elem(&modes_vector, 0, &mode);
-	assert_that(mode.length, is_equal_to(101));
+	assert_that(mode.modulus, is_equal_to(101));
 	vector_get_elem(&modes_vector, 899, &mode);
-	assert_that(mode.length, is_equal_to(1000));
+	assert_that(mode.modulus, is_equal_to(1000));
+
+	vector_dispose(&modes_vector);
+	vector_new(&modes_vector, sizeof(modes), 10);
+
+	get_modes_in_range(0, 10, indexed_mode_modulus, &conf, &modes_vector);
+	vector_get_elem(&modes_vector, 0, &mode);
+	assert_that(mode.modulus, is_equal_to(1));
+
+	vector_dispose(&modes_vector);
+	vector new_modes_vector;
+	vector_new(&new_modes_vector, sizeof(modes), 10);
+
+	get_modes_in_range(tot_num_of_grids - 11, tot_num_of_grids - 1,
+			indexed_mode_modulus, &conf, &new_modes_vector);
+	vector_get_elem(&new_modes_vector, 9, &mode);
+	assert_that(mode.modulus, is_equal_to(tot_num_of_grids - 1));
 
 	vector_dispose(&modes_vector);
 }

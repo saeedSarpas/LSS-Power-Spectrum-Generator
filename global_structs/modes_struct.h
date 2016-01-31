@@ -3,10 +3,10 @@
 
 typedef struct {
   int index;
-  int i;
-  int j;
-  int k;
-  double length;
+  int kx;
+  int ky;
+  int kz;
+  double modulus;
 } modes;
 
 #endif

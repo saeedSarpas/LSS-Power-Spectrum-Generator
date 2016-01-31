@@ -11,12 +11,8 @@
 #include "./../../src/include/sort.h"
 
 Describe(sort);
-
-BeforeEach(sort) {
-}
-
-AfterEach(sort) {
-}
+BeforeEach(sort) {}
+AfterEach(sort) {}
 
 Ensure(sort, sort_modes_array_in_ascending) {
 	config conf;
@@ -33,7 +29,7 @@ Ensure(sort, sort_modes_array_in_ascending) {
 
 	int i;
 	for (i = 0; i < ngs - 1; i++) {
-		assert_true(modes_array[i].length <= modes_array[i+1].length);
+		assert_true(modes_array[i].modulus <= modes_array[i+1].modulus);
 	}
 }
 
