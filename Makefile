@@ -80,96 +80,46 @@ gtest : $(GDIR)/tests.tst
 	cd $(GDIR); ./tests.tst
 
 #------------------------------------------------------------------------------
-# POWER SPECTRUM
+# GENERATE RANDOM INPUT
 #
-  PSDIR = ./5a_power_spectrum
+  GIDIR = ./1a_generate_random_input
 #------------------------------------------------------------------------------
-_PS_INCLUDE = load_fourier_transformed_data.o \
-              single_mode_power.o \
-              generate_logarithmic_bins.o
-PS_INCLUDE  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_INCLUDE))
+$(GIDIR)/src/main.o : $(GIDIR)/src/main.c $(G_FUNC)
+	$(CC) $< $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
 
-_PS_TEST = single_mode_power_test.o \
-           generate_logarithmic_bins_test.o
-PS_TEST  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_TEST))
-
-$(PS_INCLUDE) : %.o : %.c
-$(PS_TEST)    : %.o : %.c
-
-$(PSDIR)/tests.tst : $(PSDIR)/tests.c $(G_FUNC) $(PS_INCLUDE) $(PS_TEST)
-	$(CC) $< $(G_FUNC) $(PS_INCLUDE) $(PS_TEST) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
-
-.PHONY: pstest
-pstest : $(PSDIR)/tests.tst
-	cd $(PSDIR); ./tests.tst
-
-$(PSDIR)/src/main.o : $(PSDIR)/src/main.c $(G_FUNC) $(PS_INCLUDE)
-	$(CC) $< $(PS_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
-
-.PHONY: psmain
-psmain : pstest $(PSDIR)/src/main.o
-	cd $(PSDIR)/src; ./main.o
+.PHONY: gimain
+gimain : $(GIDIR)/src/main.o
+	cd $(GIDIR)/src; ./main.o
 
 #------------------------------------------------------------------------------
-# INDEXING FOURIER MODES
+# LOAD INPUT
 #
-  IMDIR = ./4_indexing_k_modulus
+  LHDIR = ./1b_load_halotab
 #------------------------------------------------------------------------------
-_IM_INCLUDE = load_modes_into.o \
-              sort.o
-IM_INCLUDE  = $(patsubst %,$(IMDIR)/src/include/%,$(_IM_INCLUDE))
+_LH_INCLUDE = get_number_of_lines.o \
+              load_halotab_from_file.o
+LH_INCLUDE  = $(patsubst %,$(LHDIR)/src/include/%,$(_LH_INCLUDE))
 
-_IM_TEST = load_modes_into_test.o \
-           sort_test.o
-IM_TEST  = $(patsubst %,$(IMDIR)/src/include/%,$(_IM_TEST))
+_LH_TEST = get_number_of_lines_test.o \
+           load_halotab_from_file_test.o
+LH_TEST  = $(patsubst %,$(LHDIR)/src/include/%,$(_LH_TEST))
 
-$(IM_INCLUDE) : %.o : %.c
-$(IM_TEST)    : %.o : %.c
+$(LH_INCLUDE) : %.o : %.c
+$(LH_TEST)    : %.o : %.c
 
-$(IMDIR)/tests.tst : $(IMDIR)/tests.c $(G_FUNC) $(IM_INCLUDE) $(IM_TEST)
-	$(CC) $< $(G_FUNC) $(IM_INCLUDE) $(IM_TEST) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
+$(LHDIR)/tests.tst : $(LHDIR)/tests.c $(G_FUNC) $(LH_INCLUDE) $(LH_TEST)
+	$(CC) $< $(G_FUNC) $(LH_INCLUDE) $(LH_TEST) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
 
-.PHONY: imtest
-imtest : $(IMDIR)/tests.tst
-	cd $(IMDIR); ./tests.tst
+.PHONY: lhtest
+lhtest : $(LHDIR)/tests.tst
+	cd $(LHDIR); ./tests.tst
 
-$(IMDIR)/src/main.o : $(IMDIR)/src/main.c $(G_FUNC) $(IM_INCLUDE)
-	$(CC) $< $(IM_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
+$(LHDIR)/src/main.o : $(LHDIR)/src/main.c $(G_FUNC) $(LH_INCLUDE)
+	$(CC) $< $(LH_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
 
-.PHONY: immain
-immain : imtest $(IMDIR)/src/main.o
-	cd $(IMDIR)/src; ./main.o
-
-#------------------------------------------------------------------------------
-# FAST FOURIER TRANSFORM
-#
-  FTDIR = ./3_fftw
-#------------------------------------------------------------------------------
-_FT_INCLUDE = load_density_contrast_grid.o \
-              convert_real_delta_to_complex.o \
-              reordering_fourier_input.o
-FT_INCLUDE  = $(patsubst %,$(FTDIR)/src/include/%,$(_FT_INCLUDE))
-
-_FT_TEST = reordering_fourier_input_test.o \
-           convert_real_delta_to_complex_test.o
-FT_TEST  = $(patsubst %,$(FTDIR)/src/include/%,$(_FT_TEST))
-
-$(FT_INCLUDE) : %.o : %.c
-$(FT_TEST)    : %.o : %.c
-
-$(FTDIR)/tests.tst : $(FTDIR)/tests.c $(G_FUNC) $(FT_INCLUDE) $(FT_TEST)
-	$(CC) $< $(G_FUNC) $(FT_INCLUDE) $(FT_TEST) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
-
-.PHONY: fttest
-fttest : $(FTDIR)/tests.tst
-	cd $(FTDIR); ./tests.tst
-
-$(FTDIR)/src/main.o : $(FTDIR)/src/main.c $(G_FUNC) $(FT_INCLUDE)
-	$(CC) $< $(FT_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
-
-.PHONY: ftmain
-ftmain : fttest $(FTDIR)/src/main.o
-	cd $(FTDIR)/src; ./main.o
+.PHONY: lhmain
+lhmain : lhtest $(LHDIR)/src/main.o
+	cd $(LHDIR)/src; ./main.o
 
 #------------------------------------------------------------------------------
 # GRIDING
@@ -208,43 +158,93 @@ plotDensity :
 	cd $(GRDIR); $(PYTHON) ./PlotDensity.py
 
 #------------------------------------------------------------------------------
-# LOAD INPUT
+# FAST FOURIER TRANSFORM
 #
-  LHDIR = ./1b_load_halotab
+  FTDIR = ./3_fftw
 #------------------------------------------------------------------------------
-_LH_INCLUDE = get_number_of_lines.o \
-              load_halotab_from_file.o
-LH_INCLUDE  = $(patsubst %,$(LHDIR)/src/include/%,$(_LH_INCLUDE))
+_FT_INCLUDE = load_density_contrast_grid.o \
+              convert_real_delta_to_complex.o \
+              reordering_fourier_input.o
+FT_INCLUDE  = $(patsubst %,$(FTDIR)/src/include/%,$(_FT_INCLUDE))
 
-_LH_TEST = get_number_of_lines_test.o \
-           load_halotab_from_file_test.o
-LH_TEST  = $(patsubst %,$(LHDIR)/src/include/%,$(_LH_TEST))
+_FT_TEST = reordering_fourier_input_test.o \
+           convert_real_delta_to_complex_test.o
+FT_TEST  = $(patsubst %,$(FTDIR)/src/include/%,$(_FT_TEST))
 
-$(LH_INCLUDE) : %.o : %.c
-$(LH_TEST)    : %.o : %.c
+$(FT_INCLUDE) : %.o : %.c
+$(FT_TEST)    : %.o : %.c
 
-$(LHDIR)/tests.tst : $(LHDIR)/tests.c $(G_FUNC) $(LH_INCLUDE) $(LH_TEST)
-	$(CC) $< $(G_FUNC) $(LH_INCLUDE) $(LH_TEST) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
+$(FTDIR)/tests.tst : $(FTDIR)/tests.c $(G_FUNC) $(FT_INCLUDE) $(FT_TEST)
+	$(CC) $< $(G_FUNC) $(FT_INCLUDE) $(FT_TEST) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
 
-.PHONY: lhtest
-lhtest : $(LHDIR)/tests.tst
-	cd $(LHDIR); ./tests.tst
+.PHONY: fttest
+fttest : $(FTDIR)/tests.tst
+	cd $(FTDIR); ./tests.tst
 
-$(LHDIR)/src/main.o : $(LHDIR)/src/main.c $(G_FUNC) $(LH_INCLUDE)
-	$(CC) $< $(LH_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
+$(FTDIR)/src/main.o : $(FTDIR)/src/main.c $(G_FUNC) $(FT_INCLUDE)
+	$(CC) $< $(FT_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
 
-.PHONY: lhmain
-lhmain : lhtest $(LHDIR)/src/main.o
-	cd $(LHDIR)/src; ./main.o
+.PHONY: ftmain
+ftmain : fttest $(FTDIR)/src/main.o
+	cd $(FTDIR)/src; ./main.o
 
 #------------------------------------------------------------------------------
-# GENERATE RANDOM INPUT
+# INDEXING FOURIER MODES
 #
-  GIDIR = ./1a_generate_random_input
+  IMDIR = ./4_indexing_k_modulus
 #------------------------------------------------------------------------------
-$(GIDIR)/src/main.o : $(GIDIR)/src/main.c $(G_FUNC)
-	$(CC) $< $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
+_IM_INCLUDE = load_modes_into.o \
+              sort.o
+IM_INCLUDE  = $(patsubst %,$(IMDIR)/src/include/%,$(_IM_INCLUDE))
 
-.PHONY: gimain
-gimain : $(GIDIR)/src/main.o
-	cd $(GIDIR)/src; ./main.o
+_IM_TEST = load_modes_into_test.o \
+           sort_test.o
+IM_TEST  = $(patsubst %,$(IMDIR)/src/include/%,$(_IM_TEST))
+
+$(IM_INCLUDE) : %.o : %.c
+$(IM_TEST)    : %.o : %.c
+
+$(IMDIR)/tests.tst : $(IMDIR)/tests.c $(G_FUNC) $(IM_INCLUDE) $(IM_TEST)
+	$(CC) $< $(G_FUNC) $(IM_INCLUDE) $(IM_TEST) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
+
+.PHONY: imtest
+imtest : $(IMDIR)/tests.tst
+	cd $(IMDIR); ./tests.tst
+
+$(IMDIR)/src/main.o : $(IMDIR)/src/main.c $(G_FUNC) $(IM_INCLUDE)
+	$(CC) $< $(IM_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
+
+.PHONY: immain
+immain : imtest $(IMDIR)/src/main.o
+	cd $(IMDIR)/src; ./main.o
+
+#------------------------------------------------------------------------------
+# POWER SPECTRUM
+#
+  PSDIR = ./5a_power_spectrum
+#------------------------------------------------------------------------------
+_PS_INCLUDE = load_fourier_transformed_data.o \
+              single_mode_power.o \
+              generate_logarithmic_bins.o
+PS_INCLUDE  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_INCLUDE))
+
+_PS_TEST = single_mode_power_test.o \
+           generate_logarithmic_bins_test.o
+PS_TEST  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_TEST))
+
+$(PS_INCLUDE) : %.o : %.c
+$(PS_TEST)    : %.o : %.c
+
+$(PSDIR)/tests.tst : $(PSDIR)/tests.c $(G_FUNC) $(PS_INCLUDE) $(PS_TEST) $(IM_INCLUDE)
+	$(CC) $< $(G_FUNC) $(PS_INCLUDE) $(PS_TEST) $(IM_INCLUDE) $(LIBS) $(TEST_LIBS) $(CFLAGS) -o $@
+
+.PHONY: pstest
+pstest : $(PSDIR)/tests.tst
+	cd $(PSDIR); ./tests.tst
+
+$(PSDIR)/src/main.o : $(PSDIR)/src/main.c $(G_FUNC) $(PS_INCLUDE)
+	$(CC) $< $(PS_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
+
+.PHONY: psmain
+psmain : pstest $(PSDIR)/src/main.o
+	cd $(PSDIR)/src; ./main.o
