@@ -3,7 +3,7 @@
 
 #include "./../../global_structs/config_struct.h"
 
-char* get_algorithm_alias(config *C) {
+char* get_algorithm_alias(config_struct *C) {
 	printf("Choose algorithm, [0 for NGP, 1 for CIC, 2 for TSC]: ");
 
 	int algorithm;

@@ -15,13 +15,13 @@ BeforeEach(sort) {}
 AfterEach(sort) {}
 
 Ensure(sort, sort_modes_array_in_ascending) {
-	config conf;
+	config_struct conf;
 	conf.num_of_grids_in_each_axis = 4;
 
 	int ng = conf.num_of_grids_in_each_axis;
 	int ngs = pow(ng, 3);
 
-	modes *modes_array;
+	modes_struct *modes_array;
 	allocate_modes_struct(&modes_array, ngs);
 	load_modes_into(modes_array, &conf);
 

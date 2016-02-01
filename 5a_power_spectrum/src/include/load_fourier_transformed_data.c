@@ -8,7 +8,7 @@
 #include "./../../../global_functions/io/read_fftw_complex_from.h"
 
 void load_fourier_transformed_data(char *path, fftw_complex *grid_fourier,
-		config *conf) {
+		config_struct *conf) {
 
 	FILE *file;
 	open_file(&file, path, "rb");

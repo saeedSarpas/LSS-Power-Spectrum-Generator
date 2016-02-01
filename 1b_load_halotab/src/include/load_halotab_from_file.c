@@ -2,7 +2,8 @@
 
 #include "./../../../global_structs/particle_data_struct.h"
 
-void load_halotab_from_file(FILE *file, particle_data P[], int mass_mode) {
+void load_halotab_from_file(FILE *file, particle_data_struct P[],
+		int mass_mode) {
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t read;

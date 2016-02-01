@@ -16,10 +16,10 @@ BeforeEach(load_modes_into) {}
 AfterEach(load_modes_into) {}
 
 Ensure(load_modes_into, accumulate_all_modes) {
-	config conf;
+	config_struct conf;
 	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
 
-	modes *modes_array;
+	modes_struct *modes_array;
 	allocate_modes_struct(&modes_array, pow(NUM_OF_GRIDS, 3));
 
 	load_modes_into(modes_array, &conf);

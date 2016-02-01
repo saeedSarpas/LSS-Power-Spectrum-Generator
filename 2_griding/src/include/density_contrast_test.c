@@ -1,23 +1,19 @@
 #include <cgreen/cgreen.h>
 
-#include "./../../../global_structs/input_file_infos.h"
+#include "./../../../global_structs/input_file_info.h"
 #include "./../../../global_structs/config_struct.h"
 
 #include "./../../src/include/density_contrast.h"
 
 Describe(density_contrast);
-
-BeforeEach(density_contrast) {
-}
-
-AfterEach(density_contrast) {
-}
+BeforeEach(density_contrast) {}
+AfterEach(density_contrast) {}
 
 Ensure(density_contrast, returns_right_value_for_a_trivial_case) {
-	input_file_infos info;
+	input_info_struct info;
 	info.box_length = 1;
 
-	config conf;
+	config_struct conf;
 	conf.num_of_grids_in_each_axis = 2;
 
 	double mass[8] = {2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0};

@@ -7,7 +7,8 @@
 #include "./../../../global_functions/open_file.h"
 #include "./../../../global_functions/io/read_double_from.h"
 
-void load_density_contrast_grid(char *path, double *grid_delta, config *conf) {
+void load_density_contrast_grid(char *path, double *grid_delta,
+		config_struct *conf) {
 
 	FILE *file;
 	open_file(&file, path, "rb");

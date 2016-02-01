@@ -21,11 +21,11 @@
 typedef struct {
 	double mode_power;
 	double error;
-} variance_result;
+} variance_result_struct;
 
-static variance_result variance(vector *power_double_vector) {
+static variance_result_struct variance(vector_struct *power_double_vector) {
 
-	variance_result result;
+	variance_result_struct result;
 	result.mode_power = 0.0;
 	result.error = 0.0;
 
@@ -51,23 +51,24 @@ static variance_result variance(vector *power_double_vector) {
 	return result;
 }
 
-single_mode_power_result single_mode_power (double k_min, double k, double k_max,
-		fftw_complex *delta_fourier, modes *indexed_mode_modulus, config *conf) {
+single_mode_power_result_struct single_mode_power (double k_min, double k_max,
+		fftw_complex *delta_fourier, modes_struct *indexed_mode_modulus,
+		config_struct *conf) {
 
-	single_mode_power_result result;
+	single_mode_power_result_struct result;
 
 	size_t tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
 
-	vector modes_vector;
-	vector_new(&modes_vector, sizeof(modes), tot_num_of_grids);
+	vector_struct modes_vector;
+	vector_new(&modes_vector, sizeof(struct modes_struct_tag), tot_num_of_grids);
 
 	get_modes_in_range(k_min, k_max, indexed_mode_modulus, conf, &modes_vector);
 	result.num_of_found_modes = modes_vector.log_length;
 
-	vector power_double_vector;
+	vector_struct power_double_vector;
 	vector_new(&power_double_vector, sizeof(double), modes_vector.log_length);
 
-	modes mode;
+	modes_struct mode;
 	double power;
 	while (modes_vector.log_length > 0) {
 		vector_pop(&modes_vector, &mode);
@@ -79,14 +80,14 @@ single_mode_power_result single_mode_power (double k_min, double k, double k_max
 	}
 
 	if (power_double_vector.log_length == 0) {
-		printf("\n[Found no point in this shell: %f < k < %f]\n", k_min, k_max);
+		printf("\n[Found no point in this shell: %f <= k < %f]\n", k_min, k_max);
 		vector_dispose(&modes_vector);
 		vector_dispose(&power_double_vector);
 		exit(0);
 	} else {
-		variance_result power = variance(&power_double_vector);
-		result.mode_power = power.mode_power;
-		result.error = power.error;
+		variance_result_struct variance_result = variance(&power_double_vector);
+		result.mode_power = variance_result.mode_power;
+		result.error = variance_result.error;
 	}
 
 	vector_dispose(&modes_vector);

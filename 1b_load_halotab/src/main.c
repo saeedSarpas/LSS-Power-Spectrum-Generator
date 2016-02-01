@@ -7,14 +7,14 @@
 #include "./../../global_functions/open_file.h"
 #include "./../../global_functions/memory/allocate_particle_data_struct.h"
 #include "./../../global_functions/filenames/append_input_name.h"
-#include "./../../global_functions/filenames/append_input_infos_name.h"
+#include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/io/write_particle_data_struct_to.h"
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/info_file/write_input_file_infos_to.h"
+#include "./../../global_functions/info_file/write_input_file_info_to.h"
 
 #include "./../../global_structs/particle_data_struct.h"
 #include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/input_file_infos.h"
+#include "./../../global_structs/input_file_info.h"
 
 #include "./include/get_number_of_lines.h"
 #include "./include/load_halotab_from_file.h"
@@ -34,7 +34,7 @@ int main() {
 	size_t num_of_lines = get_number_of_lines(input_file);
 	rewind(input_file);
 
-	particle_data *P;
+	particle_data_struct *P;
 	allocate_particle_data_struct(&P, num_of_lines);
 	load_halotab_from_file(input_file, P, mass_mode);
 
@@ -47,7 +47,7 @@ int main() {
 
 	FILE *out_file;
 
-	config conf;
+	config_struct conf;
 	get_config(&conf);
 
 	char *output_path = strdup("./../../0_structured_input/");
@@ -64,17 +64,17 @@ int main() {
 
 	clock_t _s_c_f_ = start("Saving configuration file... ");
 
-	input_file_infos infos;
-	infos.num_of_parts = num_of_lines;
-	infos.box_length = 1200.0;
+	input_info_struct info;
+	info.num_of_parts = num_of_lines;
+	info.box_length = 1200.0;
 
 	char *info_path = strdup("./../../0_structured_input/");
-	append_input_infos_name(conf.inputs[mass_mode][1], &info_path);
+	append_input_info_name(conf.inputs[mass_mode][1], &info_path);
 
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");
 
-	write_input_file_infos_to(info_file, &infos);
+	write_input_file_info_to(info_file, &info);
 
 	fclose(info_file);
 

@@ -4,7 +4,7 @@
 
 #include "./../../global_structs/config_struct.h"
 
-char* get_input_filename_alias(config *C) {
+char* get_input_filename_alias(config_struct *C) {
 	printf("Choose the input file, [");
 	int i;
 	for (i = 0; i < C->num_of_input_files; i++) {

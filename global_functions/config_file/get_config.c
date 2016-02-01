@@ -5,7 +5,7 @@
 #include "./my_libconfig.h"
 #include "./../../global_structs/config_struct.h"
 
-void get_config (config *conf) {
+void get_config (config_struct *conf) {
 
 	config_t cfg;
 	config_setting_t *files, *aliases, *grid, *bins, *filename_setting;

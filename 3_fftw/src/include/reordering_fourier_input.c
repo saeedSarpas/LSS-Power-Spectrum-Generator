@@ -6,7 +6,8 @@
 
 #include "./../../../global_functions/grid/one_to_three.h"
 
-void reordering_fourier_input(fftw_complex *delta_complex, config *conf) {
+void reordering_fourier_input(fftw_complex *delta_complex,
+		config_struct *conf) {
 	// This function reorders the Fourier input in a way that the zero-th
 	// element lies at the center of the output array
 

@@ -7,18 +7,14 @@
 
 #include "./../../../global_functions/grid/three_to_one.h"
 
-#include "./../../src/include/reordering_fourier_input.h"
+#include "./reordering_fourier_input.h"
 
 Describe(reordering_fourier_input);
-
-BeforeEach(reordering_fourier_input) {
-}
-
-AfterEach(reordering_fourier_input) {
-}
+BeforeEach(reordering_fourier_input) {}
+AfterEach(reordering_fourier_input) {}
 
 Ensure(reordering_fourier_input, mirrors_specific_elements) {
-	config conf;
+	config_struct conf;
 	conf.num_of_grids_in_each_axis = 2;
 
 	fftw_complex delta_complex[8];
@@ -42,7 +38,7 @@ Ensure(reordering_fourier_input, mirrors_specific_elements) {
 }
 
 Ensure(reordering_fourier_input, puts_dc_component_at_the_center_of_delta_dourier) {
-	config conf;
+	config_struct conf;
 	conf.num_of_grids_in_each_axis = 4;
 
 	int rank[3] = {4, 4, 4};

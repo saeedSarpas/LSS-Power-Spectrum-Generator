@@ -1,12 +1,12 @@
 #ifndef MODES_STRUCT_H
 #define MODES_STRUCT_H
 
-typedef struct {
+typedef struct modes_struct_tag{
   int index;
   int kx;
   int ky;
   int kz;
   double modulus;
-} modes;
+} modes_struct;
 
 #endif

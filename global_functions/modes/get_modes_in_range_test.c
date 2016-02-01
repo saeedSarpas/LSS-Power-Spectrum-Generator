@@ -17,44 +17,44 @@ BeforeEach(get_mode_in_range) {}
 AfterEach(get_mode_in_range) {}
 
 Ensure(get_mode_in_range, returns_right_results_for_a_trivial_input) {
-	config conf;
+	config_struct conf;
 	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
 
 	int tot_num_of_grids = pow(NUM_OF_GRIDS, 3);
 
-	modes *indexed_mode_modulus;
+	modes_struct *indexed_mode_modulus;
 	allocate_modes_struct(&indexed_mode_modulus, tot_num_of_grids);
 
 	int i;
 	for (i = 0; i < tot_num_of_grids; i++)
 		indexed_mode_modulus[i].modulus = i;
 
-	vector modes_vector;
+	vector_struct modes_vector;
 	vector_new(&modes_vector, sizeof(modes), 1000);
 
 	get_modes_in_range(100, 1000, indexed_mode_modulus, &conf, &modes_vector);
-	modes mode;
+	modes_struct mode;
 	assert_that(modes_vector.log_length, is_equal_to(900));
 	vector_get_elem(&modes_vector, 0, &mode);
-	assert_that(mode.modulus, is_equal_to(101));
+	assert_that(mode.modulus, is_equal_to(100));
 	vector_get_elem(&modes_vector, 899, &mode);
-	assert_that(mode.modulus, is_equal_to(1000));
+	assert_that(mode.modulus, is_equal_to(999));
 
 	vector_dispose(&modes_vector);
 	vector_new(&modes_vector, sizeof(modes), 10);
 
 	get_modes_in_range(0, 10, indexed_mode_modulus, &conf, &modes_vector);
 	vector_get_elem(&modes_vector, 0, &mode);
-	assert_that(mode.modulus, is_equal_to(1));
+	assert_that(mode.modulus, is_equal_to(0));
 
 	vector_dispose(&modes_vector);
-	vector new_modes_vector;
+	vector_struct new_modes_vector;
 	vector_new(&new_modes_vector, sizeof(modes), 10);
 
 	get_modes_in_range(tot_num_of_grids - 11, tot_num_of_grids - 1,
 			indexed_mode_modulus, &conf, &new_modes_vector);
 	vector_get_elem(&new_modes_vector, 9, &mode);
-	assert_that(mode.modulus, is_equal_to(tot_num_of_grids - 1));
+	assert_that(mode.modulus, is_equal_to(tot_num_of_grids - 2));
 
 	vector_dispose(&modes_vector);
 }

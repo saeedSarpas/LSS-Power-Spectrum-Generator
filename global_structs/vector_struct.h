@@ -3,11 +3,11 @@
 
 #include <stddef.h>
 
-typedef struct {
+typedef struct vector_struct_tag{
 	void *elems;
 	size_t elem_size;
 	size_t log_length;
 	size_t alloc_length;
-} vector;
+} vector_struct;
 
 #endif

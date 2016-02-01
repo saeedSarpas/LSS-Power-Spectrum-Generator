@@ -24,7 +24,7 @@ BeforeEach(single_mode_power) {}
 AfterEach(single_mode_power) {}
 
 Ensure(single_mode_power, returns_right_results_for_a_trivial_input) {
-	config conf;
+	config_struct conf;
 	conf.min_num_of_modes_in_bins = BINS_MIN_MODE;
 	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
 
@@ -45,7 +45,7 @@ Ensure(single_mode_power, returns_right_results_for_a_trivial_input) {
 	delta_fourier[index] = tot_num_of_grids + tot_num_of_grids * I;
 
 
-	modes *indexed_mode_modulus;
+	modes_struct *indexed_mode_modulus;
 	allocate_modes_struct(&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3));
 	int j, k;
 	for (i = 0; i < NUM_OF_GRIDS; i++) {
@@ -62,8 +62,8 @@ Ensure(single_mode_power, returns_right_results_for_a_trivial_input) {
 	}
 	sort(indexed_mode_modulus, &conf);
 
-	single_mode_power_result result;
-	result = single_mode_power(0, 100, 10000, delta_fourier,
+	single_mode_power_result_struct result;
+	result = single_mode_power(0, 10000, delta_fourier,
 			indexed_mode_modulus, &conf);
 
 	assert_that(result.mode_power, is_equal_to(2));

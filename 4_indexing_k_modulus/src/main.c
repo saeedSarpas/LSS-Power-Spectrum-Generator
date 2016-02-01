@@ -23,12 +23,12 @@
 
 int main () {
 
-	config conf;
+	config_struct conf;
 	get_config(&conf);
 
 	clock_t _i_k_m_ = start("Indexing k modes... ");
 
-	modes *indexed_modes;
+	modes_struct *indexed_modes;
 	int tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
 	allocate_modes_struct(&indexed_modes, tot_num_of_grids);
 
@@ -42,7 +42,7 @@ int main () {
 	char *output_path = strdup("./../output/");
 	append_indexed_modes_filename(&conf, &output_path);
 
-	FILE * output_file;
+	FILE *output_file;
 	open_file(&output_file, output_path, "wb");
 	write_modes_struct_to(output_file, indexed_modes, tot_num_of_grids,
 			output_path);

@@ -11,15 +11,11 @@
 #include "./../../src/include/convert_real_delta_to_complex.h"
 
 Describe(convert_real_delta_to_complex);
-
-BeforeEach(convert_real_delta_to_complex) {
-}
-
-AfterEach(convert_real_delta_to_complex) {
-}
+BeforeEach(convert_real_delta_to_complex) {}
+AfterEach(convert_real_delta_to_complex) {}
 
 Ensure(convert_real_delta_to_complex, puts_zero_in_the_imaginary_part) {
-	config conf;
+	config_struct conf;
 	conf.num_of_grids_in_each_axis = 2;
 
 	double delta_real[8] = {1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2};

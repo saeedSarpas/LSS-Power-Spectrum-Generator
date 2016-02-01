@@ -34,7 +34,7 @@ _G_FUNC = clock/done.o \
           filenames/append_density_contrast_filename.o \
           filenames/append_fourier_transformed_filename.o \
           filenames/append_indexed_modes_filename.o \
-          filenames/append_input_infos_name.o \
+          filenames/append_input_info_name.o \
           filenames/append_input_name.o \
           filenames/append_power_spectrum_filename.o \
           filenames/str_concat.o \
@@ -42,8 +42,8 @@ _G_FUNC = clock/done.o \
           grid/move_along_grid_axis.o \
           grid/one_to_three.o \
           grid/three_to_one.o \
-          info_file/read_input_file_infos.o \
-          info_file/write_input_file_infos_to.o \
+          info_file/read_input_file_info.o \
+          info_file/write_input_file_info_to.o \
           io/get_algorithm_alias.o \
           io/get_input_filename_alias.o \
           io/read_double_from.o \
@@ -57,7 +57,7 @@ _G_FUNC = clock/done.o \
           memory/allocate_config_struct.o \
           memory/allocate_double_array.o \
           memory/allocate_fftw_complex.o \
-          memory/allocate_input_file_infos_struct.o \
+          memory/allocate_input_file_info_struct.o \
           memory/allocate_modes_struct.o \
           memory/allocate_particle_data_struct.o \
           memory/allocation_failing_message.o \

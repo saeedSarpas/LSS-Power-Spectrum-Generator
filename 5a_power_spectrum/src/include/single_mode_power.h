@@ -2,5 +2,5 @@
 
 #include "./../struct/single_mode_power_result.h"
 
-single_mode_power_result single_mode_power (double, double, double,
-		fftw_complex *, modes *, config *);
+single_mode_power_result_struct single_mode_power (double, double,
+		fftw_complex *, modes_struct *, config_struct *);

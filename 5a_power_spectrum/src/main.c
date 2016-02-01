@@ -8,7 +8,7 @@
 
 #include "./../../global_structs/config_struct.h"
 #include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_infos.h"
+#include "./../../global_structs/input_file_info.h"
 #include "./../../global_structs/vector_struct.h"
 #include "./../../global_structs/modes_struct.h"
 #include "./../../global_structs/bins_struct.h"
@@ -16,8 +16,8 @@
 #include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/io/get_algorithm_alias.h"
 #include "./../../global_functions/io/get_input_filename_alias.h"
-#include "./../../global_functions/filenames/append_input_infos_name.h"
-#include "./../../global_functions/info_file/read_input_file_infos.h"
+#include "./../../global_functions/filenames/append_input_info_name.h"
+#include "./../../global_functions/info_file/read_input_file_info.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
 #include "./../../global_functions/memory/allocate_fftw_complex.h"
@@ -40,7 +40,7 @@
 
 int main() {
 
-	config conf;
+	config_struct conf;
 	get_config(&conf);
 
 	char *input_filename_alias;
@@ -49,10 +49,10 @@ int main() {
 	char *algorithm_alias;
 	algorithm_alias = get_algorithm_alias(&conf);
 
-	input_file_infos info;
+	input_info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_infos_name(input_filename_alias, &input_info_path);
-	read_input_file_infos(&info, input_info_path);
+	append_input_info_name(input_filename_alias, &input_info_path);
+	read_input_file_info(&info, input_info_path);
 
 
 	clock_t _l_f_t_d_ = start("Load Fourier transformed data... ");
@@ -77,15 +77,15 @@ int main() {
 	FILE *indexed_mode_modulus_file;
 	open_file(&indexed_mode_modulus_file, indexed_mode_modulus_file_path, "rb");
 
-	modes *indexed_mode_modulus;
+	modes_struct *indexed_mode_modulus;
 	allocate_modes_struct(&indexed_mode_modulus, tot_num_of_grids);
-	read_modes_struct_from(indexed_mode_modulus_file, indexed_mode_modulus_file_path,
-			indexed_mode_modulus, tot_num_of_grids, &conf);
+	read_modes_struct_from(indexed_mode_modulus_file,indexed_mode_modulus_file_path,
+			indexed_mode_modulus, tot_num_of_grids);
 
 	fclose(indexed_mode_modulus_file);
 
-	vector bins_vector;
-	vector_new(&bins_vector, sizeof(bins), 20);
+	vector_struct bins_vector;
+	vector_new(&bins_vector, sizeof(struct bins_struct_tag), 20);
 
 	generate_logarithmic_bins(&bins_vector, indexed_mode_modulus, &conf);
 
@@ -103,12 +103,12 @@ int main() {
 
 	fprintf(output_file, "Mode     \tShell min\tShell max\tPower   \tPower err\tFound modes\n");
 
-	bins bin;
-	single_mode_power_result result;
+	bins_struct bin;
+	single_mode_power_result_struct result;
 
 	while (bins_vector.log_length > 0) {
 		vector_pop(&bins_vector, &bin);
-		result = single_mode_power(bin.k_min, bin.k, bin.k_max, delta_fourier,
+		result = single_mode_power(bin.k_min, bin.k_max, delta_fourier,
 				indexed_mode_modulus, &conf);
 
 		fprintf(output_file, "%f\t%f\t%f\t%f\t%f\t%d\n", bin.k, bin.k_min,

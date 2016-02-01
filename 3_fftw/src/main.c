@@ -7,13 +7,13 @@
 
 #include "./../../global_structs/config_struct.h"
 #include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_infos.h"
+#include "./../../global_structs/input_file_info.h"
 
 #include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/io/get_algorithm_alias.h"
 #include "./../../global_functions/io/get_input_filename_alias.h"
-#include "./../../global_functions/filenames/append_input_infos_name.h"
-#include "./../../global_functions/info_file/read_input_file_infos.h"
+#include "./../../global_functions/filenames/append_input_info_name.h"
+#include "./../../global_functions/info_file/read_input_file_info.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
 #include "./../../global_functions/memory/allocate_fftw_complex.h"
@@ -21,7 +21,7 @@
 #include "./../../global_functions/filenames/append_density_contrast_filename.h"
 #include "./../../global_functions/filenames/append_fourier_transformed_filename.h"
 #include "./../../global_functions/open_file.h"
-#include "./../../global_functions/io/write_fft_complex_to.h"
+#include "./../../global_functions/io/write_fftw_complex_to.h"
 
 #include "./include/load_density_contrast_grid.h"
 #include "./include/convert_real_delta_to_complex.h"
@@ -29,7 +29,7 @@
 
 int main() {
 
-	config conf;
+	config_struct conf;
 	get_config(&conf);
 
 	char *input_filename_alias;
@@ -38,10 +38,10 @@ int main() {
 	char *algorithm_alias;
 	algorithm_alias = get_algorithm_alias(&conf);
 
-	input_file_infos info;
+	input_info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_infos_name(input_filename_alias, &input_info_path);
-	read_input_file_infos(&info, input_info_path);
+	append_input_info_name(input_filename_alias, &input_info_path);
+	read_input_file_info(&info, input_info_path);
 
 	clock_t _c_a_c_f_f_ = start("Creating a c2c FFTW plan... ");
 

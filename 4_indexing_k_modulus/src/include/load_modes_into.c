@@ -5,7 +5,7 @@
 
 #include "./../../../global_functions/grid/three_to_one.h"
 
-void load_modes_into(modes *modes_array, config *conf) {
+void load_modes_into(modes_struct *modes_array, config_struct *conf) {
 	int index, i, j, k;
 	int half_grid_box_size = conf->num_of_grids_in_each_axis / 2;
 

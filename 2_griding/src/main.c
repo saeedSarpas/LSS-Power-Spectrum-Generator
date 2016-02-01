@@ -6,7 +6,7 @@
 
 #include "./../../global_structs/config_struct.h"
 #include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_infos.h"
+#include "./../../global_structs/input_file_info.h"
 
 #include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/io/get_algorithm_alias.h"
@@ -16,10 +16,10 @@
 #include "./../../global_functions/clock/done.h"
 #include "./../../global_functions/memory/allocate_particle_data_struct.h"
 #include "./../../global_functions/memory/allocate_double_array.h"
-#include "./../../global_functions/filenames/append_input_infos_name.h"
+#include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/filenames/append_input_name.h"
 #include "./../../global_functions/filenames/append_density_contrast_filename.h"
-#include "./../../global_functions/info_file/read_input_file_infos.h"
+#include "./../../global_functions/info_file/read_input_file_info.h"
 #include "./../../global_functions/grid/three_to_one.h"
 #include "./../../global_functions/open_file.h"
 
@@ -30,7 +30,7 @@
 #include "./include/density_contrast.h"
 
 int main() {
-	config conf;
+	config_struct conf;
 	get_config(&conf);
 
 	char *input_filename_alias;
@@ -39,14 +39,14 @@ int main() {
 	char *algorithm_alias;
 	algorithm_alias = get_algorithm_alias(&conf);
 
-	input_file_infos info;
+	input_info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_infos_name(input_filename_alias, &input_info_path);
-	read_input_file_infos(&info, input_info_path);
+	append_input_info_name(input_filename_alias, &input_info_path);
+	read_input_file_info(&info, input_info_path);
 
 	clock_t _r_g_i_ = start("Reading griding input... ");
 
-	particle_data *P;
+	particle_data_struct *P;
 	allocate_particle_data_struct(&P, info.num_of_parts);
 
 	char *input_path = strdup("./../../0_structured_input/");

@@ -5,6 +5,6 @@ typedef struct {
 	double mode_power;
 	double error;
 	int num_of_found_modes;
-} single_mode_power_result;
+} single_mode_power_result_struct;
 
 #endif

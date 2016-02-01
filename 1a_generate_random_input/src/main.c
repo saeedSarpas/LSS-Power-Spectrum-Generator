@@ -8,13 +8,13 @@
 #include "./../../global_functions/open_file.h"
 #include "./../../global_functions/memory/allocate_particle_data_struct.h"
 #include "./../../global_functions/filenames/append_input_name.h"
-#include "./../../global_functions/filenames/append_input_infos_name.h"
+#include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/io/write_particle_data_struct_to.h"
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/info_file/write_input_file_infos_to.h"
+#include "./../../global_functions/info_file/write_input_file_info_to.h"
 
 #include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_infos.h"
+#include "./../../global_structs/input_file_info.h"
 #include "./../../global_structs/config_struct.h"
 
 int NUM_OF_PARTS = 10000000;
@@ -28,10 +28,10 @@ int main() {
 
 	clock_t _g_r_i_ = start("Generating random input... ");
 
-particle_data *P;
+	particle_data_struct *P;
 	allocate_particle_data_struct(&P, NUM_OF_PARTS);
 
-int i, n;
+	int i, n;
 	for (n = 0; n < NUM_OF_PARTS; n++) {
 		for (i = 0; i < 3; i++) {
 			P[n].Pos[i] = random_double(BOX_LENGTH);
@@ -46,7 +46,7 @@ int i, n;
 
 	FILE * out_file;
 
-	config conf;
+	config_struct conf;
 	get_config(&conf);
 
 	char *out_path = strdup("./../../0_structured_input/");
@@ -63,17 +63,17 @@ int i, n;
 
 	clock_t _s_c_f_ = start("Saving configuration file... ");
 
-	input_file_infos infos;
-	infos.num_of_parts = NUM_OF_PARTS;
-	infos.box_length = BOX_LENGTH;
+	input_info_struct info;
+	info.num_of_parts = NUM_OF_PARTS;
+	info.box_length = BOX_LENGTH;
 
 	char *info_path = strdup("./../../0_structured_input/");
-	append_input_infos_name(conf.inputs[0][1], &info_path);
+	append_input_info_name(conf.inputs[0][1], &info_path);
 
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");
 
-	write_input_file_infos_to(info_file, &infos);
+	write_input_file_info_to(info_file, &info);
 
 	fclose(info_file);
 

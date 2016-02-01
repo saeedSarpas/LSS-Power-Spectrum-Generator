@@ -4,7 +4,7 @@
 
 #include "./../../global_structs/config_struct.h"
 
-int three_to_one (int i, int j, int k, config *conf) {
+int three_to_one (int i, int j, int k, config_struct *conf) {
 	i = grid_boundry_checker(i, conf);
 	j = grid_boundry_checker(j, conf);
 	k = grid_boundry_checker(k, conf);

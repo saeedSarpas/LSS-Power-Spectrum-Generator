@@ -1,11 +1,11 @@
 #include "./../../../global_functions/grid/three_to_one.h"
 
 #include "./../../../global_structs/particle_data_struct.h"
-#include "./../../../global_structs/input_file_infos.h"
+#include "./../../../global_structs/input_file_info.h"
 #include "./../../../global_structs/config_struct.h"
 
-void ngp (particle_data *P, double *grid_mass, input_file_infos *info,
-		  config *conf) {
+void ngp (particle_data_struct *P, double *grid_mass, input_info_struct *info,
+		  config_struct *conf) {
 
 	int i, j, k, n;
 

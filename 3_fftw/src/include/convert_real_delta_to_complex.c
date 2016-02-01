@@ -5,7 +5,7 @@
 #include "./../../../global_structs/config_struct.h"
 
 void convert_real_delta_to_complex(double *delta_real,
-		fftw_complex *delta_complex, config *conf) {
+		fftw_complex *delta_complex, config_struct *conf) {
 
 	size_t tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
 

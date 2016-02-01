@@ -6,8 +6,8 @@
 
 #include "./../../global_functions/vector/vector.h"
 
-void get_modes_in_range (double min, double max, modes *indexed_mode_modulus,
-		config *conf, vector *modes_vector) {
+void get_modes_in_range (double min, double max, modes_struct *indexed_mode_modulus,
+		config_struct *conf, vector_struct *modes_vector) {
 
 	int tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
 	int pointer = tot_num_of_grids / 2;
@@ -30,14 +30,14 @@ void get_modes_in_range (double min, double max, modes *indexed_mode_modulus,
 	}
 
 	do {
+		if (indexed_mode_modulus[pointer].modulus >= min &&
+				indexed_mode_modulus[pointer].modulus < max) {
+			vector_push(modes_vector, &indexed_mode_modulus[pointer]);
+		}
 		if (pointer < tot_num_of_grids) {
 			pointer++;
 		} else {
 			break;
-		}
-		if (indexed_mode_modulus[pointer].modulus > min &&
-				indexed_mode_modulus[pointer].modulus <= max) {
-			vector_push(modes_vector, &indexed_mode_modulus[pointer]);
 		}
 	} while (indexed_mode_modulus[pointer].modulus <= max);
 }

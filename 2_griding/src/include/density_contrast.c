@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "./../../../global_structs/input_file_infos.h"
+#include "./../../../global_structs/input_file_info.h"
 #include "./../../../global_structs/config_struct.h"
 
-void density_contrast(double *grid_mass, input_file_infos *info, config *conf,
-					  double *grid_delta) {
+void density_contrast(double *grid_mass, input_info_struct *info,
+		config_struct *conf, double *grid_delta) {
 
 	unsigned int n;
 	size_t total_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);

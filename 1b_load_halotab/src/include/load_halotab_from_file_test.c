@@ -32,7 +32,7 @@ Ensure(load_halotab_from_file, load_data_correctly_for_real_mass) {
 	FILE * fp;
 	open_file(&fp, TEST_FILE_ADDR, "r");
 
-	particle_data *P;
+	particle_data_struct *P;
 	allocate_particle_data_struct(&P, TEST_FILE_NUM_OF_LINES);
 
 	load_halotab_from_file(fp, P, 2);
@@ -54,7 +54,7 @@ Ensure(load_halotab_from_file, load_data_correctly_for_constant_mass) {
 	FILE *fp;
 	open_file(&fp, TEST_FILE_ADDR, "r");
 
-	particle_data *P;
+	particle_data_struct *P;
 	allocate_particle_data_struct(&P, TEST_FILE_NUM_OF_LINES);
 
 	load_halotab_from_file(fp, P, 1);

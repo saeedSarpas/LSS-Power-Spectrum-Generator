@@ -10,16 +10,16 @@
 
 #include "./../../../global_functions/vector/vector.h"
 
-void generate_logarithmic_bins(vector *bins_vector, modes *indexed_mode_modulus,
-		config *conf) {
+void generate_logarithmic_bins(vector_struct *bins_vector,
+		modes_struct *indexed_mode_modulus, config_struct *conf) {
 
-	double first_bin_max = indexed_mode_modulus[conf->min_num_of_modes_in_bins].modulus;
+	double first_bin_max = indexed_mode_modulus[conf->min_num_of_modes_in_bins + 1].modulus;
 	double jump = sqrt(first_bin_max);
 
 	int tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
 	double largest_mode = indexed_mode_modulus[tot_num_of_grids - 1].modulus;
 
-	bins bin;
+	bins_struct bin;
 	int i = 0;
 	do {
 		bin.k_min = pow(jump, i);
