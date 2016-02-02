@@ -18,9 +18,16 @@ clean :
           $(LH_INCLUDE) $(LH_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o \
           $(GIDIR)/src/main.o
 
+.PHONY: plot
+plot :
+	cd $(PSDIR); $(PYTHON) ./plotPowerSpectra.py
+	cd $(GRDIR); $(PYTHON) ./PlotDensity.py
+
+
 .PHONY: cleanPlots
 cleanPlots :
-	rm -rf $(GRDIR)/plots/*.png
+	rm -f $(GRDIR)/plots/*.png
+	rm -f $(PSDIR)/plots/*.png
 
 #------------------------------------------------------------------------------
 # GLOBAL FUNCTIONS
@@ -152,10 +159,6 @@ $(GRDIR)/src/main.o : $(GRDIR)/src/main.c $(G_FUNC) $(GR_INCLUDE)
 .PHONY: grmain
 grmain : grtest $(GRDIR)/src/main.o
 	cd $(GRDIR)/src; ./main.o
-
-.PHONY: plotDensity
-plotDensity :
-	cd $(GRDIR); $(PYTHON) ./PlotDensity.py
 
 #------------------------------------------------------------------------------
 # FAST FOURIER TRANSFORM
