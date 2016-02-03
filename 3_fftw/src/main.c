@@ -61,7 +61,7 @@ int main() {
 
 	fftw_plan p;
 	p = fftw_plan_dft(3, rank, delta_complex, delta_fourier, FFTW_FORWARD,
-						FFTW_MEASURE);
+					  FFTW_MEASURE);
 
 	done(_c_a_c_f_f_);
 
@@ -70,7 +70,7 @@ int main() {
 
 	char *input_path = strdup("./../../2_griding/output/");
 	append_density_contrast_filename(input_filename_alias, algorithm_alias,
-										&info, &conf, &input_path);
+									 &info, &conf, &input_path);
 
 	double *delta_real;
 	allocate_double_array(&delta_real, tot_num_of_grids);
@@ -91,17 +91,27 @@ int main() {
 	done(_f_t_);
 
 
+	clock_t _n_ = start("Normalizing... ");
+
+	unsigned int i;
+	double sqrt_tot_num_of_grids = sqrt(tot_num_of_grids);
+	for (i = 0; i < tot_num_of_grids; i++)
+		delta_fourier[i] /=  sqrt_tot_num_of_grids;
+
+	done(_n_);
+
+
 	clock_t _s_d_ = start("Saving data... ");
 
 	char *output_path = strdup("./../output/");
 	append_fourier_transformed_filename(input_filename_alias, algorithm_alias,
-											&info, &conf, &output_path);
+										&info, &conf, &output_path);
 
 	FILE * out_file;
 	open_file(&out_file, output_path, "wb");
 
 	write_fftw_complex_to(out_file, output_path, delta_fourier,
-							tot_num_of_grids);
+						  tot_num_of_grids);
 
 	done(_s_d_);
 

@@ -60,6 +60,7 @@ Ensure(reordering_fourier_input, puts_dc_component_at_the_center_of_delta_dourie
 
 	fftw_execute(p);
 
+
 	int index = three_to_one(2, 2, 2, &conf);
 	assert_that(creal(delta_fourier[index]), is_equal_to(creal(dc)));
 	assert_that(cimag(delta_fourier[index]), is_equal_to(cimag(dc)));
