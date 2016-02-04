@@ -4,6 +4,10 @@ TEST_LIBS = -lcgreen
 LIBS      = -lm -lconfig -lfftw3
 
 PYTHON = python2
+IMAGE_VIEWER = eog
+
+.PHONY: ps
+ps : clean lhmain grmain ftmain immain psmain
 
 .PHONY: tests
 tests : gtest pstest imtest fttest grtest
@@ -19,15 +23,21 @@ clean :
           $(GIDIR)/src/main.o
 
 .PHONY: plot
-plot :
+plot : cleanPlots
 	cd $(PSDIR); $(PYTHON) ./plotPowerSpectra.py
+	cd $(PSDIR)/plots; $(IMAGE_VIEWER) *.png
 	cd $(GRDIR); $(PYTHON) ./PlotDensity.py
-
 
 .PHONY: cleanPlots
 cleanPlots :
 	rm -f $(GRDIR)/plots/*.png
 	rm -f $(PSDIR)/plots/*.png
+
+.PHONY: cleanOutput
+cleanOutput :
+	rm -f $(PSDIR)/output/*.dat $(IMDIR)/output/*.dat $(FTDIR)/output/*.dat \
+	$(GRDIR)/output/*.dat $(LHDIR)/output/*.dat $(GIDIR)/output/*.dat
+
 
 #------------------------------------------------------------------------------
 # GLOBAL FUNCTIONS
@@ -48,6 +58,7 @@ _G_FUNC = clock/done.o \
           grid/grid_boundry_checker.o \
           grid/move_along_grid_axis.o \
           grid/one_to_three.o \
+          grid/one_to_three_fourier_mode.o \
           grid/three_to_one.o \
           info_file/read_input_file_info.o \
           info_file/write_input_file_info_to.o \
@@ -167,7 +178,8 @@ grmain : grtest $(GRDIR)/src/main.o
 #------------------------------------------------------------------------------
 _FT_INCLUDE = load_density_contrast_grid.o \
               convert_real_delta_to_complex.o \
-              reordering_fourier_input.o
+              reordering_fourier_input.o \
+              apply_mass_assignment_window.o
 FT_INCLUDE  = $(patsubst %,$(FTDIR)/src/include/%,$(_FT_INCLUDE))
 
 _FT_TEST = reordering_fourier_input_test.o \
@@ -228,7 +240,8 @@ immain : imtest $(IMDIR)/src/main.o
 #------------------------------------------------------------------------------
 _PS_INCLUDE = load_fourier_transformed_data.o \
               single_mode_power.o \
-              generate_logarithmic_bins.o
+              generate_logarithmic_bins.o \
+              generate_linear_bins.o
 PS_INCLUDE  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_INCLUDE))
 
 _PS_TEST = single_mode_power_test.o \

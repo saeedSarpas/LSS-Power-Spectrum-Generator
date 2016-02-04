@@ -48,9 +48,12 @@ void get_config (config_struct *conf) {
 	conf->num_of_grids_in_each_axis = libconfig_setting_lookup_int(grid,
 			"num_of_grids_in_each_axis");
 
+	const char *bin_mode;
 	bins = libconfig_lookup(&cfg, "bins");
 	conf->min_num_of_modes_in_bins = libconfig_setting_lookup_int(bins,
 			"min_num_of_modes_in_bins");
+	bin_mode = libconfig_setting_lookup_string(bins, "bin_mode");
+	conf->bin_mode = strdup(bin_mode);
 
 	libconfig_destroy(&cfg);
 }

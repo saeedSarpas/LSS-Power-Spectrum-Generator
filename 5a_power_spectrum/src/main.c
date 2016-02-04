@@ -35,6 +35,7 @@
 #include "./include/load_fourier_transformed_data.h"
 #include "./include/single_mode_power.h"
 #include "./include/generate_logarithmic_bins.h"
+#include "./include/generate_linear_bins.h"
 
 #define PI (3.141592653589793)
 
@@ -80,14 +81,24 @@ int main() {
 	modes_struct *indexed_mode_modulus;
 	allocate_modes_struct(&indexed_mode_modulus, tot_num_of_grids);
 	read_modes_struct_from(indexed_mode_modulus_file,indexed_mode_modulus_file_path,
-			indexed_mode_modulus, tot_num_of_grids);
+						   indexed_mode_modulus, tot_num_of_grids);
 
 	fclose(indexed_mode_modulus_file);
 
 	vector_struct bins_vector;
-	vector_new(&bins_vector, sizeof(struct bins_struct_tag), 20);
+	vector_new(&bins_vector, sizeof(struct bins_struct_tag),
+			   conf.num_of_grids_in_each_axis);
 
-	generate_logarithmic_bins(&bins_vector, indexed_mode_modulus, &conf);
+	if (strcmp(conf.bin_mode, "linear") == 0) {
+		printf("[linear bins]");
+		generate_linear_bins(&bins_vector, &conf);
+	} else if (strcmp(conf.bin_mode, "log") == 0) {
+		printf("[logarithmic bins]");
+		generate_logarithmic_bins(&bins_vector, indexed_mode_modulus, &conf);
+	} else {
+		printf("[Unknown binning mode\n]");
+		exit(0);
+	}
 
 	done(_g_b_a_);
 
@@ -96,7 +107,7 @@ int main() {
 
 	char *output_path = strdup("./../output/");
 	append_power_spectrum_filename(input_filename_alias, algorithm_alias,
-			&conf, &info, &output_path);
+								   &conf, &info, &output_path);
 
 	FILE * output_file;
 	open_file(&output_file, output_path, "wb");
@@ -109,10 +120,18 @@ int main() {
 	while (bins_vector.log_length > 0) {
 		vector_pop(&bins_vector, &bin);
 		result = single_mode_power(bin.k_min, bin.k_max, delta_fourier,
-				indexed_mode_modulus, &conf);
+								   indexed_mode_modulus, &conf);
 
-		fprintf(output_file, "%f\t%f\t%f\t%f\t%f\t%d\n", bin.k, bin.k_min,
-				bin.k_max, result.mode_power, result.error, result.num_of_found_modes);
+		double scale = (2 * PI) / info.box_length;
+		double scaled_k = bin.k * scale;
+		double scaled_k_min = bin.k_min * scale;
+		double scaled_k_max = bin.k_max * scale;
+		double scaled_mode_power = result.mode_power;
+		double scaled_error = result.error;
+
+		fprintf(output_file, "%f\t%f\t%f\t%f\t%f\t%d\n", scaled_k, scaled_k_min,
+				scaled_k_max, scaled_mode_power, scaled_error,
+				result.num_of_found_modes);
 	}
 
 	done(_g_a_s_p_s_);

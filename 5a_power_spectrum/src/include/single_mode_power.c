@@ -29,7 +29,7 @@ static variance_result_struct variance(vector_struct *power_double_vector) {
 	result.mode_power = 0.0;
 	result.error = 0.0;
 
-	int i;
+	unsigned int i;
 	double power;
 	for (i = 0; i < power_double_vector->log_length; i++) {
 		vector_get_elem(power_double_vector, i, &power);
