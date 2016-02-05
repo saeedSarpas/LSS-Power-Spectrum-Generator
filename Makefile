@@ -151,7 +151,8 @@ _GR_INCLUDE = load_input.o \
               ngp.o
 GR_INCLUDE  = $(patsubst %,$(GRDIR)/src/include/%,$(_GR_INCLUDE))
 
-_GR_TEST = density_contrast_test.o
+_GR_TEST = density_contrast_test.o \
+           cic_test.o
 GR_TEST  = $(patsubst %,$(GRDIR)/src/include/%,$(_GR_TEST))
 
 $(GR_INCLUDE) : %.o : %.c

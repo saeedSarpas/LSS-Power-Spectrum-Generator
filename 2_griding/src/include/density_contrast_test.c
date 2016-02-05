@@ -3,7 +3,7 @@
 #include "./../../../global_structs/input_file_info.h"
 #include "./../../../global_structs/config_struct.h"
 
-#include "./../../src/include/density_contrast.h"
+#include "./density_contrast.h"
 
 Describe(density_contrast);
 BeforeEach(density_contrast) {}
