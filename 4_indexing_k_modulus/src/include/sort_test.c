@@ -11,26 +11,30 @@
 #include "./../../src/include/sort.h"
 
 Describe(sort);
-BeforeEach(sort) {}
-AfterEach(sort) {}
+
+#define NUM_OF_GRIDS 4
+
+static config_struct conf;
+static modes_struct *modes_array;
+
+BeforeEach(sort) {
+	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+
+	allocate_modes_struct(&modes_array, pow(NUM_OF_GRIDS, 3));
+	load_modes_into(modes_array, &conf);
+}
+
+AfterEach(sort) {
+	free(modes_array);
+}
 
 Ensure(sort, sort_modes_array_in_ascending) {
-	config_struct conf;
-	conf.num_of_grids_in_each_axis = 4;
-
-	int ng = conf.num_of_grids_in_each_axis;
-	int ngs = pow(ng, 3);
-
-	modes_struct *modes_array;
-	allocate_modes_struct(&modes_array, ngs);
-	load_modes_into(modes_array, &conf);
-
 	sort(modes_array, &conf);
 
-	int i;
-	for (i = 0; i < ngs - 1; i++) {
+	int i, tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+
+	for (i = 0; i < tot_num_of_grids - 1; i++)
 		assert_true(modes_array[i].modulus <= modes_array[i+1].modulus);
-	}
 }
 
 TestSuite *sort_tests() {
