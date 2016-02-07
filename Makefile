@@ -84,7 +84,8 @@ _G_FUNC = clock/done.o \
           open_file.o
 G_FUNC  = $(patsubst %,$(GDIR)/%,$(_G_FUNC))
 
-_G_TEST = modes/get_modes_in_range_test.o
+_G_TEST = modes/get_modes_in_range_test.o \
+          grid/three_to_one_test.o
 G_TEST  = $(patsubst %,$(GDIR)/%,$(_G_TEST))
 
 $(G_FUNC) : %.o : %.c
