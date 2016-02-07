@@ -11,17 +11,25 @@
 #include "./../../src/include/convert_real_delta_to_complex.h"
 
 Describe(convert_real_delta_to_complex);
-BeforeEach(convert_real_delta_to_complex) {}
+
+#define NUM_OF_GRIDS 2
+#define TOT_NUM_OF_GRIDS 8
+#define DELTA 1.2
+
+static config_struct conf;
+static double delta_real[TOT_NUM_OF_GRIDS];
+static fftw_complex delta_complex[TOT_NUM_OF_GRIDS];
+
+BeforeEach(convert_real_delta_to_complex) {
+	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+
+	int i;
+	for (i = 0; i < TOT_NUM_OF_GRIDS; i++)
+		delta_real[i] = DELTA;
+}
 AfterEach(convert_real_delta_to_complex) {}
 
 Ensure(convert_real_delta_to_complex, puts_zero_in_the_imaginary_part) {
-	config_struct conf;
-	conf.num_of_grids_in_each_axis = 2;
-
-	double delta_real[8] = {1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2, 1.2};
-	fftw_complex *delta_complex;
-	allocate_fftw_complex(&delta_complex, 8);
-
 	convert_real_delta_to_complex(delta_real, delta_complex, &conf);
 
 	int i, j, k;
@@ -38,6 +46,7 @@ Ensure(convert_real_delta_to_complex, puts_zero_in_the_imaginary_part) {
 
 TestSuite *convert_real_delta_to_complex_tests() {
 	TestSuite *suite = create_test_suite();
-	add_test_with_context(suite, convert_real_delta_to_complex, puts_zero_in_the_imaginary_part);
+	add_test_with_context(suite, convert_real_delta_to_complex,
+						  puts_zero_in_the_imaginary_part);
 	return suite;
 }
