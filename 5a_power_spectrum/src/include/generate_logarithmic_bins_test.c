@@ -11,30 +11,41 @@
 
 #include "./../../src/include/generate_logarithmic_bins.h"
 
+Describe(generate_logarithmic_bins);
+
 #define BINS_MIN_MODE 5
 #define NUM_OF_GRIDS 128
 
-Describe(generate_logarithmic_bins);
-BeforeEach(generate_logarithmic_bins) {}
-AfterEach(generate_logarithmic_bins) {}
+static config_struct conf;
+static modes_struct *indexed_mode_modulus;
+static int tot_num_of_grids;
+static double jump;
+static vector_struct bins_vector;
+static void fill_indexed_mode_modulus();
 
-Ensure(generate_logarithmic_bins, sets_bins_boundries_correct) {
-	config_struct conf;
+BeforeEach(generate_logarithmic_bins) {
 	conf.min_num_of_modes_in_bins = BINS_MIN_MODE;
 	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
 
-	modes_struct *indexed_mode_modulus;
 	allocate_modes_struct(&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3));
 
-	int i;
-	for (i = 0; i < pow(NUM_OF_GRIDS, 3); i++)
-		indexed_mode_modulus[i].modulus = i;
+	double first_bin_max =
+		indexed_mode_modulus[conf.min_num_of_modes_in_bins + 1].modulus;
+	jump = sqrt(first_bin_max);
 
-	double first_bin_max = indexed_mode_modulus[conf.min_num_of_modes_in_bins + 1].modulus;
-	double jump = sqrt(first_bin_max);
+	tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
 
-	vector_struct bins_vector;
 	vector_new(&bins_vector, sizeof(struct bins_struct_tag), 10);
+
+}
+
+AfterEach(generate_logarithmic_bins) {
+	free(indexed_mode_modulus);
+	vector_dispose(&bins_vector);
+}
+
+Ensure(generate_logarithmic_bins, sets_bins_boundries_correct) {
+	fill_indexed_mode_modulus();
 
 	generate_logarithmic_bins(&bins_vector, indexed_mode_modulus, &conf);
 
@@ -47,7 +58,6 @@ Ensure(generate_logarithmic_bins, sets_bins_boundries_correct) {
 		assert_that(bin.k_max, is_equal_to(pow(jump, 2 * bins_vector.log_length + 2)));
 	}
 
-	vector_dispose(&bins_vector);
 }
 
 TestSuite *generate_logarithmic_bins_tests() {
@@ -55,4 +65,10 @@ TestSuite *generate_logarithmic_bins_tests() {
 	add_test_with_context(suite, generate_logarithmic_bins,
 			sets_bins_boundries_correct);
 	return suite;
+}
+
+void fill_indexed_mode_modulus() {
+	int i;
+	for (i = 0; i < tot_num_of_grids; i++)
+		indexed_mode_modulus[i].modulus = i;
 }
