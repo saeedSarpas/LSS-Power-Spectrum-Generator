@@ -13,7 +13,7 @@ PLOTS = {}
 
 for pl in PLOTS_NAME:
     plot_path = "./plots/" + os.path.splitext(pl)[0]
-    PLOTS[pl] = p.Plot()
+    PLOTS[pl] = p.DensityPlot()
     PLOTS[pl].read_density("./output/" + pl)
     PLOTS[pl].draw_density(cMap=True, zShift=1)
-    PLOTS[pl].save(plot_path.replace("ascii-", "", 1))
+    p.save(plot_path.replace("ascii-", "", 1))
