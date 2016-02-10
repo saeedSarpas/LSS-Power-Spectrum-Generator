@@ -30,7 +30,7 @@ Ensure(get_mode_in_range, returns_right_results_for_a_trivial_input) {
 		indexed_mode_modulus[i].modulus = i;
 
 	vector_struct modes_vector;
-	vector_new(&modes_vector, sizeof(modes), 1000);
+	vector_new(&modes_vector, sizeof(struct modes_struct_tag), 1000);
 
 	get_modes_in_range(100, 1000, indexed_mode_modulus, &conf, &modes_vector);
 	modes_struct mode;
@@ -41,7 +41,7 @@ Ensure(get_mode_in_range, returns_right_results_for_a_trivial_input) {
 	assert_that(mode.modulus, is_equal_to(999));
 
 	vector_dispose(&modes_vector);
-	vector_new(&modes_vector, sizeof(modes), 10);
+	vector_new(&modes_vector, sizeof(struct modes_struct_tag), 10);
 
 	get_modes_in_range(0, 10, indexed_mode_modulus, &conf, &modes_vector);
 	vector_get_elem(&modes_vector, 0, &mode);
@@ -49,7 +49,7 @@ Ensure(get_mode_in_range, returns_right_results_for_a_trivial_input) {
 
 	vector_dispose(&modes_vector);
 	vector_struct new_modes_vector;
-	vector_new(&new_modes_vector, sizeof(modes), 10);
+	vector_new(&new_modes_vector, sizeof(struct modes_struct_tag), 10);
 
 	get_modes_in_range(tot_num_of_grids - 11, tot_num_of_grids - 1,
 			indexed_mode_modulus, &conf, &new_modes_vector);
