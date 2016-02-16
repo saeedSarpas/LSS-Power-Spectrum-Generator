@@ -26,6 +26,9 @@
 #include "./include/load_density_contrast_grid.h"
 #include "./include/convert_real_delta_to_complex.h"
 #include "./include/reordering_fourier_input.h"
+#include "./include/smearing_and_anisotropy_correction_for_ngp.h"
+#include "./include/smearing_and_anisotropy_correction_for_cic.h"
+#include "./include/smearing_and_anisotropy_correction_for_tsc.h"
 
 int main() {
 
@@ -42,6 +45,7 @@ int main() {
 	char *input_info_path = strdup("./../../0_structured_input/");
 	append_input_info_name(input_filename_alias, &input_info_path);
 	read_input_file_info(&info, input_info_path);
+
 
 	clock_t _c_a_c_f_f_ = start("Creating a c2c FFTW plan... ");
 
@@ -89,6 +93,18 @@ int main() {
 	fftw_destroy_plan(p);
 
 	done(_f_t_);
+
+
+	clock_t _a_m_a_w_f_ = start("Applying mass assignment window function... ");
+
+	if (strcmp(algorithm_alias, conf.ngp_alias) == 0)
+		smearing_and_anisotropy_correction_for_ngp(delta_fourier, &conf);
+	else if (strcmp(algorithm_alias, conf.cic_alias) == 0)
+		smearing_and_anisotropy_correction_for_cic(delta_fourier, &conf);
+	else if (strcmp(algorithm_alias, conf.tsc_alias) == 0)
+		smearing_and_anisotropy_correction_for_tsc(delta_fourier, &conf);
+
+	done(_a_m_a_w_f_);
 
 
 	clock_t _n_ = start("Normalizing... ");
