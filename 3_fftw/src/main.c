@@ -95,7 +95,7 @@ int main() {
 	done(_f_t_);
 
 
-	clock_t _a_m_a_w_f_ = start("Applying mass assignment window function... ");
+	clock_t _a_m_a_w_f_ = start("Smearing and anisotropy correction... ");
 
 	if (strcmp(algorithm_alias, conf.ngp_alias) == 0)
 		smearing_and_anisotropy_correction_for_ngp(delta_fourier, &conf);
@@ -103,6 +103,10 @@ int main() {
 		smearing_and_anisotropy_correction_for_cic(delta_fourier, &conf);
 	else if (strcmp(algorithm_alias, conf.tsc_alias) == 0)
 		smearing_and_anisotropy_correction_for_tsc(delta_fourier, &conf);
+	else {
+		printf("[Unknown mass assignment algorithm] ");
+		exit(0);
+	}
 
 	done(_a_m_a_w_f_);
 
