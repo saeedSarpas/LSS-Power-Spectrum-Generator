@@ -30,8 +30,6 @@ int main() {
 	size_t num_of_lines = get_number_of_lines(input_file);
 	rewind(input_file);
 
-	printf("num of lines: %d\n", (int)num_of_lines);
-
 	particle_data_struct *P;
 	allocate_particle_data_struct(&P, num_of_lines);
 	load_z07to08_from_file(input_file, P);
@@ -40,20 +38,17 @@ int main() {
 
 	done(_r_h_f_);
 
-	/* int i; */
-	/* for (i = 0; i < 1000; i++) */
-	/* 	printf("%f\t%f\t%f\n", P[i].Pos[0], P[i].Pos[1], P[i].Pos[2]); */
-
 
 	clock_t _s_o_f_ = start("Saving output file...");
 
 	FILE *out_file;
 
 	config_struct conf;
-	get_config(&conf);
+	get_config(&conf, "./../../configurations.cfg");
 
 	char *output_path = strdup("./../../0_structured_input/");
-	append_input_name(conf.inputs[3][1], &output_path);
+	append_input_name(conf.input_files[conf.run_params.file_index][1],
+					  &output_path);
 
 	open_file(&out_file, output_path, "wb");
 
@@ -71,7 +66,8 @@ int main() {
 	info.box_length = 200.0;
 
 	char *info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(conf.inputs[3][1], &info_path);
+	append_input_info_name(conf.input_files[conf.run_params.file_index][1],
+						   &info_path);
 
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");
@@ -83,6 +79,8 @@ int main() {
 	done(_s_c_f_);
 
 	free(P);
-
+	free(input_path);
+	free(output_path);
+	free(info_path);
 	return 0;
 }
