@@ -79,7 +79,7 @@ int libconfig_setting_length (config_setting_t *setting) {
 	}
 }
 
-config_setting_t* libconfig_setting_add (config_setting_t * parent, const char * name, int type) {
+config_setting_t* libconfig_setting_add (config_setting_t *parent, const char *name, int type) {
 	config_setting_t *added_setting = config_setting_add(parent, name, type);
 	if (added_setting) {
 		return added_setting;
@@ -99,6 +99,13 @@ void libconfig_setting_set_int (config_setting_t *setting, int value) {
 void libconfig_setting_set_float (config_setting_t *setting, double value) {
 	if (!config_setting_set_float(setting, value)) {
 		printf("[Unable to set float/double value]\n");
+		exit(0);
+	}
+}
+
+void libconfig_setting_set_string (config_setting_t *setting, const char *value) {
+	if (config_setting_set_string(setting, value) != CONFIG_TRUE) {
+		printf("[Unable to set string value]\n");
 		exit(0);
 	}
 }

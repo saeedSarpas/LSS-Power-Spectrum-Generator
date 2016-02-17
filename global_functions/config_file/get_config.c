@@ -5,55 +5,66 @@
 #include "./my_libconfig.h"
 #include "./../../global_structs/config_struct.h"
 
-void get_config (config_struct *conf) {
+void get_config (config_struct *conf, char *conf_path) {
 
 	config_t cfg;
-	config_setting_t *files, *aliases, *grid, *bins, *filename_setting;
+	config_setting_t *input_files, *griding_mass_addignment_functions,
+		*binning_algorithm, *run_params, *setting;
 
 	libconfig_init(&cfg);
-	libconfig_read_file(&cfg, "./../../configurations.cfg");
+	libconfig_read_file(&cfg, conf_path);
 
-	files = libconfig_lookup(&cfg, "input.files");
+	int i, len;
+	const char *name, *alias;
 
-	const char *file_name, *file_alias;
-	int i, len = libconfig_setting_length(files);
-
-	conf->num_of_input_files = len;
-
+	input_files = libconfig_lookup(&cfg, "input.files");
+	len = libconfig_setting_length(input_files);
 	for (i = 0; i < len; i++) {
-		filename_setting = libconfig_setting_get_elem(files, i);
+		setting = libconfig_setting_get_elem(input_files, i);
 
-		file_name = libconfig_setting_lookup_string(filename_setting,
-				"filename");
-		conf->inputs[i][0] = strdup(file_name);
+		name = libconfig_setting_lookup_string(setting, "filename");
+		conf->input_files[i][0] = strdup(name);
 
-		file_alias = libconfig_setting_lookup_string(filename_setting,
-				"alias");
-		conf->inputs[i][1] = strdup(file_alias);
+		alias = libconfig_setting_lookup_string(setting, "alias");
+		conf->input_files[i][1] = strdup(alias);
 	}
 
-	const char *ngp, *cic, *tsc;
-	aliases = libconfig_lookup(&cfg, "output.aliases");
 
-	ngp = libconfig_setting_lookup_string(aliases, "NGP");
-	conf->ngp_alias = strdup(ngp);
+	griding_mass_addignment_functions =
+		libconfig_lookup(&cfg,"griding.mass_assignment_functions");
+	len = libconfig_setting_length(griding_mass_addignment_functions);
+	for (i = 0; i < len; i++) {
+		setting =
+			libconfig_setting_get_elem(griding_mass_addignment_functions, i);
 
-	cic = libconfig_setting_lookup_string(aliases, "CIC");
-	conf->cic_alias = strdup(cic);
+		name = libconfig_setting_lookup_string(setting, "name");
+		conf->mass_assignment_functions[i][0] = strdup(name);
 
-	tsc = libconfig_setting_lookup_string(aliases, "TSC");
-	conf->tsc_alias = strdup(tsc);
+		alias =libconfig_setting_lookup_string(setting, "alias");
+		conf->mass_assignment_functions[i][1] = strdup(alias);
+	}
 
-	grid = libconfig_lookup(&cfg, "grid");
-	conf->num_of_grids_in_each_axis = libconfig_setting_lookup_int(grid,
-			"num_of_grids_in_each_axis");
+	binning_algorithm = libconfig_lookup(&cfg, "binning.algorithms");
+	len = libconfig_setting_length(binning_algorithm);
+	for (i = 0; i < len; i++) {
+		setting = libconfig_setting_get_elem(binning_algorithm, i);
 
-	const char *bin_mode;
-	bins = libconfig_lookup(&cfg, "bins");
-	conf->min_num_of_modes_in_bins = libconfig_setting_lookup_int(bins,
-			"min_num_of_modes_in_bins");
-	bin_mode = libconfig_setting_lookup_string(bins, "bin_mode");
-	conf->bin_mode = strdup(bin_mode);
+		name =  libconfig_setting_lookup_string(setting, "name");
+		conf->binning[i][0] = strdup(name);
+
+		alias = libconfig_setting_lookup_string(setting, "alias");
+		conf->binning[i][1] = strdup(alias);
+	}
+
+	run_params = libconfig_lookup(&cfg, "run_params");
+	conf->run_params.file_index =
+		libconfig_setting_lookup_int(run_params, "file_index");
+	conf->run_params.mass_assignment_index =
+		libconfig_setting_lookup_int(run_params, "mass_assignment_index");
+	conf->run_params.binning_index =
+		libconfig_setting_lookup_int(run_params, "binning_index");
+	conf->run_params.num_of_axis_grids =
+		libconfig_setting_lookup_int(run_params, "num_of_axis_grids");
 
 	libconfig_destroy(&cfg);
 }
