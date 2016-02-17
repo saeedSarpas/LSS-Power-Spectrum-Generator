@@ -4,8 +4,8 @@
 
 #include "./../../../global_structs/config_struct.h"
 
-#include "./../../../global_functions/open_file.h"
-#include "./../../../global_functions/io/read_double_from.h"
+#include "./../../../global_functions/io/open_file.h"
+#include "./../../../global_functions/io/read_from.h"
 
 void load_density_contrast_grid(char *path, double *grid_delta,
 		config_struct *conf) {
@@ -15,7 +15,7 @@ void load_density_contrast_grid(char *path, double *grid_delta,
 
 	size_t tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
 
-	read_double_from(file, path, grid_delta, tot_num_of_grids);
+	read_from(file, tot_num_of_grids, sizeof(double), (void *)grid_delta);
 
 	fclose(file);
 }

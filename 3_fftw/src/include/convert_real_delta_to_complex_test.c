@@ -5,7 +5,6 @@
 
 #include "./../../../global_structs/config_struct.h"
 
-#include "./../../../global_functions/memory/allocate_fftw_complex.h"
 #include "./../../../global_functions/grid/three_to_one.h"
 
 #include "./../../src/include/convert_real_delta_to_complex.h"
