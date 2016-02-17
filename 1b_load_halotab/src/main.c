@@ -5,12 +5,12 @@
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
 #include "./../../global_functions/open_file.h"
-#include "./../../global_functions/memory/allocate_particle_data_struct.h"
+#include "./../../global_functions/memory/allocate.h"
 #include "./../../global_functions/filenames/append_input_name.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
-#include "./../../global_functions/io/write_particle_data_struct_to.h"
+#include "./../../global_functions/io/write_to.h"
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/info_file/write_input_file_info_to.h"
+#include "./../../global_functions/info_file/write_info_to.h"
 
 #include "./../../global_structs/particle_data_struct.h"
 #include "./../../global_structs/config_struct.h"
@@ -31,7 +31,7 @@ int main() {
 	rewind(input_file);
 
 	particle_data_struct *P;
-	allocate_particle_data_struct(&P, num_of_lines);
+	allocate((void **)&P, num_of_lines, sizeof(particle_data_struct));
 	load_halotab_from_file(input_file, P);
 
 	fclose(input_file);
@@ -41,7 +41,7 @@ int main() {
 
 	clock_t _s_o_f_ = start("Saving output file...");
 
-	FILE *out_file;
+	FILE *output_file;
 
 	config_struct conf;
 	get_config(&conf, "./../../configurations.cfg");
@@ -49,11 +49,11 @@ int main() {
 	char *output_path = strdup("./../../0_structured_input/");
 	append_input_name(conf.input_files[0][1], &output_path);
 
-	open_file(&out_file, output_path, "wb");
+	open_file(&output_file, output_path, "wb");
 
-	write_particle_data_struct_to(out_file, P, num_of_lines, output_path);
+	write_to(output_file, P, num_of_lines, sizeof(particle_data_struct));
 
-	fclose(out_file);
+	fclose(output_file);
 
 	done(_s_o_f_);
 
@@ -70,13 +70,15 @@ int main() {
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");
 
-	write_input_file_info_to(info_file, &info);
+	write_info_to(info_file, &info);
 
 	fclose(info_file);
 
 	done(_s_c_f_);
 
 	free(P);
-
+	free(input_path);
+	free(output_path);
+	free(info_path);
 	return 0;
 }

@@ -1,8 +1,9 @@
 #include <cgreen/cgreen.h>
 
-#include "./../../../global_functions/open_file.h"
-#include "./../../../global_functions/memory/allocate_particle_data_struct.h"
 #include "./../../../global_structs/particle_data_struct.h"
+
+#include "./../../../global_functions/open_file.h"
+#include "./../../../global_functions/memory/allocate.h"
 
 #include "./../../src/include/load_halotab_from_file.h"
 
@@ -33,7 +34,7 @@ Ensure(load_halotab_from_file, load_data_correctly) {
 	open_file(&fp, TEST_FILE_ADDR, "r");
 
 	particle_data_struct *P;
-	allocate_particle_data_struct(&P, TEST_FILE_NUM_OF_LINES);
+	allocate((void **)&P, TEST_FILE_NUM_OF_LINES, sizeof(particle_data_struct));
 
 	load_halotab_from_file(fp, P);
 
