@@ -24,12 +24,12 @@
 int main () {
 
 	config_struct conf;
-	get_config(&conf);
+	get_config(&conf, "./../../configurations.cfg");
 
 	clock_t _i_k_m_ = start("Indexing k modes... ");
 
 	modes_struct *indexed_modes;
-	int tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	int tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 	allocate_modes_struct(&indexed_modes, tot_num_of_grids);
 
 	load_modes_into(indexed_modes, &conf);

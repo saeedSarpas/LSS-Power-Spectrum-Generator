@@ -17,7 +17,7 @@ static config_struct conf;
 static modes_struct *modes_array;
 
 BeforeEach(load_modes_into) {
-	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 	allocate_modes_struct(&modes_array, pow(NUM_OF_GRIDS, 3));
 }
 
@@ -28,7 +28,7 @@ AfterEach(load_modes_into) {
 Ensure(load_modes_into, accumulate_all_modes) {
 	load_modes_into(modes_array, &conf);
 
-	int hgbs = conf.num_of_grids_in_each_axis / 2;
+	int hgbs = conf.run_params.num_of_axis_grids / 2;
 	double len;
 
 	int index, i, j, k;

@@ -18,7 +18,7 @@ static config_struct conf;
 static modes_struct *modes_array;
 
 BeforeEach(sort) {
-	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 
 	allocate_modes_struct(&modes_array, pow(NUM_OF_GRIDS, 3));
 	load_modes_into(modes_array, &conf);
@@ -31,7 +31,7 @@ AfterEach(sort) {
 Ensure(sort, sort_modes_array_in_ascending) {
 	sort(modes_array, &conf);
 
-	int i, tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	int i, tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
 	for (i = 0; i < tot_num_of_grids - 1; i++)
 		assert_true(modes_array[i].modulus <= modes_array[i+1].modulus);
