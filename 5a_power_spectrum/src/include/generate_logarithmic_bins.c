@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <assert.h>
 
 #include "./../../../global_structs/vector_struct.h"
 #include "./../../../global_structs/modes_struct.h"
@@ -13,10 +12,10 @@
 void generate_logarithmic_bins(vector_struct *bins_vector,
 		modes_struct *indexed_mode_modulus, config_struct *conf) {
 
-	double first_bin_max = indexed_mode_modulus[conf->min_num_of_modes_in_bins + 1].modulus;
-	double jump = sqrt(first_bin_max);
+	double max_of_first_bin = indexed_mode_modulus[18].modulus;
+	double jump = sqrt(max_of_first_bin);
 
-	int tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
+	int tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
 	double largest_mode = indexed_mode_modulus[tot_num_of_grids - 1].modulus;
 
 	bins_struct bin;

@@ -23,7 +23,7 @@ typedef struct {
 	double error;
 } variance_result_struct;
 
-static variance_result_struct variance(vector_struct *power_double_vector) {
+static variance_result_struct variance(vector_struct *powers_vector) {
 
 	variance_result_struct result;
 	result.mode_power = 0.0;
@@ -31,18 +31,18 @@ static variance_result_struct variance(vector_struct *power_double_vector) {
 
 	unsigned int i;
 	double power;
-	for (i = 0; i < power_double_vector->log_length; i++) {
-		vector_get_elem(power_double_vector, i, &power);
+	for (i = 0; i < powers_vector->log_length; i++) {
+		vector_get_elem(powers_vector, i, &power);
 		result.mode_power += power;
 	}
 
-	result.mode_power /= power_double_vector->log_length;
+	result.mode_power /= powers_vector->log_length;
 
-	int tot_num_of_powers = power_double_vector->log_length;
+	int tot_num_of_powers = powers_vector->log_length;
 
 	double error = 0.0;
-	while (power_double_vector->log_length > 0) {
-		vector_pop(power_double_vector, &power);
+	while (powers_vector->log_length > 0) {
+		vector_pop(powers_vector, &power);
 		error += pow(power - result.mode_power, 2);
 	}
 
@@ -57,7 +57,7 @@ single_mode_power_result_struct single_mode_power (double k_min, double k_max,
 
 	single_mode_power_result_struct result;
 
-	size_t tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
+	size_t tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
 
 	vector_struct modes_vector;
 	vector_new(&modes_vector, sizeof(struct modes_struct_tag), tot_num_of_grids);
@@ -65,8 +65,8 @@ single_mode_power_result_struct single_mode_power (double k_min, double k_max,
 	get_modes_in_range(k_min, k_max, indexed_mode_modulus, conf, &modes_vector);
 	result.num_of_found_modes = modes_vector.log_length;
 
-	vector_struct power_double_vector;
-	vector_new(&power_double_vector, sizeof(double), modes_vector.log_length);
+	vector_struct powers_vector;
+	vector_new(&powers_vector, sizeof(double), modes_vector.log_length);
 
 	modes_struct mode;
 	double power;
@@ -76,22 +76,22 @@ single_mode_power_result_struct single_mode_power (double k_min, double k_max,
 		power = pow(creal(delta_fourier[mode.index]), 2) +
 			pow(cimag(delta_fourier[mode.index]), 2);
 
-		vector_push(&power_double_vector, &power);
+		vector_push(&powers_vector, &power);
 	}
 
-	if (power_double_vector.log_length == 0) {
+	if (result.num_of_found_modes == 0) {
 		printf("\n[Found no point in this shell: %f <= k < %f]\n", k_min, k_max);
 		vector_dispose(&modes_vector);
-		vector_dispose(&power_double_vector);
+		vector_dispose(&powers_vector);
 		exit(0);
 	} else {
-		variance_result_struct variance_result = variance(&power_double_vector);
+		variance_result_struct variance_result = variance(&powers_vector);
 		result.mode_power = variance_result.mode_power;
 		result.error = variance_result.error;
 	}
 
 	vector_dispose(&modes_vector);
-	vector_dispose(&power_double_vector);
+	vector_dispose(&powers_vector);
 
 	return result;
 }

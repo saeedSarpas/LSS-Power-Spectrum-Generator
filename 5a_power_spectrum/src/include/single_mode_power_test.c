@@ -18,7 +18,6 @@
 
 Describe(single_mode_power);
 
-#define BINS_MIN_MODE 5
 #define NUM_OF_GRIDS 128
 #define DELTA_FOURIER_REAL_PART 1.0
 #define DELTA_FOURIER_IMAG_PART 1.0
@@ -31,10 +30,9 @@ static void fill_delta_fourier();
 static void fill_indexed_mode_modulus();
 
 BeforeEach(single_mode_power) {
-	conf.min_num_of_modes_in_bins = BINS_MIN_MODE;
-	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 
-	tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
 	allocate_fftw_complex(&delta_fourier, tot_num_of_grids);
 

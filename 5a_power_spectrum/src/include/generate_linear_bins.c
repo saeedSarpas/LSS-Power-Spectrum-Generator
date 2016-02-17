@@ -7,7 +7,7 @@
 #include "./../../../global_functions/vector/vector.h"
 
 void generate_linear_bins (vector_struct *bins_vector, config_struct *conf) {
-	int maximum_of_k = sqrt(3) * conf->num_of_grids_in_each_axis / 2;
+	int maximum_of_k = sqrt(3) * conf->run_params.num_of_axis_grids / 2;
 
 	int i;
 	bins_struct bin;

@@ -1,7 +1,5 @@
 #include <cgreen/cgreen.h>
 #include <math.h>
-#include <complex.h>
-#include <fftw3.h>
 
 #include "./../../../global_structs/config_struct.h"
 #include "./../../../global_structs/bins_struct.h"
@@ -13,7 +11,6 @@
 
 Describe(generate_logarithmic_bins);
 
-#define BINS_MIN_MODE 5
 #define NUM_OF_GRIDS 128
 
 static config_struct conf;
@@ -21,19 +18,19 @@ static modes_struct *indexed_mode_modulus;
 static int tot_num_of_grids;
 static double jump;
 static vector_struct bins_vector;
+
 static void fill_indexed_mode_modulus();
 
 BeforeEach(generate_logarithmic_bins) {
-	conf.min_num_of_modes_in_bins = BINS_MIN_MODE;
-	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 
 	allocate_modes_struct(&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3));
 
-	double first_bin_max =
-		indexed_mode_modulus[conf.min_num_of_modes_in_bins + 1].modulus;
-	jump = sqrt(first_bin_max);
+	fill_indexed_mode_modulus();
+	double max_of_first_bin = indexed_mode_modulus[18].modulus;
+	jump = sqrt(max_of_first_bin);
 
-	tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
 	vector_new(&bins_vector, sizeof(struct bins_struct_tag), 10);
 
@@ -45,8 +42,6 @@ AfterEach(generate_logarithmic_bins) {
 }
 
 Ensure(generate_logarithmic_bins, sets_bins_boundries_correct) {
-	fill_indexed_mode_modulus();
-
 	generate_logarithmic_bins(&bins_vector, indexed_mode_modulus, &conf);
 
 	bins_struct bin;

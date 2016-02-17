@@ -17,6 +17,7 @@ for dat in PS:
                                       linestyle="solid", shaded='true',
                                       xerr='false', yerr='true',
                                       # xmin=1e-3, xmax=10,
+                                      # ymin=1e2, ymax=1e5,
                                       xaxislog='linear', yaxislog='log')
-    p.save("./plots/" + os.path.splitext(dat)[0], xlabel="$\\log k$",
-           ylabel="$P$")
+    p.save("./plots/" + os.path.splitext(dat)[0], xlabel="$k$",
+           ylabel="$\log P$")

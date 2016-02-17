@@ -14,8 +14,6 @@
 #include "./../../global_structs/bins_struct.h"
 
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/io/get_algorithm_alias.h"
-#include "./../../global_functions/io/get_input_filename_alias.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/info_file/read_input_file_info.h"
 #include "./../../global_functions/clock/start.h"
@@ -42,13 +40,14 @@
 int main() {
 
 	config_struct conf;
-	get_config(&conf);
+	get_config(&conf, "./../../configurations.cfg");
 
 	char *input_filename_alias;
-	input_filename_alias = get_input_filename_alias(&conf);
+	input_filename_alias = conf.input_files[conf.run_params.file_index][1];
 
 	char *algorithm_alias;
-	algorithm_alias = get_algorithm_alias(&conf);
+	algorithm_alias =
+		conf.mass_assignment_functions[conf.run_params.mass_assignment_index][1];
 
 	input_info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
@@ -58,7 +57,7 @@ int main() {
 
 	clock_t _l_f_t_d_ = start("Load Fourier transformed data... ");
 
-	size_t tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
 	fftw_complex *delta_fourier;
 	allocate_fftw_complex(&delta_fourier, tot_num_of_grids);
@@ -87,16 +86,16 @@ int main() {
 
 	vector_struct bins_vector;
 	vector_new(&bins_vector, sizeof(struct bins_struct_tag),
-			   conf.num_of_grids_in_each_axis);
+			   conf.run_params.num_of_axis_grids);
 
-	if (strcmp(conf.bin_mode, "linear") == 0) {
-		printf("[linear bins]");
+	if (strcmp(conf.binning[conf.run_params.binning_index][1], "lin") == 0) {
+		printf("[Using linear bins] ");
 		generate_linear_bins(&bins_vector, &conf);
-	} else if (strcmp(conf.bin_mode, "log") == 0) {
-		printf("[logarithmic bins]");
+	} else if (strcmp(conf.binning[conf.run_params.binning_index][1], "log") == 0) {
+		printf("[Using logarithmic bins] ");
 		generate_logarithmic_bins(&bins_vector, indexed_mode_modulus, &conf);
 	} else {
-		printf("[Unknown binning mode\n]");
+		printf("[Unknown binning mode]\n");
 		exit(0);
 	}
 
@@ -112,7 +111,8 @@ int main() {
 	FILE * output_file;
 	open_file(&output_file, output_path, "wb");
 
-	fprintf(output_file, "Mode     \tShell min\tShell max\tPower   \tPower err\tFound modes\n");
+	fprintf(output_file,
+			"Mode     \tShell min\tShell max\tPower   \tPower err\tFound modes\n");
 
 	bins_struct bin;
 	single_mode_power_result_struct result;
@@ -122,10 +122,10 @@ int main() {
 		result = single_mode_power(bin.k_min, bin.k_max, delta_fourier,
 								   indexed_mode_modulus, &conf);
 
-		double scale = (2 * PI) / info.box_length;
-		double scaled_k = bin.k * scale;
-		double scaled_k_min = bin.k_min * scale;
-		double scaled_k_max = bin.k_max * scale;
+		double scale_factor = (2 * PI) / info.box_length;
+		double scaled_k = bin.k * scale_factor;
+		double scaled_k_min = bin.k_min * scale_factor;
+		double scaled_k_max = bin.k_max * scale_factor;
 		double scaled_mode_power = result.mode_power;
 		double scaled_error = result.error;
 
