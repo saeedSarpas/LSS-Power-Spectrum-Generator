@@ -21,7 +21,7 @@ static double delta_real[TOT_NUM_OF_GRIDS];
 static fftw_complex delta_complex[TOT_NUM_OF_GRIDS];
 
 BeforeEach(convert_real_delta_to_complex) {
-	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 
 	int i;
 	for (i = 0; i < TOT_NUM_OF_GRIDS; i++)

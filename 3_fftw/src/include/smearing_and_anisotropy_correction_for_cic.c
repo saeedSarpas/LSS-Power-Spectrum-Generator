@@ -10,8 +10,8 @@
 
 void smearing_and_anisotropy_correction_for_cic(fftw_complex *delta_fourier,
 												config_struct *conf) {
-	int N = pow(conf->num_of_grids_in_each_axis, 3);
-	int k_Nyquist = conf->num_of_grids_in_each_axis / 2;
+	int N = pow(conf->run_params.num_of_axis_grids, 3);
+	int k_Nyquist = conf->run_params.num_of_axis_grids / 2;
 
 	int i, index, k[3];
 	double W_k, phi;
@@ -22,7 +22,7 @@ void smearing_and_anisotropy_correction_for_cic(fftw_complex *delta_fourier,
 		one_to_three(index, k, conf);
 
 		for (i = 0; i < 3; i++) {
-			k[i] -= conf->num_of_grids_in_each_axis / 2;
+			k[i] -= conf->run_params.num_of_axis_grids / 2;
 			phi = (PI * k[i]) / (2.0 * k_Nyquist);
 
 			W_k = (phi == 0.0) ? 1.0 : W_k * pow(sin(phi) / phi, 2);

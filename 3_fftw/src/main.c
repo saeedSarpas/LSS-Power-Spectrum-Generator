@@ -10,8 +10,6 @@
 #include "./../../global_structs/input_file_info.h"
 
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/io/get_algorithm_alias.h"
-#include "./../../global_functions/io/get_input_filename_alias.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/info_file/read_input_file_info.h"
 #include "./../../global_functions/clock/start.h"
@@ -33,23 +31,24 @@
 int main() {
 
 	config_struct conf;
-	get_config(&conf);
+	get_config(&conf, "./../../configurations.cfg");
 
-	char *input_filename_alias;
-	input_filename_alias = get_input_filename_alias(&conf);
+	char *filename_alias;
+	filename_alias = conf.input_files[conf.run_params.file_index][1];
 
 	char *algorithm_alias;
-	algorithm_alias = get_algorithm_alias(&conf);
+	algorithm_alias =
+		conf.mass_assignment_functions[conf.run_params.mass_assignment_index][1];
 
 	input_info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(input_filename_alias, &input_info_path);
+	append_input_info_name(filename_alias, &input_info_path);
 	read_input_file_info(&info, input_info_path);
 
 
 	clock_t _c_a_c_f_f_ = start("Creating a c2c FFTW plan... ");
 
-	size_t tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
 	fftw_complex *delta_complex;
 	allocate_fftw_complex(&delta_complex, tot_num_of_grids);
@@ -58,9 +57,9 @@ int main() {
 	allocate_fftw_complex(&delta_fourier, tot_num_of_grids);
 
 	int rank[3] = {
-		conf.num_of_grids_in_each_axis,
-		conf.num_of_grids_in_each_axis,
-		conf.num_of_grids_in_each_axis
+		conf.run_params.num_of_axis_grids,
+		conf.run_params.num_of_axis_grids,
+		conf.run_params.num_of_axis_grids
 	};
 
 	fftw_plan p;
@@ -73,7 +72,7 @@ int main() {
 	clock_t _l_d_c_ = start("Loading density contrast... ");
 
 	char *input_path = strdup("./../../2_griding/output/");
-	append_density_contrast_filename(input_filename_alias, algorithm_alias,
+	append_density_contrast_filename(filename_alias, algorithm_alias,
 									 &info, &conf, &input_path);
 
 	double *delta_real;
@@ -97,14 +96,14 @@ int main() {
 
 	clock_t _a_m_a_w_f_ = start("Smearing and anisotropy correction... ");
 
-	if (strcmp(algorithm_alias, conf.ngp_alias) == 0)
+	if (strcmp(algorithm_alias, "ngp") == 0)
 		smearing_and_anisotropy_correction_for_ngp(delta_fourier, &conf);
-	else if (strcmp(algorithm_alias, conf.cic_alias) == 0)
+	else if (strcmp(algorithm_alias, "cic") == 0)
 		smearing_and_anisotropy_correction_for_cic(delta_fourier, &conf);
-	else if (strcmp(algorithm_alias, conf.tsc_alias) == 0)
+	else if (strcmp(algorithm_alias, "tsc") == 0)
 		smearing_and_anisotropy_correction_for_tsc(delta_fourier, &conf);
 	else {
-		printf("[Unknown mass assignment algorithm] ");
+		printf("[Unknown mass assignment algorithm]\n");
 		exit(0);
 	}
 
@@ -124,7 +123,7 @@ int main() {
 	clock_t _s_d_ = start("Saving data... ");
 
 	char *output_path = strdup("./../output/");
-	append_fourier_transformed_filename(input_filename_alias, algorithm_alias,
+	append_fourier_transformed_filename(filename_alias, algorithm_alias,
 										&info, &conf, &output_path);
 
 	FILE * out_file;
@@ -140,6 +139,5 @@ int main() {
 	free(input_info_path);
 	free(input_path);
 	free(output_path);
-
 	return 0;
 }
