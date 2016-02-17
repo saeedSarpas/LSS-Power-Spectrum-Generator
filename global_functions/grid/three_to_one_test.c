@@ -13,7 +13,7 @@ AfterEach(three_to_one) {}
 
 Ensure(three_to_one, returns_right_results_for_a_trivial_input) {
 	config_struct conf;
-	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 
 	int grids_squared = pow(NUM_OF_GRIDS, 2);
 

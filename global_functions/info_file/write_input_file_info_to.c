@@ -23,4 +23,6 @@ void write_input_file_info_to(FILE *file, input_info_struct *info) {
 	libconfig_setting_set_float(box_len, info->box_length);
 
 	config_write(&cfg, file);
+
+	libconfig_destroy(&cfg);
 }

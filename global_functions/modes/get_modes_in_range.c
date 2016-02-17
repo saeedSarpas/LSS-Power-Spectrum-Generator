@@ -9,7 +9,7 @@
 void get_modes_in_range (double min, double max, modes_struct *indexed_mode_modulus,
 		config_struct *conf, vector_struct *modes_vector) {
 
-	int tot_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
+	int tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
 	int pointer = tot_num_of_grids / 2;
 	int jump_size = tot_num_of_grids / 4;
 

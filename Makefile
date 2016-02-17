@@ -14,13 +14,13 @@ tests : gtest pstest imtest fttest grtest
 
 .PHONY: clean
 clean :
-	rm -f $(G_TEST) $(G_FUNC) \
-          $(LH_INCLUDE) $(LH_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o \
-          $(PS_INCLUDE) $(PS_TEST) $(PSDIR)/tests.tst $(PSDIR)/src/main.o \
+	rm -f $(PS_INCLUDE) $(PS_TEST) $(PSDIR)/tests.tst $(PSDIR)/src/main.o \
           $(IM_INCLUDE) $(IM_TEST) $(IMDIR)/tests.tst $(IMDIR)/src/main.o \
           $(FT_INCLUDE) $(FT_TEST) $(FTDIR)/tests.tst $(FTDIR)/src/main.o \
           $(GR_INCLUDE) $(GR_TEST) $(GRDIR)/tests.tst $(GRDIR)/src/main.o \
-          $(LH_INCLUDE) $(LH_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o
+          $(LE_INCLUDE) $(LE_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o \
+          $(LH_INCLUDE) $(LH_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o \
+          $(G_TEST) $(G_FUNC)
 
 .PHONY: plot
 plot : cleanPlots
@@ -61,8 +61,6 @@ _G_FUNC = clock/done.o \
           grid/three_to_one.o \
           info_file/read_input_file_info.o \
           info_file/write_input_file_info_to.o \
-          io/get_algorithm_alias.o \
-          io/get_input_filename_alias.o \
           io/read_double_from.o \
           io/read_fftw_complex_from.o \
           io/read_modes_struct_from.o \
@@ -71,7 +69,6 @@ _G_FUNC = clock/done.o \
           io/write_fftw_complex_to.o \
           io/write_modes_struct_to.o \
           io/write_particle_data_struct_to.o \
-          memory/allocate_config_struct.o \
           memory/allocate_double_array.o \
           memory/allocate_fftw_complex.o \
           memory/allocate_input_file_info_struct.o \

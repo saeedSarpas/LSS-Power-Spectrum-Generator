@@ -7,7 +7,7 @@
 void append_indexed_modes_filename(config_struct *conf, char **return_path) {
 
 	char num_of_grids_in_each_axis[3];
-	sprintf(num_of_grids_in_each_axis, "%d", conf->num_of_grids_in_each_axis);
+	sprintf(num_of_grids_in_each_axis, "%d", conf->run_params.num_of_axis_grids);
 
   char * strings[] = {"indexed-modes-", num_of_grids_in_each_axis, ".dat"};
 
