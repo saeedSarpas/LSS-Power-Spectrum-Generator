@@ -5,8 +5,7 @@
 #include "./../../../global_structs/input_file_info.h"
 #include "./../../../global_structs/particle_data_struct.h"
 
-#include "./../../../global_functions/memory/allocate_particle_data_struct.h"
-#include "./../../../global_functions/memory/allocate_double_array.h"
+#include "./../../../global_functions/memory/allocate.h"
 #include "./../../../global_functions/grid/three_to_one.h"
 
 #include "./cic.h"
@@ -31,9 +30,9 @@ BeforeEach(cic) {
 	info.num_of_parts = NUM_OF_PARTS;
 	info.box_length = BOX_LENGTH;
 
-	allocate_particle_data_struct(&P, info.num_of_parts);
+	allocate((void **)&P, info.num_of_parts, sizeof(particle_data_struct));
 
-	allocate_double_array(&grid_mass, tot_num_of_grids);
+	allocate((void **)&grid_mass, tot_num_of_grids, sizeof(double));
 }
 
 AfterEach(cic) {

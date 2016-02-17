@@ -9,17 +9,16 @@
 #include "./../../global_structs/input_file_info.h"
 
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/io/write_double_to.h"
+#include "./../../global_functions/io/open_file.h"
+#include "./../../global_functions/io/write_to.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
-#include "./../../global_functions/memory/allocate_particle_data_struct.h"
-#include "./../../global_functions/memory/allocate_double_array.h"
+#include "./../../global_functions/memory/allocate.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/filenames/append_input_name.h"
 #include "./../../global_functions/filenames/append_density_contrast_filename.h"
-#include "./../../global_functions/info_file/read_input_file_info.h"
+#include "./../../global_functions/info_file/read_info_from.h"
 #include "./../../global_functions/grid/three_to_one.h"
-#include "./../../global_functions/open_file.h"
 
 #include "./include/load_input.h"
 #include "./include/cic.h"
@@ -39,14 +38,14 @@ int main() {
 		conf.mass_assignment_functions[conf.run_params.mass_assignment_index][1];
 
 	input_info_struct info;
-	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(filename_alias, &input_info_path);
-	read_input_file_info(&info, input_info_path);
+	char *info_path = strdup("./../../0_structured_input/");
+	append_input_info_name(filename_alias, &info_path);
+	read_info_from(info_path, &info);
 
 	clock_t _r_g_i_ = start("Reading griding input... ");
 
 	particle_data_struct *P;
-	allocate_particle_data_struct(&P, info.num_of_parts);
+	allocate((void **)&P, info.num_of_parts, sizeof(particle_data_struct));
 
 	char *input_path = strdup("./../../0_structured_input/");
 	append_input_name(filename_alias, &input_path);
@@ -58,7 +57,7 @@ int main() {
 
 	double *grid_mass;
 	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
-	allocate_double_array(&grid_mass, tot_num_of_grids);
+	allocate((void **)&grid_mass, tot_num_of_grids, sizeof(double));
 
 	if (strcmp(algorithm_alias, "cic") == 0) {
 		char alg[256] = "Griding using cloud in cell (CIC) algorithm... ";
@@ -83,7 +82,7 @@ int main() {
 	clock_t _c_d_c_ = start("Calculating density contrast... ");
 
 	double * grid_delta;
-	allocate_double_array(&grid_delta, tot_num_of_grids);
+	allocate((void **)&grid_delta, tot_num_of_grids, sizeof(double));
 
 	density_contrast(grid_mass, &info, &conf, grid_delta);
 
@@ -97,7 +96,7 @@ int main() {
 									 &info, &conf, &output_path);
 	open_file(&output_file, output_path, "wb");
 
-	write_double_to(output_file, grid_delta, tot_num_of_grids, output_path);
+	write_to(output_file, grid_delta, tot_num_of_grids, sizeof(double));
 
 	fclose(output_file);
 
@@ -131,7 +130,9 @@ int main() {
 	free(grid_delta);
 	free(filename_alias);
 	free(algorithm_alias);
-	free(input_info_path);
-
+	free(info_path);
+	free(input_path);
+	free(output_path);
+	free(ascii_output_path);
 	return 0;
 }

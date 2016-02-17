@@ -2,7 +2,7 @@
 #include <libconfig.h>
 
 #include "./../config_file/my_libconfig.h"
-#include "./../open_file.h"
+#include "./../io/open_file.h"
 
 #include "./../../global_structs/input_file_info.h"
 
