@@ -47,8 +47,7 @@ int main() {
 	get_config(&conf, "./../../configurations.cfg");
 
 	char *output_path = strdup("./../../0_structured_input/");
-	append_input_name(conf.input_files[conf.run_params.file_index][1],
-					  &output_path);
+	append_input_name(conf.input_files[1][1], &output_path);
 
 	open_file(&out_file, output_path, "wb");
 
@@ -66,8 +65,7 @@ int main() {
 	info.box_length = 200.0;
 
 	char *info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(conf.input_files[conf.run_params.file_index][1],
-						   &info_path);
+	append_input_info_name(conf.input_files[1][1], &info_path);
 
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");
