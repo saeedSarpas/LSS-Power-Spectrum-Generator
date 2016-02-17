@@ -28,14 +28,14 @@ AfterEach(load_halotab_from_file) {
 	remove(TEST_FILE_ADDR);
 }
 
-Ensure(load_halotab_from_file, load_data_correctly_for_real_mass) {
+Ensure(load_halotab_from_file, load_data_correctly) {
 	FILE * fp;
 	open_file(&fp, TEST_FILE_ADDR, "r");
 
 	particle_data_struct *P;
 	allocate_particle_data_struct(&P, TEST_FILE_NUM_OF_LINES);
 
-	load_halotab_from_file(fp, P, 2);
+	load_halotab_from_file(fp, P);
 
 	double x = DOUBLE_NUM;
 	int i;
@@ -50,25 +50,8 @@ Ensure(load_halotab_from_file, load_data_correctly_for_real_mass) {
 	}
 }
 
-Ensure(load_halotab_from_file, load_data_correctly_for_constant_mass) {
-	FILE *fp;
-	open_file(&fp, TEST_FILE_ADDR, "r");
-
-	particle_data_struct *P;
-	allocate_particle_data_struct(&P, TEST_FILE_NUM_OF_LINES);
-
-	load_halotab_from_file(fp, P, 1);
-
-	int i;
-	for (i = 0; i < TEST_FILE_NUM_OF_LINES; i++) {
-		assert_that(P[i].Mass, is_equal_to(1.0));
-	}
-	fclose(fp);
-}
-
 TestSuite *load_halotab_from_file_tests() {
 	TestSuite *suite = create_test_suite();
-	add_test_with_context(suite, load_halotab_from_file, load_data_correctly_for_real_mass);
-	add_test_with_context(suite, load_halotab_from_file, load_data_correctly_for_constant_mass);
+	add_test_with_context(suite, load_halotab_from_file, load_data_correctly);
 	return suite;
 }

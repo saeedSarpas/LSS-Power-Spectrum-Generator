@@ -21,10 +21,6 @@
 
 int main() {
 
-	int mass_mode;
-	printf("Mass mode [1 for constant mass, 2 for their real mass]: ");
-	scanf("%d", &mass_mode);
-
 	clock_t _r_h_f_ = start("Reading HaloTab_Run1 file... ");
 
 	FILE *input_file;
@@ -36,7 +32,7 @@ int main() {
 
 	particle_data_struct *P;
 	allocate_particle_data_struct(&P, num_of_lines);
-	load_halotab_from_file(input_file, P, mass_mode);
+	load_halotab_from_file(input_file, P);
 
 	fclose(input_file);
 
@@ -48,10 +44,10 @@ int main() {
 	FILE *out_file;
 
 	config_struct conf;
-	get_config(&conf);
+	get_config(&conf, "./../../configurations.cfg");
 
 	char *output_path = strdup("./../../0_structured_input/");
-	append_input_name(conf.inputs[mass_mode][1], &output_path);
+	append_input_name(conf.input_files[0][1], &output_path);
 
 	open_file(&out_file, output_path, "wb");
 
@@ -69,7 +65,7 @@ int main() {
 	info.box_length = 1200.0;
 
 	char *info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(conf.inputs[mass_mode][1], &info_path);
+	append_input_info_name(conf.input_files[0][1], &info_path);
 
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");

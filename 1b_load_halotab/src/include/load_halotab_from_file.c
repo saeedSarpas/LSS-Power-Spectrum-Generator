@@ -2,8 +2,7 @@
 
 #include "./../../../global_structs/particle_data_struct.h"
 
-void load_halotab_from_file(FILE *file, particle_data_struct P[],
-		int mass_mode) {
+void load_halotab_from_file(FILE *file, particle_data_struct *P) {
 	char *line = NULL;
 	size_t len = 0;
 	ssize_t read;
@@ -13,9 +12,6 @@ void load_halotab_from_file(FILE *file, particle_data_struct P[],
 		sscanf(line, "%lf\t%lf\t%lf\t%lf\t%d\n",
 			   &P[cntr].Mass, &P[cntr].Pos[0], &P[cntr].Pos[1], &P[cntr].Pos[2],
 			   &num_halo);
-
-		if (mass_mode == 1) { P[cntr].Mass = 1.0; }
-
 		cntr++;
 	}
 }
