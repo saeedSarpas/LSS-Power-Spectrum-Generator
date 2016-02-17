@@ -15,12 +15,12 @@ tests : gtest pstest imtest fttest grtest
 .PHONY: clean
 clean :
 	rm -f $(G_TEST) $(G_FUNC) \
+          $(LH_INCLUDE) $(LH_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o \
           $(PS_INCLUDE) $(PS_TEST) $(PSDIR)/tests.tst $(PSDIR)/src/main.o \
           $(IM_INCLUDE) $(IM_TEST) $(IMDIR)/tests.tst $(IMDIR)/src/main.o \
           $(FT_INCLUDE) $(FT_TEST) $(FTDIR)/tests.tst $(FTDIR)/src/main.o \
           $(GR_INCLUDE) $(GR_TEST) $(GRDIR)/tests.tst $(GRDIR)/src/main.o \
-          $(LH_INCLUDE) $(LH_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o \
-          $(GIDIR)/src/main.o
+          $(LH_INCLUDE) $(LH_TEST) $(LHDIR)/tests.tst $(LHDIR)/src/main.o
 
 .PHONY: plot
 plot : cleanPlots
@@ -58,7 +58,6 @@ _G_FUNC = clock/done.o \
           grid/grid_boundry_checker.o \
           grid/move_along_grid_axis.o \
           grid/one_to_three.o \
-          grid/one_to_three_fourier_mode.o \
           grid/three_to_one.o \
           info_file/read_input_file_info.o \
           info_file/write_input_file_info_to.o \
@@ -85,7 +84,8 @@ _G_FUNC = clock/done.o \
 G_FUNC  = $(patsubst %,$(GDIR)/%,$(_G_FUNC))
 
 _G_TEST = modes/get_modes_in_range_test.o \
-          grid/three_to_one_test.o
+          grid/three_to_one_test.o \
+          config_file/get_config_test.o
 G_TEST  = $(patsubst %,$(GDIR)/%,$(_G_TEST))
 
 $(G_FUNC) : %.o : %.c
@@ -99,19 +99,7 @@ gtest : $(GDIR)/tests.tst
 	cd $(GDIR); ./tests.tst
 
 #------------------------------------------------------------------------------
-# GENERATE RANDOM INPUT
-#
-  GIDIR = ./1a_generate_random_input
-#------------------------------------------------------------------------------
-$(GIDIR)/src/main.o : $(GIDIR)/src/main.c $(G_FUNC)
-	$(CC) $< $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
-
-.PHONY: gimain
-gimain : $(GIDIR)/src/main.o
-	cd $(GIDIR)/src; ./main.o
-
-#------------------------------------------------------------------------------
-# LOAD INPUT
+# LOAD INPUT HALOTAB
 #
   LHDIR = ./1b_load_halotab
 #------------------------------------------------------------------------------
@@ -139,6 +127,23 @@ $(LHDIR)/src/main.o : $(LHDIR)/src/main.c $(G_FUNC) $(LH_INCLUDE)
 .PHONY: lhmain
 lhmain : lhtest $(LHDIR)/src/main.o
 	cd $(LHDIR)/src; ./main.o
+
+#------------------------------------------------------------------------------
+# LOAD INPUT z0.7to0.8
+#
+  LEDIR = ./1a_euclid
+#------------------------------------------------------------------------------
+_LE_INCLUDE = load_z07to08_from_file.o
+LE_INCLUDE  = $(patsubst %,$(LEDIR)/src/include/%,$(_LE_INCLUDE))
+
+$(LE_INCLUDE) : %.o : %.c
+
+$(LEDIR)/src/main.o : $(LEDIR)/src/main.c $(G_FUNC) $(LH_INCLUDE) $(LE_INCLUDE)
+	$(CC) $< $(LH_INCLUDE) $(LE_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
+
+.PHONY: lemain
+lemain : $(LEDIR)/src/main.o
+	cd $(LEDIR)/src; ./main.o
 
 #------------------------------------------------------------------------------
 # GRIDING
@@ -181,7 +186,9 @@ grmain : grtest $(GRDIR)/src/main.o
 _FT_INCLUDE = load_density_contrast_grid.o \
               convert_real_delta_to_complex.o \
               reordering_fourier_input.o \
-              apply_mass_assignment_window.o
+              smearing_and_anisotropy_correction_for_ngp.o \
+              smearing_and_anisotropy_correction_for_cic.o \
+              smearing_and_anisotropy_correction_for_tsc.o
 FT_INCLUDE  = $(patsubst %,$(FTDIR)/src/include/%,$(_FT_INCLUDE))
 
 _FT_TEST = reordering_fourier_input_test.o \
@@ -264,5 +271,5 @@ $(PSDIR)/src/main.o : $(PSDIR)/src/main.c $(G_FUNC) $(PS_INCLUDE)
 	$(CC) $< $(PS_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
 
 .PHONY: psmain
-psmain : pstest $(PSDIR)/src/main.o
+psmain : $(PSDIR)/src/main.o
 	cd $(PSDIR)/src; ./main.o

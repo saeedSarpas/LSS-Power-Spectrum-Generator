@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
 
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
@@ -14,47 +13,51 @@
 #include "./../../global_functions/info_file/write_input_file_info_to.h"
 
 #include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_info.h"
 #include "./../../global_structs/config_struct.h"
+#include "./../../global_structs/input_file_info.h"
 
-int NUM_OF_PARTS = 10000000;
-double BOX_LENGTH = 256.0;
-
-double random_double(int max) {
-	return (((double)rand() / (double)(RAND_MAX)) * max);
-}
+#include "./../../1b_load_halotab/src/include/get_number_of_lines.h"
+#include "./include/load_z07to08_from_file.h"
 
 int main() {
 
-	clock_t _g_r_i_ = start("Generating random input... ");
+	clock_t _r_h_f_ = start("Reading z0.7to0.8 file... ");
+
+	FILE *input_file;
+	char *input_path = strdup("./../input/z0.7to0.8.dat");
+
+	open_file(&input_file, input_path, "r");
+	size_t num_of_lines = get_number_of_lines(input_file);
+	rewind(input_file);
+
+	printf("num of lines: %d\n", (int)num_of_lines);
 
 	particle_data_struct *P;
-	allocate_particle_data_struct(&P, NUM_OF_PARTS);
+	allocate_particle_data_struct(&P, num_of_lines);
+	load_z07to08_from_file(input_file, P);
 
-	int i, n;
-	for (n = 0; n < NUM_OF_PARTS; n++) {
-		for (i = 0; i < 3; i++) {
-			P[n].Pos[i] = random_double(BOX_LENGTH);
-		}
-		P[n].Mass = 10.0;
-	}
+	fclose(input_file);
 
-	done(_g_r_i_);
+	done(_r_h_f_);
+
+	/* int i; */
+	/* for (i = 0; i < 1000; i++) */
+	/* 	printf("%f\t%f\t%f\n", P[i].Pos[0], P[i].Pos[1], P[i].Pos[2]); */
 
 
 	clock_t _s_o_f_ = start("Saving output file...");
 
-	FILE * out_file;
+	FILE *out_file;
 
 	config_struct conf;
 	get_config(&conf);
 
-	char *out_path = strdup("./../../0_structured_input/");
-	append_input_name(conf.inputs[0][1], &out_path);
+	char *output_path = strdup("./../../0_structured_input/");
+	append_input_name(conf.inputs[3][1], &output_path);
 
-	open_file(&out_file, out_path, "wb");
+	open_file(&out_file, output_path, "wb");
 
-	write_particle_data_struct_to(out_file, P, NUM_OF_PARTS, out_path);
+	write_particle_data_struct_to(out_file, P, num_of_lines, output_path);
 
 	fclose(out_file);
 
@@ -64,11 +67,11 @@ int main() {
 	clock_t _s_c_f_ = start("Saving configuration file... ");
 
 	input_info_struct info;
-	info.num_of_parts = NUM_OF_PARTS;
-	info.box_length = BOX_LENGTH;
+	info.num_of_parts = num_of_lines;
+	info.box_length = 200.0;
 
 	char *info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(conf.inputs[0][1], &info_path);
+	append_input_info_name(conf.inputs[3][1], &info_path);
 
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");
@@ -80,5 +83,6 @@ int main() {
 	done(_s_c_f_);
 
 	free(P);
+
 	return 0;
 }
