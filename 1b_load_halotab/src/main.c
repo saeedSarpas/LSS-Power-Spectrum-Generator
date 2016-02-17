@@ -4,11 +4,11 @@
 
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
-#include "./../../global_functions/open_file.h"
 #include "./../../global_functions/memory/allocate.h"
 #include "./../../global_functions/filenames/append_input_name.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/io/write_to.h"
+#include "./../../global_functions/io/open_file.h"
 #include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/info_file/write_info_to.h"
 
