@@ -25,8 +25,8 @@ static double *grid_mass;
 static void fill_P (double, double, double, double);
 
 BeforeEach(cic) {
-	conf.num_of_grids_in_each_axis = 10;
-	tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	conf.run_params.num_of_axis_grids = 10;
+	tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
 	info.num_of_parts = NUM_OF_PARTS;
 	info.box_length = BOX_LENGTH;

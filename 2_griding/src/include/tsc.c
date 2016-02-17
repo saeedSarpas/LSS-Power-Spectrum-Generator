@@ -12,7 +12,7 @@ void tsc (particle_data_struct *P, double *grid_mass, input_info_struct *info,
 
 	int i, n, a, b, c, index, pos[3], neighbor_pos[3];
 	double overlap, weight[3][3];
-	double grid_length = info->box_length / conf->num_of_grids_in_each_axis;
+	double grid_length = info->box_length / conf->run_params.num_of_axis_grids;
 
 	for (n = 0; n < info->num_of_parts; n++) {
 		for (i = 0; i < 3; i++) {

@@ -19,7 +19,7 @@ static double mass[TOT_NUM_OF_GRIDS];
 static double delta[TOT_NUM_OF_GRIDS];
 
 BeforeEach(density_contrast) {
-	conf.num_of_grids_in_each_axis = NUM_OF_GRIDS;
+	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 	info.box_length = BOX_LENGTH;
 
 	int i;

@@ -27,7 +27,7 @@ void cic (particle_data_struct P[], double *grid_mass, input_info_struct *info,
 	int di, dj, dk;
 
 	double i_weight, j_weight, k_weight, overlap;
-	double grid_length = info->box_length / conf->num_of_grids_in_each_axis;
+	double grid_length = info->box_length / conf->run_params.num_of_axis_grids;
 
 	for (n = 0; n < info->num_of_parts; n++) {
 		i = P[n].Pos[0] / grid_length;

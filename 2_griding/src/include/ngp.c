@@ -9,7 +9,7 @@ void ngp (particle_data_struct *P, double *grid_mass, input_info_struct *info,
 
 	int i, j, k, n;
 
-	double grid_length = info->box_length / conf->num_of_grids_in_each_axis;
+	double grid_length = info->box_length / conf->run_params.num_of_axis_grids;
 
 	for (n = 1; n < info->num_of_parts; n++) {
 		i = P[n].Pos[0] / grid_length;

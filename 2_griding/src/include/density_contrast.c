@@ -8,9 +8,9 @@ void density_contrast(double *grid_mass, input_info_struct *info,
 		config_struct *conf, double *grid_delta) {
 
 	unsigned int n;
-	size_t total_num_of_grids = pow(conf->num_of_grids_in_each_axis, 3);
+	size_t total_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
 
-	double grid_length = info->box_length / conf->num_of_grids_in_each_axis;
+	double grid_length = info->box_length / conf->run_params.num_of_axis_grids;
 	double grid_block_volume = pow(grid_length, 3);
 
 	double total_mass = 0.0;

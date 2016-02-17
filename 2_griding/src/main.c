@@ -9,8 +9,6 @@
 #include "./../../global_structs/input_file_info.h"
 
 #include "./../../global_functions/config_file/get_config.h"
-#include "./../../global_functions/io/get_algorithm_alias.h"
-#include "./../../global_functions/io/get_input_filename_alias.h"
 #include "./../../global_functions/io/write_double_to.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
@@ -31,17 +29,18 @@
 
 int main() {
 	config_struct conf;
-	get_config(&conf);
+	get_config(&conf, "./../../configurations.cfg");
 
-	char *input_filename_alias;
-	input_filename_alias = get_input_filename_alias(&conf);
+	char *filename_alias;
+	filename_alias = conf.input_files[conf.run_params.file_index][1];
 
 	char *algorithm_alias;
-	algorithm_alias = get_algorithm_alias(&conf);
+	algorithm_alias =
+		conf.mass_assignment_functions[conf.run_params.mass_assignment_index][1];
 
 	input_info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(input_filename_alias, &input_info_path);
+	append_input_info_name(filename_alias, &input_info_path);
 	read_input_file_info(&info, input_info_path);
 
 	clock_t _r_g_i_ = start("Reading griding input... ");
@@ -50,7 +49,7 @@ int main() {
 	allocate_particle_data_struct(&P, info.num_of_parts);
 
 	char *input_path = strdup("./../../0_structured_input/");
-	append_input_name(input_filename_alias, &input_path);
+	append_input_name(filename_alias, &input_path);
 
 	load_input(P, input_path, &info);
 
@@ -58,20 +57,20 @@ int main() {
 
 
 	double *grid_mass;
-	size_t tot_num_of_grids = pow(conf.num_of_grids_in_each_axis, 3);
+	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 	allocate_double_array(&grid_mass, tot_num_of_grids);
 
-	if (strcmp(algorithm_alias, conf.cic_alias) == 0) {
+	if (strcmp(algorithm_alias, "cic") == 0) {
 		char alg[256] = "Griding using cloud in cell (CIC) algorithm... ";
 		clock_t begin = start(alg);
 		cic(P, grid_mass, &info, &conf);
 		done(begin);
-	} else if (strcmp(algorithm_alias, conf.tsc_alias) == 0) {
+	} else if (strcmp(algorithm_alias, "tsc") == 0) {
 		char alg[256] = "Griding using triangular shaped cloud (TSC) algorithm... ";
 		clock_t begin = start(alg);
 		tsc(P, grid_mass, &info, &conf);
 		done(begin);
-	} else if (strcmp(algorithm_alias, conf.ngp_alias) == 0) {
+	} else if (strcmp(algorithm_alias, "ngp") == 0) {
 		char alg[256] = "Griding using nearest grid points (NGP) algorithm... ";
 		clock_t begin = start(alg);
 		ngp(P, grid_mass, &info, &conf);
@@ -94,7 +93,7 @@ int main() {
 
 	FILE *output_file;
 	char *output_path = strdup("./../output/");
-	append_density_contrast_filename(input_filename_alias, algorithm_alias,
+	append_density_contrast_filename(filename_alias, algorithm_alias,
 									 &info, &conf, &output_path);
 	open_file(&output_file, output_path, "wb");
 
@@ -108,15 +107,15 @@ int main() {
 
 	FILE * ascii_output_file;
 	char *ascii_output_path = strdup("./../output/ascii-");
-	append_density_contrast_filename(input_filename_alias, algorithm_alias,
-									 &info, &conf, &ascii_output_path);
+	append_density_contrast_filename(filename_alias, algorithm_alias, &info,
+									 &conf, &ascii_output_path);
 	open_file(&ascii_output_file, ascii_output_path, "w");
 
 	int i, j, k, index;
-	for (i = 0; i < conf.num_of_grids_in_each_axis; i++) {
-		for (j = 0; j < conf.num_of_grids_in_each_axis; j++) {
-			for (k = (conf.num_of_grids_in_each_axis / 2);
-				 k < (conf.num_of_grids_in_each_axis / 2) + 1; k++) {
+	for (i = 0; i < conf.run_params.num_of_axis_grids; i++) {
+		for (j = 0; j < conf.run_params.num_of_axis_grids; j++) {
+			for (k = (conf.run_params.num_of_axis_grids / 2);
+				 k < (conf.run_params.num_of_axis_grids / 2) + 1; k++) {
 
 				index = three_to_one(i, j, k, &conf);
 				fprintf(ascii_output_file, "%d\t%d\t%f\n", i, j, grid_delta[index]);
@@ -130,7 +129,7 @@ int main() {
 
 	free(P);
 	free(grid_delta);
-	free(input_filename_alias);
+	free(filename_alias);
 	free(algorithm_alias);
 	free(input_info_path);
 
