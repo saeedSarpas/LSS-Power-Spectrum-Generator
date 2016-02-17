@@ -5,7 +5,7 @@
 
 #include "./../../global_structs/input_file_info.h"
 
-void read_input_file_info(input_info_struct *info, char *info_file_path) {
+void read_info_from(char *info_file_path, input_info_struct *info) {
 	config_t cfg;
 	config_setting_t *info_setting;
 

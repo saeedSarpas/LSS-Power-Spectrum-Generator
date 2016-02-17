@@ -6,7 +6,7 @@
 
 #include "./../../global_structs/input_file_info.h"
 
-void write_input_file_info_to(FILE *file, input_info_struct *info) {
+void write_info_to(FILE *file, input_info_struct *info) {
 
 	config_t cfg;
 	config_setting_t *root, *info_node, *num_of_parts, *box_len;

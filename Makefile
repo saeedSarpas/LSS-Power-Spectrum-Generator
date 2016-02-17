@@ -59,16 +59,18 @@ _G_FUNC = clock/done.o \
           grid/move_along_grid_axis.o \
           grid/one_to_three.o \
           grid/three_to_one.o \
-          info_file/read_input_file_info.o \
-          info_file/write_input_file_info_to.o \
+          info_file/read_info_from.o \
+          info_file/write_info_to.o \
           io/read_double_from.o \
           io/read_fftw_complex_from.o \
           io/read_modes_struct_from.o \
           io/read_particle_data_struct_from.o \
+          io/write_to.o \
           io/write_double_to.o \
           io/write_fftw_complex_to.o \
           io/write_modes_struct_to.o \
           io/write_particle_data_struct_to.o \
+          memory/allocate.o \
           memory/allocate_double_array.o \
           memory/allocate_fftw_complex.o \
           memory/allocate_input_file_info_struct.o \
