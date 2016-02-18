@@ -15,18 +15,16 @@
 
 #include "./../../global_functions/config_file/get_config.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
-#include "./../../global_functions/info_file/read_input_file_info.h"
+#include "./../../global_functions/info_file/read_info_from.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
-#include "./../../global_functions/memory/allocate_fftw_complex.h"
 #include "./../../global_functions/filenames/append_fourier_transformed_filename.h"
 #include "./../../global_functions/filenames/append_power_spectrum_filename.h"
-#include "./../../global_functions/open_file.h"
-#include "./../../global_functions/memory/allocate_double_array.h"
+#include "./../../global_functions/io/open_file.h"
+#include "./../../global_functions/io/read_from.h"
+#include "./../../global_functions/memory/allocate.h"
 #include "./../../global_functions/vector/vector.h"
 #include "./../../global_functions/filenames/append_indexed_modes_filename.h"
-#include "./../../global_functions/memory/allocate_modes_struct.h"
-#include "./../../global_functions/io/read_modes_struct_from.h"
 
 #include "./struct/single_mode_power_result.h"
 
@@ -52,7 +50,7 @@ int main() {
 	input_info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
 	append_input_info_name(input_filename_alias, &input_info_path);
-	read_input_file_info(&info, input_info_path);
+	read_info_from(input_info_path, &info);
 
 
 	clock_t _l_f_t_d_ = start("Load Fourier transformed data... ");
@@ -60,7 +58,7 @@ int main() {
 	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
 	fftw_complex *delta_fourier;
-	allocate_fftw_complex(&delta_fourier, tot_num_of_grids);
+	allocate((void **)&delta_fourier, tot_num_of_grids, sizeof(fftw_complex));
 
 	char *input_path = strdup("./../../3_fftw/output/");
 	append_fourier_transformed_filename(input_filename_alias, algorithm_alias,
@@ -78,9 +76,10 @@ int main() {
 	open_file(&indexed_mode_modulus_file, indexed_mode_modulus_file_path, "rb");
 
 	modes_struct *indexed_mode_modulus;
-	allocate_modes_struct(&indexed_mode_modulus, tot_num_of_grids);
-	read_modes_struct_from(indexed_mode_modulus_file,indexed_mode_modulus_file_path,
-						   indexed_mode_modulus, tot_num_of_grids);
+	allocate((void **)&indexed_mode_modulus, tot_num_of_grids,
+			 sizeof(modes_struct));
+	read_from(indexed_mode_modulus_file, tot_num_of_grids, sizeof(modes_struct),
+			  (void *)indexed_mode_modulus);
 
 	fclose(indexed_mode_modulus_file);
 

@@ -7,8 +7,6 @@
 #include "./../../../global_structs/vector_struct.h"
 #include "./../../../global_structs/modes_struct.h"
 
-#include "./../../../global_functions/memory/allocate_double_array.h"
-#include "./../../../global_functions/memory/allocate_fftw_complex.h"
 #include "./../../../global_functions/vector/vector.h"
 
 #include "./../../../global_functions/modes/get_modes_in_range.h"

@@ -61,25 +61,12 @@ _G_FUNC = clock/done.o \
           grid/three_to_one.o \
           info_file/read_info_from.o \
           info_file/write_info_to.o \
-          io/read_double_from.o \
-          io/read_fftw_complex_from.o \
-          io/read_modes_struct_from.o \
-          io/read_particle_data_struct_from.o \
+          io/open_file.o \
+          io/read_from.o \
           io/write_to.o \
-          io/write_double_to.o \
-          io/write_fftw_complex_to.o \
-          io/write_modes_struct_to.o \
-          io/write_particle_data_struct_to.o \
           memory/allocate.o \
-          memory/allocate_double_array.o \
-          memory/allocate_fftw_complex.o \
-          memory/allocate_input_file_info_struct.o \
-          memory/allocate_modes_struct.o \
-          memory/allocate_particle_data_struct.o \
-          memory/allocation_failing_message.o \
           modes/get_modes_in_range.o \
-          vector/vector.o \
-          open_file.o
+          vector/vector.o
 G_FUNC  = $(patsubst %,$(GDIR)/%,$(_G_FUNC))
 
 _G_TEST = modes/get_modes_in_range_test.o \

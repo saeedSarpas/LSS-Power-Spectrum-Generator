@@ -5,7 +5,7 @@
 #include "./../../../global_structs/bins_struct.h"
 
 #include "./../../../global_functions/vector/vector.h"
-#include "./../../../global_functions/memory/allocate_modes_struct.h"
+#include "./../../../global_functions/memory/allocate.h"
 
 #include "./../../src/include/generate_logarithmic_bins.h"
 
@@ -24,7 +24,8 @@ static void fill_indexed_mode_modulus();
 BeforeEach(generate_logarithmic_bins) {
 	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
 
-	allocate_modes_struct(&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3));
+	allocate((void **)&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3),
+			 sizeof(modes_struct));
 
 	fill_indexed_mode_modulus();
 	double max_of_first_bin = indexed_mode_modulus[18].modulus;

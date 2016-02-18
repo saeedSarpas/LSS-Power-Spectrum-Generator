@@ -5,8 +5,7 @@
 
 #include "./../../../global_structs/config_struct.h"
 
-#include "./../../../global_functions/memory/allocate_fftw_complex.h"
-#include "./../../../global_functions/memory/allocate_modes_struct.h"
+#include "./../../../global_functions/memory/allocate.h"
 #include "./../../../global_functions/grid/three_to_one.h"
 
 #include "./../../../4_indexing_k_modulus/src/include/sort.h"
@@ -34,9 +33,10 @@ BeforeEach(single_mode_power) {
 
 	tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
 
-	allocate_fftw_complex(&delta_fourier, tot_num_of_grids);
+	allocate((void **)&delta_fourier, tot_num_of_grids, sizeof(fftw_complex));
 
-	allocate_modes_struct(&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3));
+	allocate((void **)&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3),
+			 sizeof(modes_struct));
 }
 
 AfterEach(single_mode_power) {
