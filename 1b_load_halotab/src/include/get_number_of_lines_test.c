@@ -1,6 +1,6 @@
 #include <cgreen/cgreen.h>
 
-#include "./../../../global_functions/open_file.h"
+#include "./../../../global_functions/io/open_file.h"
 
 #include "./../../src/include/get_number_of_lines.h"
 

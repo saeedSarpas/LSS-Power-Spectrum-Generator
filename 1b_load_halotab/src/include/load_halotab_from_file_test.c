@@ -2,7 +2,7 @@
 
 #include "./../../../global_structs/particle_data_struct.h"
 
-#include "./../../../global_functions/open_file.h"
+#include "./../../../global_functions/io/open_file.h"
 #include "./../../../global_functions/memory/allocate.h"
 
 #include "./../../src/include/load_halotab_from_file.h"
