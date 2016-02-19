@@ -4,7 +4,7 @@
 #include "./../../../global_structs/config_struct.h"
 #include "./../../../global_structs/modes_struct.h"
 
-#include "./../../../global_functions/memory/allocate_modes_struct.h"
+#include "./../../../global_functions/memory/allocate.h"
 #include "./../../../global_functions/grid/three_to_one.h"
 
 #include "./../../src/include/load_modes_into.h"
@@ -18,7 +18,7 @@ static modes_struct *modes_array;
 
 BeforeEach(load_modes_into) {
 	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
-	allocate_modes_struct(&modes_array, pow(NUM_OF_GRIDS, 3));
+	allocate((void **)&modes_array, pow(NUM_OF_GRIDS, 3), sizeof(modes_struct));
 }
 
 AfterEach(load_modes_into) {
