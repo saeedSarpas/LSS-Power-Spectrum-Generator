@@ -4,6 +4,7 @@
 #include <complex.h>
 #include <fftw3.h>
 #include <string.h>
+#include <time.h>
 
 #include "./../../global_structs/config_struct.h"
 #include "./../../global_structs/particle_data_struct.h"

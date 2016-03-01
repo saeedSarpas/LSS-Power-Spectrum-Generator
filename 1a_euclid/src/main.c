@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"

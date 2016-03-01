@@ -3,8 +3,8 @@ CFLAGS    = -Wall -std=gnu11
 TEST_LIBS = -lcgreen
 LIBS      = -lm -lconfig -lfftw3
 
-PYTHON = python2
-IMAGE_VIEWER = eog
+PYTHON = python
+IMAGE_VIEWER = open
 
 .PHONY: ps
 ps : clean lhmain grmain ftmain immain psmain

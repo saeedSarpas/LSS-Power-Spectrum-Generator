@@ -4,7 +4,7 @@
 #include <math.h>
 #include <string.h>
 #include <complex.h>
-#include <fftw.h>
+#include <fftw3.h>
 
 #include "./../../global_structs/config_struct.h"
 #include "./../../global_structs/modes_struct.h"
@@ -44,7 +44,7 @@ int main () {
 
 	FILE *output_file;
 	open_file(&output_file, output_path, "wb");
-	write_to(output_file, indexed_modes, tot_num_of_grids,
+  write_to(output_file, indexed_modes, tot_num_of_grids,
 			 sizeof(modes_struct));
 
 	done(_s_i_m_);
