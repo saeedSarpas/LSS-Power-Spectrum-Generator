@@ -3,7 +3,7 @@
 
 #include "./../../global_structs/config_struct.h"
 
-#include "./../../global_functions/open_file.h"
+#include "./../../global_functions/io/open_file.h"
 
 #include "./my_libconfig.h"
 #include "./get_config.h"
@@ -109,23 +109,23 @@ Ensure(get_config, fills_config_struct_with_right_configs) {
 
 	int i;
 	for (i = 0; i < 2; i++) {
-		assert_that(conf.input_files[i][0], is_equal_to_string(FILENAME));
-		assert_that(conf.input_files[i][1], is_equal_to_string(ALIAS));
+		assert_that(conf.files[i].filename, is_equal_to_string(FILENAME));
+		assert_that(conf.files[i].alias, is_equal_to_string(ALIAS));
 
-		assert_that(conf.mass_assignment_functions[i][0],
+		assert_that(conf.massFunctions[i].name,
 					is_equal_to_string(MASS_ASSIGNMENT_NAME));
-		assert_that(conf.mass_assignment_functions[i][1],
+		assert_that(conf.massFunctions[i].alias,
 					is_equal_to_string(ALIAS));
 
-		assert_that(conf.binning[i][0], is_equal_to_string(BINNING_NAME));
-		assert_that(conf.binning[i][1], is_equal_to_string(ALIAS));
+		assert_that(conf.binning[i].name, is_equal_to_string(BINNING_NAME));
+		assert_that(conf.binning[i].alias, is_equal_to_string(ALIAS));
 	}
 
-	assert_that(conf.run_params.file_index, is_equal_to(FILE_INDEX));
-	assert_that(conf.run_params.mass_assignment_index,
+	assert_that(conf.params.fileIndex, is_equal_to(FILE_INDEX));
+	assert_that(conf.params.massAssignmentIndex,
 				is_equal_to(MASS_ASSIGNMENT_INDEX));
-	assert_that(conf.run_params.binning_index, is_equal_to(BINNING_INDEX));
-	assert_that(conf.run_params.num_of_axis_grids,
+	assert_that(conf.params.binningIndex, is_equal_to(BINNING_INDEX));
+	assert_that(conf.params.numOfAxisGrids,
 				is_equal_to(NUM_OF_AXIS_GRIDS));
 }
 

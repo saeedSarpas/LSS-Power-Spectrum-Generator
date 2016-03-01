@@ -14,7 +14,7 @@ void get_config (config_struct *conf, char *conf_path) {
 	libconfig_init(&cfg);
 	libconfig_read_file(&cfg, conf_path);
 
-	int i, len;
+	int i, len, index;
 	const char *name, *alias;
 
 	input_files = libconfig_lookup(&cfg, "input.files");
@@ -22,11 +22,13 @@ void get_config (config_struct *conf, char *conf_path) {
 	for (i = 0; i < len; i++) {
 		setting = libconfig_setting_get_elem(input_files, i);
 
+    index = libconfig_setting_lookup_int(setting, "index");
+
 		name = libconfig_setting_lookup_string(setting, "filename");
-		conf->input_files[i][0] = strdup(name);
+		conf->files[index].filename = strdup(name);
 
 		alias = libconfig_setting_lookup_string(setting, "alias");
-		conf->input_files[i][1] = strdup(alias);
+		conf->files[index].alias = strdup(alias);
 	}
 
 
@@ -37,11 +39,13 @@ void get_config (config_struct *conf, char *conf_path) {
 		setting =
 			libconfig_setting_get_elem(griding_mass_addignment_functions, i);
 
+    index = libconfig_setting_lookup_int(setting, "index");
+
 		name = libconfig_setting_lookup_string(setting, "name");
-		conf->mass_assignment_functions[i][0] = strdup(name);
+		conf->massFunctions[index].name = strdup(name);
 
 		alias =libconfig_setting_lookup_string(setting, "alias");
-		conf->mass_assignment_functions[i][1] = strdup(alias);
+		conf->massFunctions[index].alias = strdup(alias);
 	}
 
 	binning_algorithm = libconfig_lookup(&cfg, "binning.algorithms");
@@ -49,21 +53,23 @@ void get_config (config_struct *conf, char *conf_path) {
 	for (i = 0; i < len; i++) {
 		setting = libconfig_setting_get_elem(binning_algorithm, i);
 
+    index = libconfig_setting_lookup_int(setting, "index");
+
 		name =  libconfig_setting_lookup_string(setting, "name");
-		conf->binning[i][0] = strdup(name);
+		conf->binning[index].name = strdup(name);
 
 		alias = libconfig_setting_lookup_string(setting, "alias");
-		conf->binning[i][1] = strdup(alias);
+		conf->binning[index].alias = strdup(alias);
 	}
 
 	run_params = libconfig_lookup(&cfg, "run_params");
-	conf->run_params.file_index =
+	conf->params.fileIndex =
 		libconfig_setting_lookup_int(run_params, "file_index");
-	conf->run_params.mass_assignment_index =
+	conf->params.massAssignmentIndex =
 		libconfig_setting_lookup_int(run_params, "mass_assignment_index");
-	conf->run_params.binning_index =
+	conf->params.binningIndex =
 		libconfig_setting_lookup_int(run_params, "binning_index");
-	conf->run_params.num_of_axis_grids =
+	conf->params.numOfAxisGrids =
 		libconfig_setting_lookup_int(run_params, "num_of_axis_grids");
 
 	libconfig_destroy(&cfg);
