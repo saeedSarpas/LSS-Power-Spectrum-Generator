@@ -1,6 +1,6 @@
 #include <cgreen/cgreen.h>
 
-#include "./../../../global_structs/particle_data_struct.h"
+#include "./../../../global_structs/particle_struct.h"
 
 #include "./../../../global_functions/io/open_file.h"
 #include "./../../../global_functions/memory/allocate.h"
@@ -33,8 +33,8 @@ Ensure(load_halotab_from_file, load_data_correctly) {
 	FILE * fp;
 	open_file(&fp, TEST_FILE_ADDR, "r");
 
-	particle_data_struct *P;
-	allocate((void **)&P, TEST_FILE_NUM_OF_LINES, sizeof(particle_data_struct));
+	particle_struct *P;
+	allocate((void **)&P, TEST_FILE_NUM_OF_LINES, sizeof(struct particle));
 
 	load_halotab_from_file(fp, P);
 

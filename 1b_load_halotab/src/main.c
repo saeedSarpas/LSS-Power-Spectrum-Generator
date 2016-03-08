@@ -10,12 +10,12 @@
 #include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/io/write_to.h"
 #include "./../../global_functions/io/open_file.h"
-#include "./../../global_functions/config_file/get_config.h"
+#include "./../../global_functions/config_file/load_config_from.h"
 #include "./../../global_functions/info_file/write_info_to.h"
 
-#include "./../../global_structs/particle_data_struct.h"
+#include "./../../global_structs/particle_struct.h"
 #include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/input_file_info.h"
+#include "./../../global_structs/info_strcut.h"
 
 #include "./include/get_number_of_lines.h"
 #include "./include/load_halotab_from_file.h"
@@ -31,8 +31,8 @@ int main() {
 	size_t num_of_lines = get_number_of_lines(input_file);
 	rewind(input_file);
 
-	particle_data_struct *P;
-	allocate((void **)&P, num_of_lines, sizeof(particle_data_struct));
+	particle_struct *P;
+	allocate((void **)&P, num_of_lines, sizeof(particle_struct));
 	load_halotab_from_file(input_file, P);
 
 	fclose(input_file);
@@ -44,15 +44,14 @@ int main() {
 
 	FILE *output_file;
 
-	config_struct conf;
-	get_config(&conf, "./../../configurations.cfg");
+	config_struct conf = load_config_from("./../../configurations.cfg");
 
 	char *output_path = strdup("./../../0_structured_input/");
-	append_input_name(conf.input_files[0][1], &output_path);
+	append_input_name(conf.files[0].alias, &output_path);
 
 	open_file(&output_file, output_path, "wb");
 
-	write_to(output_file, P, num_of_lines, sizeof(particle_data_struct));
+	write_to(output_file, P, num_of_lines, sizeof(struct particle));
 
 	fclose(output_file);
 
@@ -61,12 +60,12 @@ int main() {
 
 	clock_t _s_c_f_ = start("Saving configuration file... ");
 
-	input_info_struct info;
-	info.num_of_parts = num_of_lines;
-	info.box_length = 1200.0;
+	info_struct info;
+	info.numOfParts = num_of_lines;
+	info.boxLength = 1200.0;
 
 	char *info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(conf.input_files[0][1], &info_path);
+	append_input_info_name(conf.files[0].alias, &info_path);
 
 	FILE *info_file;
 	open_file(&info_file, info_path, "w+");
