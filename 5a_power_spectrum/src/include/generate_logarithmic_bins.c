@@ -15,7 +15,7 @@ void generate_logarithmic_bins(vector_struct *bins_vector,
 	double max_of_first_bin = indexed_mode_modulus[18].modulus;
 	double jump = sqrt(max_of_first_bin);
 
-	int tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
+	int tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 	double largest_mode = indexed_mode_modulus[tot_num_of_grids - 1].modulus;
 
 	bins_struct bin;

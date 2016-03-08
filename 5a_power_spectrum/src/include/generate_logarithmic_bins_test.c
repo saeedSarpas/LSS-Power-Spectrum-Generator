@@ -22,7 +22,7 @@ static vector_struct bins_vector;
 static void fill_indexed_mode_modulus();
 
 BeforeEach(generate_logarithmic_bins) {
-	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
+	conf.params.numOfAxisGrids = NUM_OF_GRIDS;
 
 	allocate((void **)&indexed_mode_modulus, pow(NUM_OF_GRIDS, 3),
 			 sizeof(modes_struct));
@@ -31,9 +31,9 @@ BeforeEach(generate_logarithmic_bins) {
 	double max_of_first_bin = indexed_mode_modulus[18].modulus;
 	jump = sqrt(max_of_first_bin);
 
-	tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
+	tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
 
-	vector_new(&bins_vector, sizeof(struct bins_struct_tag), 10);
+	vector_new(&bins_vector, sizeof(struct bins), 10);
 
 }
 

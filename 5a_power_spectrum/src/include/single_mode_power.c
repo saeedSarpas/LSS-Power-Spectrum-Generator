@@ -55,10 +55,10 @@ single_mode_power_result_struct single_mode_power (double k_min, double k_max,
 
 	single_mode_power_result_struct result;
 
-	size_t tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
+	size_t tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 
 	vector_struct modes_vector;
-	vector_new(&modes_vector, sizeof(struct modes_struct_tag), tot_num_of_grids);
+	vector_new(&modes_vector, sizeof(struct modes), tot_num_of_grids);
 
 	get_modes_in_range(k_min, k_max, indexed_mode_modulus, conf, &modes_vector);
 	result.num_of_found_modes = modes_vector.log_length;

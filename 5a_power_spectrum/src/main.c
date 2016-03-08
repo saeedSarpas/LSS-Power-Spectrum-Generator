@@ -7,13 +7,13 @@
 #include <time.h>
 
 #include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_info.h"
+#include "./../../global_structs/particle_struct.h"
+#include "./../../global_structs/info_strcut.h"
 #include "./../../global_structs/vector_struct.h"
 #include "./../../global_structs/modes_struct.h"
 #include "./../../global_structs/bins_struct.h"
 
-#include "./../../global_functions/config_file/get_config.h"
+#include "./../../global_functions/config_file/load_config_from.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/info_file/read_info_from.h"
 #include "./../../global_functions/clock/start.h"
@@ -37,17 +37,13 @@
 
 int main() {
 
-	config_struct conf;
-	get_config(&conf, "./../../configurations.cfg");
+	config_struct conf = load_config_from("./../../configurations.cfg");
 
-	char *input_filename_alias;
-	input_filename_alias = conf.input_files[conf.run_params.file_index][1];
+	char *input_filename_alias = conf.files[conf.params.fileIndex].alias;
+	char *algorithm_alias =
+    conf.massFunctions[conf.params.massAssignmentIndex].alias;
 
-	char *algorithm_alias;
-	algorithm_alias =
-		conf.mass_assignment_functions[conf.run_params.mass_assignment_index][1];
-
-	input_info_struct info;
+	info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
 	append_input_info_name(input_filename_alias, &input_info_path);
 	read_info_from(input_info_path, &info);
@@ -55,7 +51,7 @@ int main() {
 
 	clock_t _l_f_t_d_ = start("Load Fourier transformed data... ");
 
-	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
+	size_t tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
 
 	fftw_complex *delta_fourier;
 	allocate((void **)&delta_fourier, tot_num_of_grids, sizeof(fftw_complex));
@@ -84,13 +80,12 @@ int main() {
 	fclose(indexed_mode_modulus_file);
 
 	vector_struct bins_vector;
-	vector_new(&bins_vector, sizeof(struct bins_struct_tag),
-			   conf.run_params.num_of_axis_grids);
+	vector_new(&bins_vector, sizeof(struct bins), conf.params.numOfAxisGrids);
 
-	if (strcmp(conf.binning[conf.run_params.binning_index][1], "lin") == 0) {
+	if (strcmp(conf.binning[conf.params.binningIndex].alias, "lin") == 0) {
 		printf("[Using linear bins] ");
 		generate_linear_bins(&bins_vector, &conf);
-	} else if (strcmp(conf.binning[conf.run_params.binning_index][1], "log") == 0) {
+	} else if (strcmp(conf.binning[conf.params.binningIndex].alias, "log") == 0) {
 		printf("[Using logarithmic bins] ");
 		generate_logarithmic_bins(&bins_vector, indexed_mode_modulus, &conf);
 	} else {
@@ -121,7 +116,7 @@ int main() {
 		result = single_mode_power(bin.k_min, bin.k_max, delta_fourier,
 								   indexed_mode_modulus, &conf);
 
-		double scale_factor = (2 * PI) / info.box_length;
+		double scale_factor = (2 * PI) / info.boxLength;
 		double scaled_k = bin.k * scale_factor;
 		double scaled_k_min = bin.k_min * scale_factor;
 		double scaled_k_max = bin.k_max * scale_factor;

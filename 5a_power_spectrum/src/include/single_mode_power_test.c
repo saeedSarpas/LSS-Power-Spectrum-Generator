@@ -29,9 +29,9 @@ static void fill_delta_fourier();
 static void fill_indexed_mode_modulus();
 
 BeforeEach(single_mode_power) {
-	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
+	conf.params.numOfAxisGrids = NUM_OF_GRIDS;
 
-	tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
+	tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
 
 	allocate((void **)&delta_fourier, tot_num_of_grids, sizeof(fftw_complex));
 

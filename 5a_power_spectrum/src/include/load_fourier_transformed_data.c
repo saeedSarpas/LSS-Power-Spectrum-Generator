@@ -13,7 +13,7 @@ void load_fourier_transformed_data(char *path, fftw_complex *grid_fourier,
 	FILE *file;
 	open_file(&file, path, "rb");
 
-	size_t tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
+	size_t tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 
 	read_from(file, tot_num_of_grids, sizeof(fftw_complex),
 			  (void *)grid_fourier);

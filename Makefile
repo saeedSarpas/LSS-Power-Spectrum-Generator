@@ -257,5 +257,5 @@ $(PSDIR)/src/main.o : $(PSDIR)/src/main.c $(G_FUNC) $(PS_INCLUDE)
 	$(CC) $< $(PS_INCLUDE) $(G_FUNC) $(LIBS) $(CFLAGS) -o $@
 
 .PHONY: psmain
-psmain : $(PSDIR)/src/main.o
+psmain : $(PSDIR)/src/main.o pstest
 	cd $(PSDIR)/src; ./main.o
