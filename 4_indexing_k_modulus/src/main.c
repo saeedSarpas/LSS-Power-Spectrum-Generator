@@ -9,7 +9,7 @@
 #include "./../../global_structs/config_struct.h"
 #include "./../../global_structs/modes_struct.h"
 
-#include "./../../global_functions/config_file/get_config.h"
+#include "./../../global_functions/config_file/load_config_from.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
 #include "./../../global_functions/memory/allocate.h"
@@ -23,13 +23,12 @@
 
 int main () {
 
-	config_struct conf;
-	get_config(&conf, "./../../configurations.cfg");
+	config_struct conf = load_config_from("./../../configurations.cfg");
 
 	clock_t _i_k_m_ = start("Indexing k modes... ");
 
 	modes_struct *indexed_modes;
-	int tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
+	int tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
 	allocate((void **)&indexed_modes, tot_num_of_grids, sizeof(modes_struct));
 
 	load_modes_into(indexed_modes, &conf);

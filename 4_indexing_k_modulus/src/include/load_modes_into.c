@@ -7,11 +7,11 @@
 
 void load_modes_into(modes_struct *modes_array, config_struct *conf) {
 	int index, i, j, k;
-	int half_grid_box_size = conf->run_params.num_of_axis_grids / 2;
+	int half_grid_box_size = conf->params.numOfAxisGrids / 2;
 
-	for (i = 0; i < conf->run_params.num_of_axis_grids; i++) {
-		for (j = 0; j < conf->run_params.num_of_axis_grids; j++) {
-			for (k = 0; k < conf->run_params.num_of_axis_grids; k++) {
+	for (i = 0; i < conf->params.numOfAxisGrids; i++) {
+		for (j = 0; j < conf->params.numOfAxisGrids; j++) {
+			for (k = 0; k < conf->params.numOfAxisGrids; k++) {
 				index = three_to_one(i, j, k, conf);
 				modes_array[index].index = index;
 				modes_array[index].kx = i - half_grid_box_size;

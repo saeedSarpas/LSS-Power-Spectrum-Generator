@@ -7,13 +7,9 @@
 int compare(const void*, const void*);
 
 void sort(modes_struct *modes_array, config_struct *conf) {
-	int tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
+	int tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 
-	qsort((void *) modes_array,
-			tot_num_of_grids,
-			sizeof(struct modes_struct_tag),
-			compare);
-
+	qsort((void *) modes_array, tot_num_of_grids, sizeof(struct modes), compare);
 }
 
 int compare(const void *p1, const void *p2)
