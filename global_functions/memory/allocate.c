@@ -7,6 +7,6 @@ void allocate (void **pptr, unsigned int nmemb, unsigned int size) {
 	*pptr = calloc(nmemb, size);
 	if (*pptr == NULL) {
 		printf("[calloc error: %s]\n", strerror(errno));
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 }

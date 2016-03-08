@@ -3,4 +3,4 @@
 #include "./../../global_structs/vector_struct.h"
 
 void get_modes_in_range (double, double, modes_struct *, config_struct *,
-		vector_struct *);
+                         vector_struct *);

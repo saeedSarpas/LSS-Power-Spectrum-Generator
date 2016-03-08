@@ -46,7 +46,7 @@ cleanOutput :
 #------------------------------------------------------------------------------
 _G_FUNC = clock/done.o \
           clock/start.o \
-          config_file/get_config.o \
+          config_file/load_config_from.o \
           config_file/my_libconfig.o \
           filenames/append_density_contrast_filename.o \
           filenames/append_fourier_transformed_filename.o \
@@ -71,7 +71,7 @@ G_FUNC  = $(patsubst %,$(GDIR)/%,$(_G_FUNC))
 
 _G_TEST = modes/get_modes_in_range_test.o \
           grid/three_to_one_test.o \
-          config_file/get_config_test.o
+          config_file/load_config_from_test.o
 G_TEST  = $(patsubst %,$(GDIR)/%,$(_G_TEST))
 
 $(G_FUNC) : %.o : %.c

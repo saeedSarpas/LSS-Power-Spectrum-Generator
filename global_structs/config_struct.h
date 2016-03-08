@@ -1,24 +1,24 @@
 #ifndef CONFIG_STRUCT_H
 #define CONFIG_STRUCT_H
 
-typedef struct params_struct_tag {
+typedef struct params {
   int fileIndex;
   int massAssignmentIndex;
   int binningIndex;
   int numOfAxisGrids;
 } params_struct;
 
-typedef struct files_struct_tag {
+typedef struct files {
   const char *filename;
   const char *alias;
 } files_struct;
 
-typedef struct mass_functions_struct_tag {
+typedef struct mass_functions {
   const char *name;
   const char *alias;
 } mass_functions_struct;
 
-typedef struct binning_struct_tag {
+typedef struct binning {
   const char *name;
   const char *alias;
 } binning_struct;

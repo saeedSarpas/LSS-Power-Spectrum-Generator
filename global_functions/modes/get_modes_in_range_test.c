@@ -6,7 +6,7 @@
 #include "./../../global_structs/config_struct.h"
 
 #include "./../../global_functions/vector/vector.h"
-#include "./../../global_functions/memory/allocate_modes_struct.h"
+#include "./../../global_functions/memory/allocate.h"
 
 #include "./get_modes_in_range.h"
 
@@ -18,12 +18,13 @@ AfterEach(get_mode_in_range) {}
 
 Ensure(get_mode_in_range, returns_right_results_for_a_trivial_input) {
 	config_struct conf;
-	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
+	conf.params.numOfAxisGrids = NUM_OF_GRIDS;
 
 	int tot_num_of_grids = pow(NUM_OF_GRIDS, 3);
 
 	modes_struct *indexed_mode_modulus;
-	allocate_modes_struct(&indexed_mode_modulus, tot_num_of_grids);
+	allocate((void **)&indexed_mode_modulus, tot_num_of_grids,
+           sizeof(modes_struct));
 
 	int i;
 	for (i = 0; i < tot_num_of_grids; i++)

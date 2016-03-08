@@ -6,7 +6,7 @@
 #include "./../../global_functions/io/open_file.h"
 
 #include "./my_libconfig.h"
-#include "./get_config.h"
+#include "./load_config_from.h"
 
 #define FILE_INDEX 1
 #define MASS_ASSIGNMENT_INDEX 1
@@ -19,9 +19,52 @@
 #define ALGORITHM_NAME "algorithm_name"
 #define CONF_FILE_ADDR "./conf.test"
 
-Describe(get_config);
+void write_new_config_file ();
 
-BeforeEach(get_config) {
+Describe (load_config_from);
+
+BeforeEach (load_config_from) {
+  write_new_config_file();
+}
+
+AfterEach (load_config_from) {
+	remove(CONF_FILE_ADDR);
+}
+
+Ensure (load_config_from, fills_config_struct_with_right_configs) {
+
+	config_struct conf = load_config_from(CONF_FILE_ADDR);
+
+	int i;
+	for (i = 0; i < 2; i++) {
+		assert_that(conf.files[i].filename, is_equal_to_string(FILENAME));
+		assert_that(conf.files[i].alias, is_equal_to_string(ALIAS));
+
+		assert_that(conf.massFunctions[i].name,
+					is_equal_to_string(MASS_ASSIGNMENT_NAME));
+		assert_that(conf.massFunctions[i].alias,
+					is_equal_to_string(ALIAS));
+
+		assert_that(conf.binning[i].name, is_equal_to_string(BINNING_NAME));
+		assert_that(conf.binning[i].alias, is_equal_to_string(ALIAS));
+	}
+
+	assert_that(conf.params.fileIndex, is_equal_to(FILE_INDEX));
+	assert_that(conf.params.massAssignmentIndex,
+				is_equal_to(MASS_ASSIGNMENT_INDEX));
+	assert_that(conf.params.binningIndex, is_equal_to(BINNING_INDEX));
+	assert_that(conf.params.numOfAxisGrids,
+				is_equal_to(NUM_OF_AXIS_GRIDS));
+}
+
+TestSuite *load_config_from_tests() {
+	TestSuite *suite = create_test_suite();
+	add_test_with_context(suite, load_config_from,
+						 fills_config_struct_with_right_configs);
+	return suite;
+}
+
+void write_new_config_file () {
 	int i;
 
 	config_t cfg;
@@ -89,7 +132,7 @@ BeforeEach(get_config) {
 		setting = libconfig_setting_add(groups, "alias", CONFIG_TYPE_STRING);
 		libconfig_setting_set_string(setting, ALIAS);
 	}
-	
+
 	FILE *conf_file;
 	open_file(&conf_file, CONF_FILE_ADDR, "w");
 
@@ -97,41 +140,4 @@ BeforeEach(get_config) {
 
 	fclose(conf_file);
 	libconfig_destroy(&cfg);
-}
-
-AfterEach(get_config) {
-	remove(CONF_FILE_ADDR);
-}
-
-Ensure(get_config, fills_config_struct_with_right_configs) {
-	config_struct conf;
-	get_config(&conf, CONF_FILE_ADDR);
-
-	int i;
-	for (i = 0; i < 2; i++) {
-		assert_that(conf.files[i].filename, is_equal_to_string(FILENAME));
-		assert_that(conf.files[i].alias, is_equal_to_string(ALIAS));
-
-		assert_that(conf.massFunctions[i].name,
-					is_equal_to_string(MASS_ASSIGNMENT_NAME));
-		assert_that(conf.massFunctions[i].alias,
-					is_equal_to_string(ALIAS));
-
-		assert_that(conf.binning[i].name, is_equal_to_string(BINNING_NAME));
-		assert_that(conf.binning[i].alias, is_equal_to_string(ALIAS));
-	}
-
-	assert_that(conf.params.fileIndex, is_equal_to(FILE_INDEX));
-	assert_that(conf.params.massAssignmentIndex,
-				is_equal_to(MASS_ASSIGNMENT_INDEX));
-	assert_that(conf.params.binningIndex, is_equal_to(BINNING_INDEX));
-	assert_that(conf.params.numOfAxisGrids,
-				is_equal_to(NUM_OF_AXIS_GRIDS));
-}
-
-TestSuite *get_config_tests() {
-	TestSuite *suite = create_test_suite();
-	add_test_with_context(suite, get_config,
-						 fills_config_struct_with_right_configs);
-	return suite;
 }

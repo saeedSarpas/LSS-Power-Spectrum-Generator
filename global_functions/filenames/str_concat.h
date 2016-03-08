@@ -1,2 +1,2 @@
 
-void str_concat(char *[], int, char **);
+void str_concat (char *[], int, char **);

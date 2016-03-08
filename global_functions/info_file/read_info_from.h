@@ -1,3 +1,3 @@
-#include "./../../global_structs/input_file_info.h"
+#include "./../../global_structs/info_strcut.h"
 
-void read_info_from(char*, input_info_struct*);
+void read_info_from (char *, info_struct *);

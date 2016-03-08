@@ -1,2 +1,3 @@
+#include <stdio.h>
 
-void read_from (FILE*, unsigned int, unsigned int, void*);
+void read_from (FILE *, unsigned int, unsigned int, void *);

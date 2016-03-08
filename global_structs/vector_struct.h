@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-typedef struct vector_struct_tag{
+typedef struct vector{
 	void *elems;
 	size_t elem_size;
 	size_t log_length;

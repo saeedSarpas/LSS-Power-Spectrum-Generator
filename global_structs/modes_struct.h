@@ -1,7 +1,7 @@
 #ifndef MODES_STRUCT_H
 #define MODES_STRUCT_H
 
-typedef struct modes_struct_tag{
+typedef struct modes{
   int index;
   int kx;
   int ky;

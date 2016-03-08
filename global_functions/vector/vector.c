@@ -12,7 +12,7 @@ void vector_new(vector_struct *v, size_t elem_size, size_t alloc_length) {
 	v->elems = malloc(elem_size * alloc_length);
 	if (v->elems == NULL) {
 		printf("[Unable to allocate space for the vector]\n");
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -25,7 +25,7 @@ static void vector_grow (vector_struct *v) {
 	v->elems = realloc(v->elems, v->alloc_length * v->elem_size);
 	if (v->elems == NULL) {
 		printf("[Unable to reallocate the vector]\n");
-		exit(0);
+		exit(EXIT_FAILURE);
 	}
 }
 

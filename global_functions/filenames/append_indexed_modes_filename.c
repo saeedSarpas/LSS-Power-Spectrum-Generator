@@ -4,9 +4,9 @@
 
 #include "./str_concat.h"
 
-void append_indexed_modes_filename(config_struct *conf, char **return_path) {
-	char num_of_grids_in_each_axis[10];
-	sprintf(num_of_grids_in_each_axis, "%d", conf->run_params.num_of_axis_grids);
+void append_indexed_modes_filename (config_struct *conf, char **return_path) {
+	char num_of_grids_in_each_axis[32];
+	sprintf(num_of_grids_in_each_axis, "%d", conf->params.numOfAxisGrids);
 
   char * strings[] = {"indexed-modes-", num_of_grids_in_each_axis, ".dat"};
 

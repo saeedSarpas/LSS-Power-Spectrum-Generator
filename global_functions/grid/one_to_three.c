@@ -3,9 +3,9 @@
 #include "./../../global_structs/config_struct.h"
 
 void one_to_three (int x, int *pos, config_struct *conf) {
-  int ret = x % (int)pow(conf->run_params.num_of_axis_grids, 2);
+  int ret = x % (int)pow(conf->params.numOfAxisGrids, 2);
 
-  pos[0] = x / pow(conf->run_params.num_of_axis_grids, 2);
-  pos[1] = ret / conf->run_params.num_of_axis_grids;
-  pos[2] = ret % conf->run_params.num_of_axis_grids;
+  pos[0] = x / pow(conf->params.numOfAxisGrids, 2);
+  pos[1] = ret / conf->params.numOfAxisGrids;
+  pos[2] = ret % conf->params.numOfAxisGrids;
 }
