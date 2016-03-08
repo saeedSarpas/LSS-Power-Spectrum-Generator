@@ -7,7 +7,7 @@
 void convert_real_delta_to_complex(double *delta_real,
 		fftw_complex *delta_complex, config_struct *conf) {
 
-	size_t tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
+	size_t tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 
 	unsigned int i;
 	for (i = 0; i < tot_num_of_grids; i++) {

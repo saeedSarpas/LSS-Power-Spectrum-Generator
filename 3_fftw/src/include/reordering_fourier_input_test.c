@@ -21,7 +21,7 @@ static fftw_complex delta_complex[TOT_NUM_OF_GRIDS];
 static void fill_delta_complex(fftw_complex*);
 
 BeforeEach(reordering_fourier_input) {
-	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
+	conf.params.numOfAxisGrids = NUM_OF_GRIDS;
 	fill_delta_complex(delta_complex);
 }
 
@@ -31,9 +31,9 @@ Ensure(reordering_fourier_input, mirrors_right_elements) {
 	reordering_fourier_input(delta_complex, &conf);
 
 	int i, j, k;
-	for (i = 0; i < conf.run_params.num_of_axis_grids; i++) {
-		for (j = 0; j < conf.run_params.num_of_axis_grids; j++) {
-			for (k = 0; k < conf.run_params.num_of_axis_grids; k++) {
+	for (i = 0; i < conf.params.numOfAxisGrids; i++) {
+		for (j = 0; j < conf.params.numOfAxisGrids; j++) {
+			for (k = 0; k < conf.params.numOfAxisGrids; k++) {
 				int s = pow(-1, (i + j + k));
 				int index = three_to_one(i, j, k, &conf);
 				assert_that(creal(delta_complex[index]),

@@ -7,10 +7,10 @@
 #include <time.h>
 
 #include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_info.h"
+#include "./../../global_structs/particle_struct.h"
+#include "./../../global_structs/info_strcut.h"
 
-#include "./../../global_functions/config_file/get_config.h"
+#include "./../../global_functions/config_file/load_config_from.h"
 #include "./../../global_functions/filenames/append_input_info_name.h"
 #include "./../../global_functions/info_file/read_info_from.h"
 #include "./../../global_functions/clock/start.h"
@@ -30,17 +30,13 @@
 
 int main() {
 
-	config_struct conf;
-	get_config(&conf, "./../../configurations.cfg");
+	config_struct conf = load_config_from("./../../configurations.cfg");
 
-	char *filename_alias;
-	filename_alias = conf.input_files[conf.run_params.file_index][1];
+	char *filename_alias = conf.files[conf.params.fileIndex].alias;
+	char *algorithm_alias =
+    conf.massFunctions[conf.params.massAssignmentIndex].alias;
 
-	char *algorithm_alias;
-	algorithm_alias =
-		conf.mass_assignment_functions[conf.run_params.mass_assignment_index][1];
-
-	input_info_struct info;
+	info_struct info;
 	char *input_info_path = strdup("./../../0_structured_input/");
 	append_input_info_name(filename_alias, &input_info_path);
 	read_info_from(input_info_path, &info);
@@ -48,7 +44,7 @@ int main() {
 
 	clock_t _c_a_c_f_f_ = start("Creating a c2c FFTW plan... ");
 
-	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
+	size_t tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
 
 	fftw_complex *delta_complex;
 	allocate((void **)&delta_complex, tot_num_of_grids, sizeof(fftw_complex));
@@ -58,9 +54,9 @@ int main() {
 
 
 	int rank[3] = {
-		conf.run_params.num_of_axis_grids,
-		conf.run_params.num_of_axis_grids,
-		conf.run_params.num_of_axis_grids
+		conf.params.numOfAxisGrids,
+		conf.params.numOfAxisGrids,
+		conf.params.numOfAxisGrids
 	};
 
 	fftw_plan p;

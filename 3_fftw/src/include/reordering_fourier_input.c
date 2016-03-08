@@ -13,7 +13,7 @@ void reordering_fourier_input(fftw_complex *delta_complex,
 
 	unsigned int i;
 	int pos[3];
-	size_t tot_num_of_grids = pow(conf->run_params.num_of_axis_grids, 3);
+	size_t tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 
 	for (i = 0; i < tot_num_of_grids; i++) {
 		one_to_three(i, pos, conf);
