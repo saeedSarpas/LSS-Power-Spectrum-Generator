@@ -2,8 +2,8 @@
 #include <math.h>
 
 #include "./../../../global_structs/config_struct.h"
-#include "./../../../global_structs/input_file_info.h"
-#include "./../../../global_structs/particle_data_struct.h"
+#include "./../../../global_structs/info_strcut.h"
+#include "./../../../global_structs/particle_struct.h"
 
 #include "./../../../global_functions/memory/allocate.h"
 #include "./../../../global_functions/grid/three_to_one.h"
@@ -18,19 +18,19 @@ Describe(cic);
 
 static config_struct conf;
 static int tot_num_of_grids;
-static input_info_struct info;
-static particle_data_struct *P;
+static info_struct info;
+static particle_struct *P;
 static double *grid_mass;
 static void fill_P (double, double, double, double);
 
 BeforeEach(cic) {
-	conf.run_params.num_of_axis_grids = 10;
-	tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
+	conf.params.numOfAxisGrids = 10;
+	tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
 
-	info.num_of_parts = NUM_OF_PARTS;
-	info.box_length = BOX_LENGTH;
+	info.numOfParts = NUM_OF_PARTS;
+	info.boxLength = BOX_LENGTH;
 
-	allocate((void **)&P, info.num_of_parts, sizeof(particle_data_struct));
+	allocate((void **)&P, info.numOfParts, sizeof(struct particle));
 
 	allocate((void **)&grid_mass, tot_num_of_grids, sizeof(double));
 }
@@ -49,7 +49,7 @@ Ensure(cic, returns_right_value_for_a_trivial_case) {
 		if (i != index)
 			assert_that(grid_mass[i], is_equal_to(0));
 		else
-			assert_that(grid_mass[i], is_equal_to(1 * info.num_of_parts));
+			assert_that(grid_mass[i], is_equal_to(1 * info.numOfParts));
 	}
 }
 
@@ -66,7 +66,7 @@ Ensure(cic, calculate_the_share_of_each_cell_right) {
 					assert_that(grid_mass[index], is_equal_to(0));
 				else
 					assert_that(grid_mass[index],
-								is_equal_to(1 * info.num_of_parts / 8));
+								is_equal_to(1 * info.numOfParts / 8));
 			}
 		}
 	}
@@ -92,7 +92,7 @@ TestSuite *cic_tests() {
 
 void fill_P (double x, double y, double z, double mass) {
 	int i;
-	for (i = 0; i < info.num_of_parts; i++) {
+	for (i = 0; i < info.numOfParts; i++) {
 		P[i].Pos[0] = x;
 		P[i].Pos[1] = y;
 		P[i].Pos[2] = z;

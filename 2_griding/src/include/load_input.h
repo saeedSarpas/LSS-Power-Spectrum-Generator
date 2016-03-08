@@ -1,4 +1,4 @@
-#include "./../../../global_structs/particle_data_struct.h"
-#include "./../../../global_structs/input_file_info.h"
+#include "./../../../global_structs/particle_struct.h"
+#include "./../../../global_structs/info_strcut.h"
 
-void load_input(particle_data_struct [], char *, input_info_struct *);
+void load_input(particle_struct [], char *, info_struct *);

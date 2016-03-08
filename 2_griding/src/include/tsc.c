@@ -1,20 +1,20 @@
 #include <math.h>
 
-#include "./../../../global_structs/particle_data_struct.h"
-#include "./../../../global_structs/input_file_info.h"
+#include "./../../../global_structs/particle_struct.h"
+#include "./../../../global_structs/info_strcut.h"
 #include "./../../../global_structs/config_struct.h"
 
 #include "./../../../global_functions/grid/move_along_grid_axis.h"
 #include "./../../../global_functions/grid/three_to_one.h"
 
-void tsc (particle_data_struct *P, double *grid_mass, input_info_struct *info,
+void tsc (particle_struct *P, double *grid_mass, info_struct *info,
 		  config_struct *conf) {
 
 	int i, n, a, b, c, index, pos[3], neighbor_pos[3];
 	double overlap, weight[3][3];
-	double grid_length = info->box_length / conf->run_params.num_of_axis_grids;
+	double grid_length = info->boxLength / conf->params.numOfAxisGrids;
 
-	for (n = 0; n < info->num_of_parts; n++) {
+	for (n = 0; n < info->numOfParts; n++) {
 		for (i = 0; i < 3; i++) {
 			pos[i] = P[n].Pos[i] / grid_length;
 			overlap = fmodf(P[n].Pos[i], grid_length);

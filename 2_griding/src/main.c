@@ -5,10 +5,10 @@
 #include <time.h>
 
 #include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/particle_data_struct.h"
-#include "./../../global_structs/input_file_info.h"
+#include "./../../global_structs/particle_struct.h"
+#include "./../../global_structs/info_strcut.h"
 
-#include "./../../global_functions/config_file/get_config.h"
+#include "./../../global_functions/config_file/load_config_from.h"
 #include "./../../global_functions/io/open_file.h"
 #include "./../../global_functions/io/write_to.h"
 #include "./../../global_functions/clock/start.h"
@@ -27,25 +27,21 @@
 #include "./include/density_contrast.h"
 
 int main() {
-	config_struct conf;
-	get_config(&conf, "./../../configurations.cfg");
+	config_struct conf = load_config_from("./../../configurations.cfg");
 
-	char *filename_alias;
-	filename_alias = conf.input_files[conf.run_params.file_index][1];
+	char *filename_alias = conf.files[conf.params.fileIndex].alias;
+	char *algorithm_alias =
+    conf.massFunctions[conf.params.massAssignmentIndex].alias;
 
-	char *algorithm_alias;
-	algorithm_alias =
-		conf.mass_assignment_functions[conf.run_params.mass_assignment_index][1];
-
-	input_info_struct info;
+	info_struct info;
 	char *info_path = strdup("./../../0_structured_input/");
 	append_input_info_name(filename_alias, &info_path);
 	read_info_from(info_path, &info);
 
 	clock_t _r_g_i_ = start("Reading griding input... ");
 
-	particle_data_struct *P;
-	allocate((void **)&P, info.num_of_parts, sizeof(particle_data_struct));
+	particle_struct *P;
+	allocate((void **)&P, info.numOfParts, sizeof(struct particle));
 
 	char *input_path = strdup("./../../0_structured_input/");
 	append_input_name(filename_alias, &input_path);
@@ -56,7 +52,7 @@ int main() {
 
 
 	double *grid_mass;
-	size_t tot_num_of_grids = pow(conf.run_params.num_of_axis_grids, 3);
+	size_t tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
 	allocate((void **)&grid_mass, tot_num_of_grids, sizeof(double));
 
 	if (strcmp(algorithm_alias, "cic") == 0) {
@@ -111,10 +107,10 @@ int main() {
 	open_file(&ascii_output_file, ascii_output_path, "w");
 
 	int i, j, k, index;
-	for (i = 0; i < conf.run_params.num_of_axis_grids; i++) {
-		for (j = 0; j < conf.run_params.num_of_axis_grids; j++) {
-			for (k = (conf.run_params.num_of_axis_grids / 2);
-				 k < (conf.run_params.num_of_axis_grids / 2) + 1; k++) {
+	for (i = 0; i < conf.params.numOfAxisGrids; i++) {
+		for (j = 0; j < conf.params.numOfAxisGrids; j++) {
+			for (k = (conf.params.numOfAxisGrids / 2);
+				 k < (conf.params.numOfAxisGrids / 2) + 1; k++) {
 
 				index = three_to_one(i, j, k, &conf);
 				fprintf(ascii_output_file, "%d\t%d\t%f\n", i, j, grid_delta[index]);

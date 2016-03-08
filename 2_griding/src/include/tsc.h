@@ -1,6 +1,5 @@
-#include "./../../../global_structs/particle_data_struct.h"
-#include "./../../../global_structs/input_file_info.h"
+#include "./../../../global_structs/particle_struct.h"
+#include "./../../../global_structs/info_strcut.h"
 #include "./../../../global_structs/config_struct.h"
 
-void tsc (particle_data_struct *, double *, input_info_struct *,
-		config_struct *);
+void tsc (particle_struct *, double *, info_struct *, config_struct *);

@@ -1,6 +1,6 @@
 #include <cgreen/cgreen.h>
 
-#include "./../../../global_structs/input_file_info.h"
+#include "./../../../global_structs/info_strcut.h"
 #include "./../../../global_structs/config_struct.h"
 
 #include "./density_contrast.h"
@@ -14,13 +14,13 @@ Describe(density_contrast);
 #define RANDOM -1.234567
 
 static config_struct conf;
-static input_info_struct info;
+static info_struct info;
 static double mass[TOT_NUM_OF_GRIDS];
 static double delta[TOT_NUM_OF_GRIDS];
 
 BeforeEach(density_contrast) {
-	conf.run_params.num_of_axis_grids = NUM_OF_GRIDS;
-	info.box_length = BOX_LENGTH;
+	conf.params.numOfAxisGrids = NUM_OF_GRIDS;
+	info.boxLength = BOX_LENGTH;
 
 	int i;
 	for (i = 0; i < TOT_NUM_OF_GRIDS; i++) {
