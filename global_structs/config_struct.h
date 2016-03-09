@@ -23,7 +23,7 @@ typedef struct binning {
   char *alias;
 } binning_struct;
 
-typedef struct config_struct_tag {
+typedef struct config {
   files_struct files[2];
   mass_functions_struct massFunctions[3];
   binning_struct binning[2];
