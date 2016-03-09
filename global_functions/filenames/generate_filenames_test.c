@@ -5,8 +5,8 @@
 #include "./../../global_structs/info_strcut.h"
 #include "./../../global_structs/filenames_struct.h"
 
+#include "./../strings/concat.h"
 #include "./generate_filenames.h"
-#include "./str_concat.h"
 
 Describe (generate_filenames);
 
@@ -121,12 +121,12 @@ void fill_filenames(){
   structuredInput = strdup("");
   strings[0] = strdup(conf.files[conf.params.fileIndex].alias);
   strings[1] = strdup(".dat");
-  str_concat(strings, 2, &structuredInput);
+  structuredInput = concat(strings, 2);
 
   inputInfo = strdup("");
   strings[0] = strdup(conf.files[conf.params.fileIndex].alias);
   strings[1] = strdup(".info");
-  str_concat(strings, 2, &inputInfo);
+  inputInfo = concat(strings, 2);
 
   densityContrast = strdup("");
   strings[0] = strdup("density-contrast-grid-");
@@ -138,7 +138,7 @@ void fill_filenames(){
   strings[6] = strdup("-");
   strings[7] = strdup(num_of_parts);
   strings[8] = strdup(".dat");
-  str_concat(strings, 9, &densityContrast);
+  densityContrast = concat(strings, 9);
 
   fourierTransformed = strdup("");
   strings[0] = strdup("fourier-transformed-grid-");
@@ -150,13 +150,13 @@ void fill_filenames(){
   strings[6] = strdup("-");
   strings[7] = strdup(num_of_parts);
   strings[8] = strdup(".dat");
-  str_concat(strings, 9, &fourierTransformed);
+  fourierTransformed = concat(strings, 9);
 
   indexedModes = strdup("");
   strings[0] = strdup("indexed-modes-");
   strings[1] = strdup(num_of_grids_in_each_axis);
   strings[2] = strdup(".dat");
-  str_concat(strings, 3, &indexedModes);
+  indexedModes = concat(strings, 3);
 
   powerSpectrum = strdup("");
   strings[0] = strdup("power-spectrum-");
@@ -168,7 +168,7 @@ void fill_filenames(){
   strings[6] = strdup("-");
   strings[7] = strdup(num_of_parts);
   strings[8] = strdup(".dat");
-  str_concat(strings, 9, &powerSpectrum);
+  powerSpectrum = concat(strings, 9);
 
   int i;
   for (i = 0; i < STRING_ARRAY_LENGTH; i++)

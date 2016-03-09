@@ -7,7 +7,7 @@
 #include "./../../global_structs/info_strcut.h"
 #include "./../../global_structs/filenames_struct.h"
 
-#include "./str_concat.h"
+#include "./../strings/concat.h"
 
 filenames_struct generate_filenames(config_struct *conf, info_struct *info,
                                     int count, ...) {
@@ -39,7 +39,7 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info,
         conf->files[conf->params.fileIndex].alias,
         ".dat"
       };
-      str_concat(strings, 2, &filenames.structuredInput);
+      filenames.structuredInput = concat(strings, 2);
     }
 
     if (all || strcmp("inputInfo", module_name) == 0) {
@@ -47,7 +47,7 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info,
         conf->files[conf->params.fileIndex].alias,
         ".info"
       };
-      str_concat(strings, 2, &filenames.inputInfo);
+      filenames.inputInfo = concat(strings, 2);
     }
 
     if (all || strcmp("densityContrast", module_name) == 0) {
@@ -59,7 +59,7 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info,
         num_of_parts,
         ".dat"
       };
-      str_concat(strings, 9, &filenames.densityContrast);
+      filenames.densityContrast = concat(strings, 9);
     }
 
     if (all || strcmp("fourierTransformed", module_name) == 0) {
@@ -71,7 +71,7 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info,
         num_of_parts,
         ".dat"
       };
-      str_concat(strings, 9, &filenames.fourierTransformed);
+      filenames.fourierTransformed = concat(strings, 9);
     }
 
     if (all || strcmp("indexedModes", module_name) == 0) {
@@ -80,7 +80,7 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info,
         num_of_grids_in_each_axis,
         ".dat"
       };
-      str_concat(strings, 3, &filenames.indexedModes);
+      filenames.indexedModes = concat(strings, 3);
     }
 
     if (all || strcmp("powerSpectrum", module_name) == 0) {
@@ -92,7 +92,7 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info,
         num_of_parts,
         ".dat"
       };
-      str_concat(strings, 9, &filenames.powerSpectrum);
+      filenames.powerSpectrum = concat(strings, 9);
     }
   } while (0 <-- count);
 

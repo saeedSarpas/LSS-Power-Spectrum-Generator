@@ -5,6 +5,7 @@ TestSuite *three_to_one_tests();
 TestSuite *load_config_from_tests();
 TestSuite *generate_filenames_tests();
 TestSuite *append_tests();
+TestSuite *concat_tests();
 
 int main(int argc, char **argv) {
 	TestSuite *suite = create_test_suite();
@@ -14,6 +15,7 @@ int main(int argc, char **argv) {
 	add_suite(suite, load_config_from_tests());
 	add_suite(suite, generate_filenames_tests());
 	add_suite(suite, append_tests());
+	add_suite(suite, concat_tests());
 
 	if (argc > 1) {
 		return run_single_test(suite, argv[1], create_text_reporter());

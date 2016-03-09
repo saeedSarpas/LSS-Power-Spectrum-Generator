@@ -76,7 +76,8 @@ _G_TEST = modes/get_modes_in_range_test.o \
           grid/three_to_one_test.o \
           config_file/load_config_from_test.o \
           filenames/generate_filenames_test.o \
-          strings/append_test.o
+          strings/append_test.o \
+          strings/concat_test.o
 G_TEST  = $(patsubst %,$(GDIR)/%,$(_G_TEST))
 
 $(G_FUNC) : %.o : %.c
