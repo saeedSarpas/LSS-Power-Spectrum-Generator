@@ -55,8 +55,9 @@ _G_FUNC = clock/done.o \
           filenames/append_input_name.o \
           filenames/append_power_spectrum_filename.o \
           filenames/generate_filenames.o \
-          filenames/free_filename_struct.o \
+          filenames/free_filenames_struct.o \
           filenames/str_concat.o \
+          strings/append.o \
           grid/grid_boundry_checker.o \
           grid/move_along_grid_axis.o \
           grid/one_to_three.o \
@@ -74,7 +75,8 @@ G_FUNC  = $(patsubst %,$(GDIR)/%,$(_G_FUNC))
 _G_TEST = modes/get_modes_in_range_test.o \
           grid/three_to_one_test.o \
           config_file/load_config_from_test.o \
-          filenames/generate_filenames_test.o
+          filenames/generate_filenames_test.o \
+          strings/append_test.o
 G_TEST  = $(patsubst %,$(GDIR)/%,$(_G_TEST))
 
 $(G_FUNC) : %.o : %.c

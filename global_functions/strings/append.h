@@ -1,0 +1,2 @@
+
+void append(char *, char *);
