@@ -16,7 +16,7 @@
 #include "./../../global_functions/config_file/load_config_from.h"
 #include "./../../global_functions/info_file/write_info_to.h"
 #include "./../../global_functions/filenames/generate_filenames.h"
-#include "./../../global_functions/strings/append.h"
+#include "./../../global_functions/strings/concat.h"
 
 #include "./include/get_number_of_lines.h"
 #include "./include/load_halotab_from_file.h"
@@ -42,12 +42,10 @@ int main() {
 
   config_struct conf = load_config_from("./../../configurations.cfg");
   info_struct info = {.numOfParts = num_of_lines, .boxLength = 1200.0};
-  filenames_struct filenames = generate_filenames(&conf, &info, 2,
-                                                  "structuredInput",
-                                                  "inputInfo");
+  filenames_struct filenames = generate_filenames(&conf, &info);
 
-  char *output_path = append("./../../0_structured_input/",
-                             filenames.structuredInput);
+  char *output_path = concat(2,
+    "./../../0_structured_input/", filenames.structuredInput);
 
   FILE *output_file;
   open_file(&output_file, output_path, "wb");
@@ -59,7 +57,8 @@ int main() {
 
   clock_t _s_c_f_ = start("Saving info file... ");
 
-  char *info_path = append("./../../0_structured_input/", filenames.inputInfo);
+  char *info_path = concat(2,
+    "./../../0_structured_input/", filenames.inputInfo);
 
   FILE *info_file;
   open_file(&info_file, info_path, "w+");
