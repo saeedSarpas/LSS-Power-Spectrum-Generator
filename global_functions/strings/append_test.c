@@ -17,12 +17,9 @@ BeforeEach (append) {
 }
 
 Ensure(append, appends_strings_correctly) {
-  char *base = strdup(BASE);
-  append(base, STRING);
+  char *text = append(BASE, STRING);
 
-  assert_true(strcmp(base, result) == 0);
-
-  free(base);
+  assert_true(strcmp(text, result) == 0);
 }
 
 AfterEach (append) {

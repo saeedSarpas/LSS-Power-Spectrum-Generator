@@ -1,8 +1,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-void append(char *base, char *string) {
-  int length = strlen(base) + strlen(string) + 1;
-  base = realloc(base, length);
-  strcat(base, string);
+char* append(char *base, char *string) {
+  char *result = malloc(strlen(base) + strlen(string) + 1);
+
+  strcat(result, base);
+  strcat(result, string);
+
+  return result;
 }

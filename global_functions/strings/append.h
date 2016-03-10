@@ -1,2 +1,2 @@
 
-void append(char *, char *);
+char* append(char *, char *);
