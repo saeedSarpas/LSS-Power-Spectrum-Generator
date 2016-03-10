@@ -7,7 +7,7 @@ PYTHON = python
 IMAGE_VIEWER = open
 
 .PHONY: ps
-ps : clean lhmain grmain ftmain immain psmain
+ps : clean lemain lhmain grmain ftmain immain psmain
 
 .PHONY: tests
 tests : gtest pstest imtest fttest grtest
@@ -59,7 +59,7 @@ _G_FUNC = clock/done.o \
           grid/move_along_grid_axis.o \
           grid/one_to_three.o \
           grid/three_to_one.o \
-          info_file/read_info_from.o \
+          info_file/get_info_from.o \
           info_file/write_info_to.o \
           io/open_file.o \
           io/read_from.o \
