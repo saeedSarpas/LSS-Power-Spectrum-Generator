@@ -48,8 +48,6 @@ _G_FUNC = clock/done.o \
           clock/start.o \
           config_file/load_config_from.o \
           config_file/my_libconfig.o \
-          filenames/append_density_contrast_filename.o \
-          filenames/append_fourier_transformed_filename.o \
           filenames/append_indexed_modes_filename.o \
           filenames/append_power_spectrum_filename.o \
           filenames/generate_filenames.o \

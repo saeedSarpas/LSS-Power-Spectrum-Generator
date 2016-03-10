@@ -11,15 +11,14 @@
 #include "./../../global_structs/info_strcut.h"
 
 #include "./../../global_functions/config_file/load_config_from.h"
-#include "./../../global_functions/filenames/append_input_info_name.h"
-#include "./../../global_functions/info_file/read_info_from.h"
+#include "./../../global_functions/info_file/get_info_from.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
 #include "./../../global_functions/memory/allocate.h"
-#include "./../../global_functions/filenames/append_density_contrast_filename.h"
-#include "./../../global_functions/filenames/append_fourier_transformed_filename.h"
 #include "./../../global_functions/io/open_file.h"
 #include "./../../global_functions/io/write_to.h"
+#include "./../../global_functions/filenames/generate_filenames.h"
+#include "./../../global_functions/strings/concat.h"
 
 #include "./include/load_density_contrast_grid.h"
 #include "./include/convert_real_delta_to_complex.h"
@@ -31,15 +30,7 @@
 int main() {
 
 	config_struct conf = load_config_from("./../../configurations.cfg");
-
-	char *filename_alias = conf.files[conf.params.fileIndex].alias;
-	char *algorithm_alias =
-    conf.massFunctions[conf.params.massAssignmentIndex].alias;
-
-	info_struct info;
-	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(filename_alias, &input_info_path);
-	read_info_from(input_info_path, &info);
+  filenames_struct filenames = generate_filenames(&conf);
 
 
 	clock_t _c_a_c_f_f_ = start("Creating a c2c FFTW plan... ");
@@ -68,16 +59,13 @@ int main() {
 
 	clock_t _l_d_c_ = start("Loading density contrast... ");
 
-	char *input_path = strdup("./../../2_griding/output/");
-	append_density_contrast_filename(filename_alias, algorithm_alias,
-									 &info, &conf, &input_path);
+	char *input_path = concat(2,
+    "./../../2_griding/output/", filenames.densityContrast);
 
 	double *delta_real;
 	allocate((void **)&delta_real, tot_num_of_grids, sizeof(double));
 	load_density_contrast_grid(input_path, delta_real, &conf);
-
 	convert_real_delta_to_complex(delta_real, delta_complex, &conf);
-
 	reordering_fourier_input(delta_complex, &conf);
 
 	done(_l_d_c_);
@@ -93,11 +81,13 @@ int main() {
 
 	clock_t _a_m_a_w_f_ = start("Smearing and anisotropy correction... ");
 
-	if (strcmp(algorithm_alias, "ngp") == 0)
+	char *alg_alias = conf.massFunctions[conf.params.massAssignmentIndex].alias;
+
+	if (strcmp(alg_alias, "ngp") == 0)
 		smearing_and_anisotropy_correction_for_ngp(delta_fourier, &conf);
-	else if (strcmp(algorithm_alias, "cic") == 0)
+	else if (strcmp(alg_alias, "cic") == 0)
 		smearing_and_anisotropy_correction_for_cic(delta_fourier, &conf);
-	else if (strcmp(algorithm_alias, "tsc") == 0)
+	else if (strcmp(alg_alias, "tsc") == 0)
 		smearing_and_anisotropy_correction_for_tsc(delta_fourier, &conf);
 	else {
 		printf("[Unknown mass assignment algorithm]\n");
@@ -119,9 +109,8 @@ int main() {
 
 	clock_t _s_d_ = start("Saving data... ");
 
-	char *output_path = strdup("./../output/");
-	append_fourier_transformed_filename(filename_alias, algorithm_alias,
-										&info, &conf, &output_path);
+	char *output_path = concat(2,
+    "./../output/", filenames.fourierTransformed);
 
 	FILE * out_file;
 	open_file(&out_file, output_path, "wb");
@@ -132,9 +121,9 @@ int main() {
 	done(_s_d_);
 
 	free(delta_real);
+	free(alg_alias);
 	fftw_free(delta_fourier);
 	fftw_free(delta_complex);
-	free(input_info_path);
 	free(input_path);
 	free(output_path);
 	return 0;
