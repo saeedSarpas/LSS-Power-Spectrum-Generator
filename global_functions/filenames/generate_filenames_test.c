@@ -2,7 +2,6 @@
 #include <string.h>
 
 #include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/info_strcut.h"
 #include "./../../global_structs/filenames_struct.h"
 
 #include "./../strings/concat.h"
@@ -10,14 +9,12 @@
 
 Describe (generate_filenames);
 
-#define NUM_OF_PARTS 1000
+#define STRING_ARRAY_LENGTH 8
 #define FILENAME "filename"
 #define ALIAS "alias"
 #define NOG 64
-#define STRING_ARRAY_LENGTH 9 
 
 static config_struct conf;
-static info_struct info;
 static char* structuredInput;
 static char* inputInfo;
 static char* densityContrast;
@@ -34,8 +31,6 @@ BeforeEach (generate_filenames) {
   conf.files[conf.params.fileIndex].alias = ALIAS;
   conf.massFunctions[conf.params.massAssignmentIndex].alias = ALIAS;
 
-  info.numOfParts = NUM_OF_PARTS;
-
   fill_filenames();
 }
 
@@ -50,7 +45,7 @@ AfterEach (generate_filenames) {
 
 Ensure (generate_filenames, returns_all_filenames_correct) {
 
-  filenames_struct filenames = generate_filenames(&conf, &info);
+  filenames_struct filenames = generate_filenames(&conf);
 
   assert_true(strcmp(filenames.structuredInput, structuredInput) == 0);
   assert_true(strcmp(filenames.inputInfo, inputInfo) == 0);
@@ -70,8 +65,6 @@ TestSuite *generate_filenames_tests() {
 void fill_filenames(){
   char num_of_grids_in_each_axis[32];
   sprintf(num_of_grids_in_each_axis, "%d", conf.params.numOfAxisGrids);
-  char num_of_parts[32];
-  sprintf(num_of_parts, "%d", info.numOfParts);
 
   structuredInput = concat(2,
     conf.files[conf.params.fileIndex].alias,
@@ -83,21 +76,19 @@ void fill_filenames(){
     ".info"
   );
 
-  densityContrast = concat(9,
+  densityContrast = concat(8,
     "density-contrast-grid-",
     conf.massFunctions[conf.params.massAssignmentIndex].alias, "-",
     num_of_grids_in_each_axis, "-",
     conf.files[conf.params.fileIndex].alias, "-",
-    num_of_parts,
     ".dat"
   );
 
-  fourierTransformed = concat(9,
+  fourierTransformed = concat(8,
     "fourier-transformed-grid-",
     conf.massFunctions[conf.params.massAssignmentIndex].alias, "-",
     num_of_grids_in_each_axis, "-",
     conf.files[conf.params.fileIndex].alias, "-",
-    num_of_parts,
     ".dat"
   );
 
@@ -107,12 +98,11 @@ void fill_filenames(){
     ".dat"
   );
 
-  powerSpectrum = concat(9,
+  powerSpectrum = concat(8,
     "power-spectrum-",
     conf.massFunctions[conf.params.massAssignmentIndex].alias, "-",
     num_of_grids_in_each_axis, "-",
     conf.files[conf.params.fileIndex].alias, "-",
-    num_of_parts,
     ".dat"
   );
 }

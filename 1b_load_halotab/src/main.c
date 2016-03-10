@@ -42,7 +42,7 @@ int main() {
 
   config_struct conf = load_config_from("./../../configurations.cfg");
   info_struct info = {.numOfParts = num_of_lines, .boxLength = 1200.0};
-  filenames_struct filenames = generate_filenames(&conf, &info);
+  filenames_struct filenames = generate_filenames(&conf);
 
   char *output_path = concat(2,
     "./../../0_structured_input/", filenames.structuredInput);

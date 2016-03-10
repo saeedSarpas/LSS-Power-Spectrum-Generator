@@ -4,18 +4,15 @@
 #include <string.h>
 
 #include "./../../global_structs/config_struct.h"
-#include "./../../global_structs/info_strcut.h"
 #include "./../../global_structs/filenames_struct.h"
 
 #include "./../strings/concat.h"
 
-filenames_struct generate_filenames(config_struct *conf, info_struct *info) {
+filenames_struct generate_filenames(config_struct *conf) {
   filenames_struct filenames;
 
   char num_of_grids_in_each_axis[32];
   sprintf(num_of_grids_in_each_axis, "%d", conf->params.numOfAxisGrids);
-  char num_of_parts[32];
-  sprintf(num_of_parts, "%d", info->numOfParts);
 
   filenames.structuredInput = strdup("");
   filenames.inputInfo = strdup("");
@@ -34,21 +31,19 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info) {
     ".info"
   );
 
-  filenames.densityContrast = concat(9,
+  filenames.densityContrast = concat(8,
     "density-contrast-grid-",
     conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
     num_of_grids_in_each_axis, "-",
     conf->files[conf->params.fileIndex].alias, "-",
-    num_of_parts,
     ".dat"
   );
 
-  filenames.fourierTransformed = concat(9,
+  filenames.fourierTransformed = concat(8,
     "fourier-transformed-grid-",
     conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
     num_of_grids_in_each_axis, "-",
     conf->files[conf->params.fileIndex].alias, "-",
-    num_of_parts,
     ".dat"
   );
 
@@ -58,12 +53,11 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info) {
     ".dat"
   );
 
-  filenames.powerSpectrum = concat(9,
+  filenames.powerSpectrum = concat(8,
     "power-spectrum-",
     conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
     num_of_grids_in_each_axis, "-",
     conf->files[conf->params.fileIndex].alias, "-",
-    num_of_parts,
     ".dat"
   );
 

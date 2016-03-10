@@ -28,12 +28,11 @@
 
 int main() {
 	config_struct conf = load_config_from("./../../configurations.cfg");
-	info_struct info;
-  filenames_struct filenames = generate_filenames(&conf, &info);
+  filenames_struct filenames = generate_filenames(&conf);
 
   char *info_path = concat(2,
     "./../../0_structured_input/", filenames.inputInfo);
-	info = get_info_from(info_path);
+	info_struct info = get_info_from(info_path);
 
 
 	clock_t _r_g_i_ = start("Reading griding input... ");
