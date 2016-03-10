@@ -9,10 +9,8 @@
 
 #include "./../strings/concat.h"
 
-filenames_struct generate_filenames(config_struct *conf, info_struct *info,
-                                    int count, ...) {
+filenames_struct generate_filenames(config_struct *conf, info_struct *info) {
   filenames_struct filenames;
-  bool all = (count < 1) ? true : false;
 
   char num_of_grids_in_each_axis[32];
   sprintf(num_of_grids_in_each_axis, "%d", conf->params.numOfAxisGrids);
@@ -26,77 +24,48 @@ filenames_struct generate_filenames(config_struct *conf, info_struct *info,
   filenames.indexedModes = strdup("");
   filenames.powerSpectrum = strdup("");
 
-  va_list args;
-  va_start(args, count);
+  filenames.structuredInput = concat(2,
+    conf->files[conf->params.fileIndex].alias,
+    ".dat"
+  );
 
-  char *module_name;
+  filenames.inputInfo = concat(2,
+    conf->files[conf->params.fileIndex].alias,
+    ".info"
+  );
 
-  do {
-    if (!all) module_name = va_arg(args, char*);
+  filenames.densityContrast = concat(9,
+    "density-contrast-grid-",
+    conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
+    num_of_grids_in_each_axis, "-",
+    conf->files[conf->params.fileIndex].alias, "-",
+    num_of_parts,
+    ".dat"
+  );
 
-    if (all || strcmp("structuredInput", module_name) == 0) {
-      char *strings[] = {
-        conf->files[conf->params.fileIndex].alias,
-        ".dat"
-      };
-      filenames.structuredInput = concat(strings, 2);
-    }
+  filenames.fourierTransformed = concat(9,
+    "fourier-transformed-grid-",
+    conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
+    num_of_grids_in_each_axis, "-",
+    conf->files[conf->params.fileIndex].alias, "-",
+    num_of_parts,
+    ".dat"
+  );
 
-    if (all || strcmp("inputInfo", module_name) == 0) {
-      char *strings[] = {
-        conf->files[conf->params.fileIndex].alias,
-        ".info"
-      };
-      filenames.inputInfo = concat(strings, 2);
-    }
+  filenames.indexedModes = concat(3,
+    "indexed-modes-",
+    num_of_grids_in_each_axis,
+    ".dat"
+  );
 
-    if (all || strcmp("densityContrast", module_name) == 0) {
-      char *strings[] = {
-        "density-contrast-grid-",
-        conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
-        num_of_grids_in_each_axis, "-",
-        conf->files[conf->params.fileIndex].alias, "-",
-        num_of_parts,
-        ".dat"
-      };
-      filenames.densityContrast = concat(strings, 9);
-    }
-
-    if (all || strcmp("fourierTransformed", module_name) == 0) {
-      char *strings[] = {
-        "fourier-transformed-grid-",
-        conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
-        num_of_grids_in_each_axis, "-",
-        conf->files[conf->params.fileIndex].alias, "-",
-        num_of_parts,
-        ".dat"
-      };
-      filenames.fourierTransformed = concat(strings, 9);
-    }
-
-    if (all || strcmp("indexedModes", module_name) == 0) {
-      char *strings[] = {
-        "indexed-modes-",
-        num_of_grids_in_each_axis,
-        ".dat"
-      };
-      filenames.indexedModes = concat(strings, 3);
-    }
-
-    if (all || strcmp("powerSpectrum", module_name) == 0) {
-      char *strings[] = {
-        "power-spectrum-",
-        conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
-        num_of_grids_in_each_axis, "-",
-        conf->files[conf->params.fileIndex].alias, "-",
-        num_of_parts,
-        ".dat"
-      };
-      filenames.powerSpectrum = concat(strings, 9);
-    }
-  } while (0 <-- count);
-
-  va_end(args);
+  filenames.powerSpectrum = concat(9,
+    "power-spectrum-",
+    conf->massFunctions[conf->params.massAssignmentIndex].alias, "-",
+    num_of_grids_in_each_axis, "-",
+    conf->files[conf->params.fileIndex].alias, "-",
+    num_of_parts,
+    ".dat"
+  );
 
   return filenames;
 }

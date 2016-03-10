@@ -4,7 +4,6 @@ TestSuite *get_mode_in_range_tests();
 TestSuite *three_to_one_tests();
 TestSuite *load_config_from_tests();
 TestSuite *generate_filenames_tests();
-TestSuite *append_tests();
 TestSuite *concat_tests();
 
 int main(int argc, char **argv) {
@@ -14,7 +13,6 @@ int main(int argc, char **argv) {
 	add_suite(suite, three_to_one_tests());
 	add_suite(suite, load_config_from_tests());
 	add_suite(suite, generate_filenames_tests());
-	add_suite(suite, append_tests());
 	add_suite(suite, concat_tests());
 
 	if (argc > 1) {

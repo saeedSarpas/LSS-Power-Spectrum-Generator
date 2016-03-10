@@ -1,18 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
-char* concat (char *strings[], int length) {
-  char *result = strdup("");
+char* concat (int count, ...) {
 
-	int i, strings_length = 0;
-	for (i = 0; i < length; i++)
-		strings_length += strlen(strings[i]);
+  if (count < 2) {
+    printf("[You should at least provide two argumemts for concat function]\n");
+    exit(EXIT_FAILURE);
+  }
 
-	result = realloc(result, strings_length + 1);
+  va_list list;
+  char **strings = malloc(count * sizeof(char *));
 
-	for (i = 0; i < length; i++)
+  va_start(list, count);
+
+  int i, length = 0;
+	for (i = 0; i < count; i++) {
+    strings[i] = va_arg(list, char *);
+		length += strlen(strings[i]);
+  }
+
+  char *result = malloc(length + 1);
+
+	for (i = 0; i < count; i++)
 		strcat(result, strings[i]);
+
+  free(strings);
+  va_end(list);
 
   return result;
 }

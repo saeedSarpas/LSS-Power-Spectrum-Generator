@@ -1,2 +1,2 @@
 
-char* concat (char *[], int);
+char* concat (int, ...);

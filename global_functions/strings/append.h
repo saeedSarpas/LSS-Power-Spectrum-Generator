@@ -1,2 +1,0 @@
-
-char* append(char *, char *);

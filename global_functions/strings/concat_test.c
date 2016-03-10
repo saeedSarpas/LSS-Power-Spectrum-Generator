@@ -11,7 +11,6 @@ Describe (concat);
 #define STRING3 "string3"
 #define STRING4 "string4"
 #define STRING5 "string5"
-#define INITIAL_STRING ""
 #define LENGTH 6
 
 static char *strings[LENGTH];
@@ -24,8 +23,9 @@ BeforeEach (concat) {
   strings[3] = strdup(STRING3);
   strings[4] = strdup(STRING4);
   strings[5] = strdup(STRING5);
-  result = strdup(INITIAL_STRING);
-  result = realloc(result, strlen(STRING0) * LENGTH + 1);
+
+  result = malloc(strlen(STRING0) * LENGTH + 1);
+
   int i;
   for (i = 0; i < LENGTH; i++)
     strcat(result, strings[i]);
@@ -40,7 +40,9 @@ AfterEach (concat) {
 }
 
 Ensure(concat, concats_strings_correctly) {
-  char *base = concat(strings, LENGTH);
+  char *base = concat(LENGTH,
+    strings[0], strings[1], strings[2], strings[3], strings[4], strings[5]
+  );
 
   assert_true(strcmp(base, result) == 0);
 

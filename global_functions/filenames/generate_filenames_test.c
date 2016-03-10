@@ -49,7 +49,8 @@ AfterEach (generate_filenames) {
 }
 
 Ensure (generate_filenames, returns_all_filenames_correct) {
-  filenames_struct filenames = generate_filenames(&conf, &info, -1);
+
+  filenames_struct filenames = generate_filenames(&conf, &info);
 
   assert_true(strcmp(filenames.structuredInput, structuredInput) == 0);
   assert_true(strcmp(filenames.inputInfo, inputInfo) == 0);
@@ -57,121 +58,61 @@ Ensure (generate_filenames, returns_all_filenames_correct) {
   assert_true(strcmp(filenames.fourierTransformed, fourierTransformed) == 0);
   assert_true(strcmp(filenames.indexedModes, indexedModes) == 0);
   assert_true(strcmp(filenames.powerSpectrum, powerSpectrum) == 0);
-}
-
-Ensure (generate_filenames, returns_only_structuredInput) {
-  filenames_struct filenames = generate_filenames(&conf, &info, 1,
-                                                 "structuredInput");
-
-  assert_true(strcmp(filenames.structuredInput, structuredInput) == 0);
-  assert_true(strcmp(filenames.inputInfo, "") == 0);
-  assert_true(strcmp(filenames.densityContrast, "") == 0);
-  assert_true(strcmp(filenames.fourierTransformed, "") == 0);
-  assert_true(strcmp(filenames.indexedModes, "") == 0);
-  assert_true(strcmp(filenames.powerSpectrum, "") == 0);
-}
-
-Ensure (generate_filenames, returns_only_powerSpectrum) {
-  filenames_struct filenames = generate_filenames(&conf, &info, 1,
-                                                  "powerSpectrum");
-
-  assert_true(strcmp(filenames.structuredInput, "") == 0);
-  assert_true(strcmp(filenames.inputInfo, "") == 0);
-  assert_true(strcmp(filenames.densityContrast, "") == 0);
-  assert_true(strcmp(filenames.fourierTransformed, "") == 0);
-  assert_true(strcmp(filenames.indexedModes, "") == 0);
-  assert_true(strcmp(filenames.powerSpectrum, powerSpectrum) == 0);
-}
-
-Ensure (generate_filenames, returns_4_filenames) {
-  filenames_struct filenames = generate_filenames(&conf, &info, 4,
-                                                  "inputInfo",
-                                                  "densityContrast",
-                                                  "fourierTransformed",
-                                                  "indexedModes");
-
-  assert_true(strcmp(filenames.structuredInput, "") == 0);
-  assert_true(strcmp(filenames.inputInfo, inputInfo) == 0);
-  assert_true(strcmp(filenames.densityContrast, densityContrast) == 0);
-  assert_true(strcmp(filenames.fourierTransformed, fourierTransformed) == 0);
-  assert_true(strcmp(filenames.indexedModes, indexedModes) == 0);
-  assert_true(strcmp(filenames.powerSpectrum, "") == 0);
 }
 
 TestSuite *generate_filenames_tests() {
-	TestSuite *suite = create_test_suite();
-	add_test_with_context(suite, generate_filenames,
+  TestSuite *suite = create_test_suite();
+  add_test_with_context(suite, generate_filenames,
                         returns_all_filenames_correct);
-	add_test_with_context(suite, generate_filenames,
-                        returns_only_structuredInput);
-	add_test_with_context(suite, generate_filenames,
-                        returns_only_powerSpectrum);
-	add_test_with_context(suite, generate_filenames,
-                        returns_4_filenames);
-	return suite;
+  return suite;
 }
 
 void fill_filenames(){
-	char num_of_grids_in_each_axis[32];
-	sprintf(num_of_grids_in_each_axis, "%d", conf.params.numOfAxisGrids);
-	char num_of_parts[32];
-	sprintf(num_of_parts, "%d", info.numOfParts);
+  char num_of_grids_in_each_axis[32];
+  sprintf(num_of_grids_in_each_axis, "%d", conf.params.numOfAxisGrids);
+  char num_of_parts[32];
+  sprintf(num_of_parts, "%d", info.numOfParts);
 
-  char *strings[STRING_ARRAY_LENGTH];
-  structuredInput = strdup("");
-  strings[0] = strdup(conf.files[conf.params.fileIndex].alias);
-  strings[1] = strdup(".dat");
-  structuredInput = concat(strings, 2);
+  structuredInput = concat(2,
+    conf.files[conf.params.fileIndex].alias,
+    ".dat"
+  );
 
-  inputInfo = strdup("");
-  strings[0] = strdup(conf.files[conf.params.fileIndex].alias);
-  strings[1] = strdup(".info");
-  inputInfo = concat(strings, 2);
+  inputInfo = concat(2,
+    conf.files[conf.params.fileIndex].alias,
+    ".info"
+  );
 
-  densityContrast = strdup("");
-  strings[0] = strdup("density-contrast-grid-");
-  strings[1] = strdup(conf.massFunctions[conf.params.massAssignmentIndex].alias);
-  strings[2] = strdup("-");
-  strings[3] = strdup(num_of_grids_in_each_axis);
-  strings[4] = strdup("-");
-  strings[5] = strdup(conf.files[conf.params.fileIndex].alias);
-  strings[6] = strdup("-");
-  strings[7] = strdup(num_of_parts);
-  strings[8] = strdup(".dat");
-  densityContrast = concat(strings, 9);
+  densityContrast = concat(9,
+    "density-contrast-grid-",
+    conf.massFunctions[conf.params.massAssignmentIndex].alias, "-",
+    num_of_grids_in_each_axis, "-",
+    conf.files[conf.params.fileIndex].alias, "-",
+    num_of_parts,
+    ".dat"
+  );
 
-  fourierTransformed = strdup("");
-  strings[0] = strdup("fourier-transformed-grid-");
-  strings[1] = strdup(conf.massFunctions[conf.params.massAssignmentIndex].alias);
-  strings[2] = strdup("-");
-  strings[3] = strdup(num_of_grids_in_each_axis);
-  strings[4] = strdup("-");
-  strings[5] = strdup(conf.files[conf.params.fileIndex].alias);
-  strings[6] = strdup("-");
-  strings[7] = strdup(num_of_parts);
-  strings[8] = strdup(".dat");
-  fourierTransformed = concat(strings, 9);
+  fourierTransformed = concat(9,
+    "fourier-transformed-grid-",
+    conf.massFunctions[conf.params.massAssignmentIndex].alias, "-",
+    num_of_grids_in_each_axis, "-",
+    conf.files[conf.params.fileIndex].alias, "-",
+    num_of_parts,
+    ".dat"
+  );
 
-  indexedModes = strdup("");
-  strings[0] = strdup("indexed-modes-");
-  strings[1] = strdup(num_of_grids_in_each_axis);
-  strings[2] = strdup(".dat");
-  indexedModes = concat(strings, 3);
+  indexedModes = concat(3,
+    "indexed-modes-",
+    num_of_grids_in_each_axis,
+    ".dat"
+  );
 
-  powerSpectrum = strdup("");
-  strings[0] = strdup("power-spectrum-");
-  strings[1] = strdup(conf.massFunctions[conf.params.massAssignmentIndex].alias);
-  strings[2] = strdup("-");
-  strings[3] = strdup(num_of_grids_in_each_axis);
-  strings[4] = strdup("-");
-  strings[5] = strdup(conf.files[conf.params.fileIndex].alias);
-  strings[6] = strdup("-");
-  strings[7] = strdup(num_of_parts);
-  strings[8] = strdup(".dat");
-  powerSpectrum = concat(strings, 9);
-
-  int i;
-  for (i = 0; i < STRING_ARRAY_LENGTH; i++)
-    if (strings[i] != NULL)
-      free(strings[i]);
+  powerSpectrum = concat(9,
+    "power-spectrum-",
+    conf.massFunctions[conf.params.massAssignmentIndex].alias, "-",
+    num_of_grids_in_each_axis, "-",
+    conf.files[conf.params.fileIndex].alias, "-",
+    num_of_parts,
+    ".dat"
+  );
 }
