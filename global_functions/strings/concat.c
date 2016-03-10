@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "./../memory/allocate.h"
+
 char* concat (int count, ...) {
 
   if (count < 2) {
@@ -21,7 +23,8 @@ char* concat (int count, ...) {
 		length += strlen(strings[i]);
   }
 
-  char *result = malloc(length + 1);
+  char *result;
+  allocate((void **)&result, length + 1, sizeof(char));
 
 	for (i = 0; i < count; i++)
 		strcat(result, strings[i]);
