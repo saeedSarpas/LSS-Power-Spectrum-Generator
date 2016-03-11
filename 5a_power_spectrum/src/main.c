@@ -7,6 +7,7 @@
 #include <time.h>
 
 #include "./../../global_structs/config_struct.h"
+#include "./../../global_structs/filenames_struct.h"
 #include "./../../global_structs/particle_struct.h"
 #include "./../../global_structs/info_strcut.h"
 #include "./../../global_structs/vector_struct.h"
@@ -14,17 +15,15 @@
 #include "./../../global_structs/bins_struct.h"
 
 #include "./../../global_functions/config_file/load_config_from.h"
-#include "./../../global_functions/filenames/append_input_info_name.h"
-#include "./../../global_functions/info_file/read_info_from.h"
+#include "./../../global_functions/info_file/get_info_from.h"
 #include "./../../global_functions/clock/start.h"
 #include "./../../global_functions/clock/done.h"
-#include "./../../global_functions/filenames/append_fourier_transformed_filename.h"
-#include "./../../global_functions/filenames/append_power_spectrum_filename.h"
 #include "./../../global_functions/io/open_file.h"
 #include "./../../global_functions/io/read_from.h"
 #include "./../../global_functions/memory/allocate.h"
 #include "./../../global_functions/vector/vector.h"
-#include "./../../global_functions/filenames/append_indexed_modes_filename.h"
+#include "./../../global_functions/filenames/generate_filenames.h"
+#include "./../../global_functions/strings/concat.h"
 
 #include "./struct/single_mode_power_result.h"
 
@@ -36,17 +35,12 @@
 #define PI (3.141592653589793)
 
 int main() {
-
 	config_struct conf = load_config_from("./../../configurations.cfg");
+  filenames_struct filenames = generate_filenames(&conf);
 
-	char *input_filename_alias = conf.files[conf.params.fileIndex].alias;
-	char *algorithm_alias =
-    conf.massFunctions[conf.params.massAssignmentIndex].alias;
-
-	info_struct info;
-	char *input_info_path = strdup("./../../0_structured_input/");
-	append_input_info_name(input_filename_alias, &input_info_path);
-	read_info_from(input_info_path, &info);
+	char *info_path = concat(2,
+    "./../../0_structured_input/", filenames.inputInfo);
+	info_struct info = get_info_from(info_path);
 
 
 	clock_t _l_f_t_d_ = start("Load Fourier transformed data... ");
@@ -56,19 +50,17 @@ int main() {
 	fftw_complex *delta_fourier;
 	allocate((void **)&delta_fourier, tot_num_of_grids, sizeof(fftw_complex));
 
-	char *input_path = strdup("./../../3_fftw/output/");
-	append_fourier_transformed_filename(input_filename_alias, algorithm_alias,
-										&info, &conf, &input_path);
+	char *input_path = concat(2,
+    "./../../3_fftw/output/", filenames.fourierTransformed);
 	load_fourier_transformed_data(input_path, delta_fourier, &conf);
 
 	done(_l_f_t_d_);
 
 	clock_t _g_b_a_ = start("Generate bins array...");
 
-	char *indexed_mode_modulus_file_path = strdup("./../../4_indexing_k_modulus/output/");
-	append_indexed_modes_filename(&conf, &indexed_mode_modulus_file_path);
-
 	FILE *indexed_mode_modulus_file;
+	char *indexed_mode_modulus_file_path = concat(2,
+    "./../../4_indexing_k_modulus/output/", filenames.indexedModes);
 	open_file(&indexed_mode_modulus_file, indexed_mode_modulus_file_path, "rb");
 
 	modes_struct *indexed_mode_modulus;
@@ -98,9 +90,8 @@ int main() {
 
 	clock_t _g_a_s_p_s_ = start("Generating and saving power spectrum... ");
 
-	char *output_path = strdup("./../output/");
-	append_power_spectrum_filename(input_filename_alias, algorithm_alias,
-								   &conf, &info, &output_path);
+	char *output_path = concat(2,
+    "./../output/", filenames.powerSpectrum);
 
 	FILE * output_file;
 	open_file(&output_file, output_path, "wb");
@@ -132,7 +123,7 @@ int main() {
 
 	fclose(output_file);
 
-	free(input_info_path);
+	free(info_path);
 	free(input_path);
 	free(indexed_mode_modulus_file_path);
 	free(output_path);

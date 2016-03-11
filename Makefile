@@ -48,7 +48,6 @@ _G_FUNC = clock/done.o \
           clock/start.o \
           config_file/load_config_from.o \
           config_file/my_libconfig.o \
-          filenames/append_power_spectrum_filename.o \
           filenames/generate_filenames.o \
           filenames/free_filenames_struct.o \
           strings/concat.o \
