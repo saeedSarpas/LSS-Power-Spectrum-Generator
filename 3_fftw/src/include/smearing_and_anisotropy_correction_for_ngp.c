@@ -6,8 +6,6 @@
 
 #include "./../../../global_functions/grid/one_to_three.h"
 
-#define PI (3.141592653589793)
-
 void smearing_and_anisotropy_correction_for_ngp(fftw_complex *delta_fourier,
 												config_struct *conf) {
 	int N = pow(conf->params.numOfAxisGrids, 3);
@@ -23,7 +21,7 @@ void smearing_and_anisotropy_correction_for_ngp(fftw_complex *delta_fourier,
 
 		for (i = 0; i < 3; i++) {
 			k[i] -= conf->params.numOfAxisGrids / 2;
-			phi = (PI * k[i]) / (2.0 * k_Nyquist);
+			phi = (M_PI * k[i]) / (2.0 * k_Nyquist);
 
 			W_k = (phi == 0.0) ? 1.0 : W_k * sin(phi) / phi;
 		}
