@@ -1,12 +1,12 @@
 #include <cgreen/cgreen.h>
 
-TestSuite *single_mode_power_tests();
+TestSuite *signal_power_tests();
 TestSuite *generate_logarithmic_bins_tests();
 
 int main(int argc, char **argv) {
 	TestSuite *suite = create_test_suite();
 
-	add_suite(suite, single_mode_power_tests());
+	add_suite(suite, signal_power_tests());
 	add_suite(suite, generate_logarithmic_bins_tests());
 
 	if (argc > 1) {

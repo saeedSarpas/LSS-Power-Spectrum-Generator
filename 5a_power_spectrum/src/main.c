@@ -25,14 +25,12 @@
 #include "./../../global_functions/filenames/generate_filenames.h"
 #include "./../../global_functions/strings/concat.h"
 
-#include "./struct/single_mode_power_result.h"
+#include "./struct/signal_power_result.h"
 
 #include "./include/load_fourier_transformed_data.h"
-#include "./include/single_mode_power.h"
+#include "./include/signal_power.h"
 #include "./include/generate_logarithmic_bins.h"
 #include "./include/generate_linear_bins.h"
-
-#define PI (3.141592653589793)
 
 int main() {
 	config_struct conf = load_config_from("./../../configurations.cfg");
@@ -100,14 +98,14 @@ int main() {
 			"Mode     \tShell min\tShell max\tPower   \tPower err\tFound modes\n");
 
 	bins_struct bin;
-	single_mode_power_result_struct result;
+	signal_power_result_struct result;
 
 	while (bins_vector.log_length > 0) {
 		vector_pop(&bins_vector, &bin);
-		result = single_mode_power(bin.k_min, bin.k_max, delta_fourier,
+		result = signal_power(bin.k_min, bin.k_max, delta_fourier,
 								   indexed_mode_modulus, &conf);
 
-		double scale_factor = (2 * PI) / info.boxLength;
+		double scale_factor = (2 * M_PI) / info.boxLength;
 		double scaled_k = bin.k * scale_factor;
 		double scaled_k_min = bin.k_min * scale_factor;
 		double scaled_k_max = bin.k_max * scale_factor;

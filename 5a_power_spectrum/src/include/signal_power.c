@@ -12,7 +12,7 @@
 #include "./../../../global_functions/modes/get_modes_in_range.h"
 #include "./../../../global_functions/grid/three_to_one.h"
 
-#include "./../struct/single_mode_power_result.h"
+#include "./../struct/signal_power_result.h"
 
 #include "./../include/generate_logarithmic_bins.h"
 
@@ -49,11 +49,11 @@ static variance_result_struct variance(vector_struct *powers_vector) {
 	return result;
 }
 
-single_mode_power_result_struct single_mode_power (double k_min, double k_max,
+signal_power_result_struct signal_power (double k_min, double k_max,
 		fftw_complex *delta_fourier, modes_struct *indexed_mode_modulus,
 		config_struct *conf) {
 
-	single_mode_power_result_struct result;
+	signal_power_result_struct result;
 
 	size_t tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 

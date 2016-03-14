@@ -10,12 +10,12 @@
 
 #include "./../../../4_indexing_k_modulus/src/include/sort.h"
 
-#include "./../../src/struct/single_mode_power_result.h"
+#include "./../../src/struct/signal_power_result.h"
 
-#include "./../../src/include/single_mode_power.h"
+#include "./../../src/include/signal_power.h"
 #include "./../../src/include/generate_logarithmic_bins.h"
 
-Describe(single_mode_power);
+Describe(signal_power);
 
 #define NUM_OF_GRIDS 128
 #define DELTA_FOURIER_REAL_PART 1.0
@@ -28,7 +28,7 @@ static int tot_num_of_grids;
 static void fill_delta_fourier();
 static void fill_indexed_mode_modulus();
 
-BeforeEach(single_mode_power) {
+BeforeEach(signal_power) {
 	conf.params.numOfAxisGrids = NUM_OF_GRIDS;
 
 	tot_num_of_grids = pow(conf.params.numOfAxisGrids, 3);
@@ -39,17 +39,17 @@ BeforeEach(single_mode_power) {
 			 sizeof(modes_struct));
 }
 
-AfterEach(single_mode_power) {
+AfterEach(signal_power) {
 	free(delta_fourier);
 	free(indexed_mode_modulus);
 }
 
-Ensure(single_mode_power, returns_right_results_for_a_trivial_input) {
+Ensure(signal_power, returns_right_results_for_a_trivial_input) {
 	fill_delta_fourier();
 	fill_indexed_mode_modulus();
 
-	single_mode_power_result_struct result;
-	result = single_mode_power(0, 10000, delta_fourier,
+	signal_power_result_struct result;
+	result = signal_power(0, 10000, delta_fourier,
 			indexed_mode_modulus, &conf);
 
 	double power = pow(DELTA_FOURIER_REAL_PART, 2) +
@@ -60,9 +60,9 @@ Ensure(single_mode_power, returns_right_results_for_a_trivial_input) {
 	assert_that(result.num_of_found_modes, is_equal_to(10000));
 }
 
-TestSuite *single_mode_power_tests() {
+TestSuite *signal_power_tests() {
 	TestSuite *suite = create_test_suite();
-	add_test_with_context(suite, single_mode_power,
+	add_test_with_context(suite, signal_power,
 						 returns_right_results_for_a_trivial_input);
 	return suite;
 }

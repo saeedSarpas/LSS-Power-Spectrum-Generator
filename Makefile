@@ -232,12 +232,12 @@ immain : imtest $(IMDIR)/src/main.o
   PSDIR = ./5a_power_spectrum
 #------------------------------------------------------------------------------
 _PS_INCLUDE = load_fourier_transformed_data.o \
-              single_mode_power.o \
+              signal_power.o \
               generate_logarithmic_bins.o \
               generate_linear_bins.o
 PS_INCLUDE  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_INCLUDE))
 
-_PS_TEST = single_mode_power_test.o \
+_PS_TEST = signal_power_test.o \
            generate_logarithmic_bins_test.o
 PS_TEST  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_TEST))
 
