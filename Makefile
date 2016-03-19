@@ -61,11 +61,13 @@ _G_FUNC = clock/done.o \
           io/read_from.o \
           io/write_to.o \
           memory/allocate.o \
-          modes/get_modes_in_range.o \
+          modes/find_first_mode_with_modulus.o \
+          modes/sort_modes.o \
           vector/vector.o
 G_FUNC  = $(patsubst %,$(GDIR)/%,$(_G_FUNC))
 
-_G_TEST = modes/get_modes_in_range_test.o \
+_G_TEST = modes/find_first_mode_with_modulus_test.o \
+          modes/sort_modes_test.o \
           grid/three_to_one_test.o \
           config_file/load_config_from_test.o \
           filenames/generate_filenames_test.o \
@@ -201,12 +203,10 @@ ftmain : fttest $(FTDIR)/src/main.o
 #
   IMDIR = ./4_indexing_k_modulus
 #------------------------------------------------------------------------------
-_IM_INCLUDE = load_modes_into.o \
-              sort.o
+_IM_INCLUDE = load_modes_into.o
 IM_INCLUDE  = $(patsubst %,$(IMDIR)/src/include/%,$(_IM_INCLUDE))
 
-_IM_TEST = load_modes_into_test.o \
-           sort_test.o
+_IM_TEST = load_modes_into_test.o
 IM_TEST  = $(patsubst %,$(IMDIR)/src/include/%,$(_IM_TEST))
 
 $(IM_INCLUDE) : %.o : %.c
