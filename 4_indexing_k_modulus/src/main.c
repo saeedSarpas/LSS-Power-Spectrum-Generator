@@ -19,9 +19,9 @@
 #include "./../../global_functions/io/write_to.h"
 #include "./../../global_functions/filenames/generate_filenames.h"
 #include "./../../global_functions/strings/concat.h"
+#include "./../../global_functions/modes/sort_modes.h"
 
 #include "./include/load_modes_into.h"
-#include "./include/sort.h"
 
 int main () {
 	config_struct conf = load_config_from("./../../configurations.cfg");
@@ -34,7 +34,7 @@ int main () {
 	allocate((void **)&indexed_modes, tot_num_of_grids, sizeof(modes_struct));
 
 	load_modes_into(indexed_modes, &conf);
-	sort(indexed_modes, &conf);
+	sort_modes(indexed_modes, &conf);
 
 	done(_i_k_m_);
 
