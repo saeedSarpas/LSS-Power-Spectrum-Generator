@@ -52,7 +52,7 @@ Ensure(signal_power, returns_right_results_for_a_trivial_input) {
     fill_indexed_mode_modulus();
 
     signal_power_result_struct result;
-    result = signal_power(0, 10000, delta_fourier,
+    result = signal_power(0.5, 10000.5, delta_fourier,
                           indexed_mode_modulus, &conf);
 
     double power = pow(DELTA_FOURIER_REAL_PART, 2) +

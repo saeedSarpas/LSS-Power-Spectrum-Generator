@@ -29,7 +29,7 @@
 
 #include "./../../../global_functions/vector/vector.h"
 
-#include "./../../../global_functions/modes/find_first_mode_with_modulus.h"
+#include "./../../../global_functions/modes/find_first_mode_greater_than_or_equal_to.h"
 #include "./../../../global_functions/grid/three_to_one.h"
 
 #include "./../struct/signal_power_result.h"
@@ -78,9 +78,9 @@ signal_power_result_struct signal_power (double k_min, double k_max,
 
     size_t tot_num_of_grids = pow(conf->params.numOfAxisGrids, 3);
 
-    int min_index = find_first_mode_with_modulus(
+    int min_index = find_first_mode_greater_than_or_equal_to(
         k_min, sorted_modes_array, tot_num_of_grids);
-    int max_index = find_first_mode_with_modulus(
+    int max_index = find_first_mode_greater_than_or_equal_to(
         k_max, sorted_modes_array, tot_num_of_grids);
 
     vector_struct powers_vector;
