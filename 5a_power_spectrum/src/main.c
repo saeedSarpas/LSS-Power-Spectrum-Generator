@@ -31,6 +31,9 @@
 #include "./include/signal_power.h"
 #include "./include/generate_logarithmic_bins.h"
 #include "./include/generate_linear_bins.h"
+#include "./include/smearing_and_anisotropy_correction_for_ngp.h"
+#include "./include/smearing_and_anisotropy_correction_for_cic.h"
+#include "./include/smearing_and_anisotropy_correction_for_tsc.h"
 
 int main() {
 	config_struct conf = load_config_from("./../../configurations.cfg");
@@ -53,6 +56,35 @@ int main() {
 	load_fourier_transformed_data(input_path, delta_fourier, &conf);
 
 	done(_l_f_t_d_);
+
+
+	clock_t _a_m_a_w_f_ = start("Smearing and anisotropy correction... ");
+
+	char *alg_alias = conf.massFunctions[conf.params.massAssignmentIndex].alias;
+
+	if (strcmp(alg_alias, "ngp") == 0)
+      smearing_and_anisotropy_correction_for_ngp(delta_fourier, &conf);
+	else if (strcmp(alg_alias, "cic") == 0)
+      smearing_and_anisotropy_correction_for_cic(delta_fourier, &conf);
+	else if (strcmp(alg_alias, "tsc") == 0)
+      smearing_and_anisotropy_correction_for_tsc(delta_fourier, &conf);
+	else {
+      printf("[Unknown mass assignment algorithm]\n");
+      exit(0);
+	}
+
+	done(_a_m_a_w_f_);
+
+
+	clock_t _n_ = start("Normalizing... ");
+
+	unsigned int i;
+	double sqrt_tot_num_of_grids = sqrt(tot_num_of_grids);
+	for (i = 0; i < tot_num_of_grids; i++)
+      delta_fourier[i] /=  sqrt_tot_num_of_grids;
+
+	done(_n_);
+
 
 	clock_t _g_b_a_ = start("Generate bins array...");
 

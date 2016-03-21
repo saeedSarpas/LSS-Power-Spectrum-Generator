@@ -173,10 +173,7 @@ grmain : grtest $(GRDIR)/src/main.o
 #------------------------------------------------------------------------------
 _FT_INCLUDE = load_density_contrast_grid.o \
               convert_real_delta_to_complex.o \
-              reordering_fourier_input.o \
-              smearing_and_anisotropy_correction_for_ngp.o \
-              smearing_and_anisotropy_correction_for_cic.o \
-              smearing_and_anisotropy_correction_for_tsc.o
+              reordering_fourier_input.o
 FT_INCLUDE  = $(patsubst %,$(FTDIR)/src/include/%,$(_FT_INCLUDE))
 
 _FT_TEST = reordering_fourier_input_test.o \
@@ -236,7 +233,10 @@ immain : imtest $(IMDIR)/src/main.o
 _PS_INCLUDE = load_fourier_transformed_data.o \
               signal_power.o \
               generate_logarithmic_bins.o \
-              generate_linear_bins.o
+              generate_linear_bins.o \
+              smearing_and_anisotropy_correction_for_ngp.o \
+              smearing_and_anisotropy_correction_for_cic.o \
+              smearing_and_anisotropy_correction_for_tsc.o
 PS_INCLUDE  = $(patsubst %,$(PSDIR)/src/include/%,$(_PS_INCLUDE))
 
 _PS_TEST = signal_power_test.o \

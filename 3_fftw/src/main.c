@@ -23,9 +23,6 @@
 #include "./include/load_density_contrast_grid.h"
 #include "./include/convert_real_delta_to_complex.h"
 #include "./include/reordering_fourier_input.h"
-#include "./include/smearing_and_anisotropy_correction_for_ngp.h"
-#include "./include/smearing_and_anisotropy_correction_for_cic.h"
-#include "./include/smearing_and_anisotropy_correction_for_tsc.h"
 
 int main() {
 
@@ -77,34 +74,6 @@ int main() {
 	fftw_destroy_plan(p);
 
 	done(_f_t_);
-
-
-	clock_t _a_m_a_w_f_ = start("Smearing and anisotropy correction... ");
-
-	char *alg_alias = conf.massFunctions[conf.params.massAssignmentIndex].alias;
-
-	if (strcmp(alg_alias, "ngp") == 0)
-		smearing_and_anisotropy_correction_for_ngp(delta_fourier, &conf);
-	else if (strcmp(alg_alias, "cic") == 0)
-		smearing_and_anisotropy_correction_for_cic(delta_fourier, &conf);
-	else if (strcmp(alg_alias, "tsc") == 0)
-		smearing_and_anisotropy_correction_for_tsc(delta_fourier, &conf);
-	else {
-		printf("[Unknown mass assignment algorithm]\n");
-		exit(0);
-	}
-
-	done(_a_m_a_w_f_);
-
-
-	clock_t _n_ = start("Normalizing... ");
-
-	unsigned int i;
-	double sqrt_tot_num_of_grids = sqrt(tot_num_of_grids);
-	for (i = 0; i < tot_num_of_grids; i++)
-		delta_fourier[i] /=  sqrt_tot_num_of_grids;
-
-	done(_n_);
 
 
 	clock_t _s_d_ = start("Saving data... ");
