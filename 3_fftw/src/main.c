@@ -90,7 +90,6 @@ int main() {
 	done(_s_d_);
 
 	free(delta_real);
-	free(alg_alias);
 	fftw_free(delta_fourier);
 	fftw_free(delta_complex);
 	free(input_path);
