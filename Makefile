@@ -63,12 +63,14 @@ _G_FUNC = clock/done.o \
           memory/allocate.o \
           modes/find_first_mode_with_modulus.o \
           modes/find_last_mode_with_modulus.o \
+          modes/find_first_mode_greater_than_or_equal_to.o \
           modes/sort_modes.o \
           vector/vector.o
 G_FUNC  = $(patsubst %,$(GDIR)/%,$(_G_FUNC))
 
 _G_TEST = modes/find_first_mode_with_modulus_test.o \
           modes/find_last_mode_with_modulus_test.o \
+          modes/find_first_mode_greater_than_or_equal_to_test.o \
           modes/sort_modes_test.o \
           grid/three_to_one_test.o \
           config_file/load_config_from_test.o \
